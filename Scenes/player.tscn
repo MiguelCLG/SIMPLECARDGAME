@@ -1,0 +1,121 @@
+[gd_scene load_steps=9 format=3 uid="uid://hpf7fmhasyf7"]
+
+[ext_resource type="Script" path="res://scripts/Player.cs" id="1_khrn5"]
+[ext_resource type="PackedScene" uid="uid://celrxrn4kmdyu" path="res://Scenes/card.tscn" id="2_q7tu8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tflnk"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0, 0, 0, 1)
+expand_margin_right = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_42vwu"]
+bg_color = Color(1, 0, 0, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_bottom = 10
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Theme" id="Theme_bku1k"]
+ProgressBar/styles/background = SubResource("StyleBoxFlat_tflnk")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_42vwu")
+
+[sub_resource type="Theme" id="Theme_fwkjw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_usheg"]
+bg_color = Color(0, 0, 1, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_bottom = 10
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Theme" id="Theme_wotc4"]
+ProgressBar/styles/background = SubResource("StyleBoxFlat_tflnk")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_usheg")
+
+[node name="Player" type="Node2D"]
+script = ExtResource("1_khrn5")
+
+[node name="PlayerUI" type="CanvasLayer" parent="."]
+
+[node name="HealthBar" type="ProgressBar" parent="PlayerUI"]
+offset_right = 150.0
+offset_bottom = 50.0
+theme = SubResource("Theme_bku1k")
+value = 100.0
+show_percentage = false
+
+[node name="Control" type="BoxContainer" parent="PlayerUI/HealthBar"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_fwkjw")
+alignment = 1
+
+[node name="Label" type="Label" parent="PlayerUI/HealthBar/Control"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ManaBar" type="ProgressBar" parent="PlayerUI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -160.0
+offset_right = -10.0
+offset_bottom = 50.0
+grow_horizontal = 0
+theme = SubResource("Theme_wotc4")
+value = 100.0
+show_percentage = false
+
+[node name="Control" type="BoxContainer" parent="PlayerUI/ManaBar"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_fwkjw")
+alignment = 1
+
+[node name="Label" type="Label" parent="PlayerUI/ManaBar/Control"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HandContainer" type="HBoxContainer" parent="PlayerUI"]
+layout_direction = 2
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -124.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="CardContainer3" parent="PlayerUI/HandContainer" instance=ExtResource("2_q7tu8")]
+layout_mode = 2
+
+[node name="CardContainer" parent="PlayerUI/HandContainer" instance=ExtResource("2_q7tu8")]
+layout_mode = 2
+
+[node name="CardContainer2" parent="PlayerUI/HandContainer" instance=ExtResource("2_q7tu8")]
+layout_mode = 2

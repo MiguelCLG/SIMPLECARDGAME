@@ -1,0 +1,29 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="SimpleCardGame"
+config/features=PackedStringArray("4.1", "C#", "Mobile")
+config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=360
+window/size/viewport_height=718
+window/handheld/orientation=1
+
+[dotnet]
+
+project/assembly_name="SimpleCardGame"
+
+[rendering]
+
+renderer/rendering_method="mobile"
