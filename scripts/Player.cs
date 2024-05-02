@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot;
 
 public partial class Player : Character
 {
@@ -8,13 +9,36 @@ public partial class Player : Character
     public List<Card> Hand { get; set; }
     public List<Card> DiscardPile { get; set; }
     public int Mana { get; set; }
+    private PackedScene cardScene = GD.Load<PackedScene>("res://Scenes/card.tscn");
+    private HBoxContainer handContainer;
 
-    public Player(int health, int maxHealth, int armor)
-        : base(health, maxHealth, armor) { }
+    /*public Player(int health, int maxHealth, int armor)
+        : base(health, maxHealth, armor) { }*/
+
+    public override void _Ready()
+    {
+        handContainer = GetNode<HBoxContainer>("%HandContainer");
+        Hand = new();
+        DiscardPile = new();
+        Deck = new();
+    }
+
+    public void StartEncounter()
+    {
+        if (Deck == null)
+        {
+            GD.PrintErr("Player has no deck");
+            return;
+        }
+        DrawCard();
+        DrawCard();
+        DrawCard();
+    }
 
     public void DrawCard()
     {
         // Implement drawing card logic
+        GD.Print(Deck.Count);
         if (Deck.Count <= 0)
         {
             Deck = DiscardPile;
@@ -22,7 +46,18 @@ public partial class Player : Character
             Shuffle();
         }
         Hand.Add(Deck.First());
+        SpawnCard(Deck.First());
         Deck.Remove(Deck.First());
+    }
+
+    public void SpawnCard(Card card)
+    {
+        var cardInstance = cardScene.Instantiate<Card>();
+        cardInstance.CardName = card.CardName;
+        cardInstance.Description = card.Description;
+        cardInstance.Cost = card.Cost;
+        cardInstance.Effect = card.Effect;
+        handContainer.AddChild(cardInstance);
     }
 
     public void DiscardCard(Card card)

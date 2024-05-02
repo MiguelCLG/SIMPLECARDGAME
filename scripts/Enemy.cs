@@ -1,4 +1,5 @@
 using System;
+using Godot;
 
 public enum Intent
 {
@@ -11,8 +12,19 @@ public partial class Enemy : Character
     private Intent intentType = Intent.Attack;
     private int intentValue = 0;
 
-    public Enemy(int health, int maxHealth, int armor)
-        : base(health, maxHealth, armor) { }
+    [Export]
+    private string EnemyName = "";
+
+    private ProgressBar ProgressBar;
+
+    /*public Enemy(int health, int maxHealth, int armor)
+        : base(health, maxHealth, armor) { }*/
+
+    public override void _Ready()
+    {
+        ProgressBar = GetNode<ProgressBar>("HealthBar");
+        ProgressBar.Value = Mathf.RoundToInt(Health * 100 / MaxHealth);
+    }
 
     public void SetIntent(Intent intent, int value)
     {
@@ -42,6 +54,7 @@ public partial class Enemy : Character
             }
         }
         Health -= variableDamage;
+        ProgressBar.Value = Mathf.RoundToInt(Health * 100 / MaxHealth);
         if (Health <= 0)
         {
             Health = 0;
@@ -65,6 +78,11 @@ public partial class Enemy : Character
     private void AttackPlayer(Player player)
     {
         player.TakeDamage(intentValue);
+    }
+
+    public void OnEnemyClick()
+    {
+        EventRegistry.GetEventPublisher("OnEnemyClick").RaiseEvent(this);
     }
 
     // Add other methods as needed

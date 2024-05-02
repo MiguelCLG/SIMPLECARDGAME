@@ -1,15 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://celrxrn4kmdyu"]
+[gd_scene load_steps=9 format=3 uid="uid://celrxrn4kmdyu"]
+
+[ext_resource type="Script" path="res://scripts/Card.cs" id="1_ay7ty"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dwvu2"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sados"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tkrll"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qw6jv"]
+bg_color = Color(1, 1, 1, 1)
 
 [sub_resource type="Theme" id="Theme_ybr27"]
+Button/styles/disabled = SubResource("StyleBoxFlat_dwvu2")
+Button/styles/focus = SubResource("StyleBoxFlat_sados")
+Button/styles/hover = SubResource("StyleBoxFlat_tkrll")
+Button/styles/normal = SubResource("StyleBoxFlat_qw6jv")
 Panel/styles/panel = null
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_go3vk"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 6
-border_width_top = 6
-border_width_right = 6
-border_width_bottom = 6
-border_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gllfx"]
 bg_color = Color(0.294118, 0.643137, 0.815686, 1)
@@ -26,7 +36,7 @@ corner_radius_bottom_left = 50
 [sub_resource type="Theme" id="Theme_6l17w"]
 Panel/styles/panel = SubResource("StyleBoxFlat_gllfx")
 
-[node name="CardContainer" type="Panel"]
+[node name="CardContainer" type="Button"]
 custom_minimum_size = Vector2(75, 125)
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,7 +44,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_ybr27")
-theme_override_styles/panel = SubResource("StyleBoxFlat_go3vk")
+script = ExtResource("1_ay7ty")
 
 [node name="ManaContainer" type="Panel" parent="."]
 layout_mode = 1
@@ -83,3 +93,5 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Name"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[connection signal="pressed" from="." to="." method="OnButtonPressed"]

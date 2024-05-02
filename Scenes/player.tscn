@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://hpf7fmhasyf7"]
+[gd_scene load_steps=8 format=3 uid="uid://hpf7fmhasyf7"]
 
 [ext_resource type="Script" path="res://scripts/Player.cs" id="1_khrn5"]
-[ext_resource type="PackedScene" uid="uid://celrxrn4kmdyu" path="res://Scenes/card.tscn" id="2_q7tu8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tflnk"]
 bg_color = Color(1, 1, 1, 1)
@@ -100,22 +99,15 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HandContainer" type="HBoxContainer" parent="PlayerUI"]
+unique_name_in_owner = true
 layout_direction = 2
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = -124.0
+offset_right = 3.0
 offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 alignment = 1
-
-[node name="CardContainer3" parent="PlayerUI/HandContainer" instance=ExtResource("2_q7tu8")]
-layout_mode = 2
-
-[node name="CardContainer" parent="PlayerUI/HandContainer" instance=ExtResource("2_q7tu8")]
-layout_mode = 2
-
-[node name="CardContainer2" parent="PlayerUI/HandContainer" instance=ExtResource("2_q7tu8")]
-layout_mode = 2

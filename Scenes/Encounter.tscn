@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://mm8pkalmgkf4"]
 
-[ext_resource type="Script" path="res://scripts/Encounter.cs" id="1_fq8yt"]
+[ext_resource type="Script" path="res://scripts/GameManager.cs" id="1_88b2m"]
 [ext_resource type="PackedScene" uid="uid://hpf7fmhasyf7" path="res://Scenes/player.tscn" id="1_sstfg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s31f2"]
@@ -10,7 +10,7 @@ bg_color = Color(0.945098, 0.945098, 0.945098, 1)
 Panel/styles/panel = SubResource("StyleBoxFlat_s31f2")
 
 [node name="Encounter" type="Node2D"]
-script = ExtResource("1_fq8yt")
+script = ExtResource("1_88b2m")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -23,3 +23,20 @@ grow_vertical = 2
 theme = SubResource("Theme_36bdi")
 
 [node name="Player" parent="CanvasLayer/Panel" instance=ExtResource("1_sstfg")]
+unique_name_in_owner = true
+
+[node name="EnemySpawn" type="Node2D" parent="CanvasLayer/Panel"]
+unique_name_in_owner = true
+position = Vector2(89, 250)
+
+[node name="EnemySpawn2" type="Node2D" parent="CanvasLayer/Panel"]
+unique_name_in_owner = true
+position = Vector2(277, 249)
+
+[node name="EnemySpawn3" type="Node2D" parent="CanvasLayer/Panel"]
+unique_name_in_owner = true
+position = Vector2(275, 404)
+
+[node name="EnemySpawn4" type="Node2D" parent="CanvasLayer/Panel"]
+unique_name_in_owner = true
+position = Vector2(91, 404)
