@@ -24,21 +24,21 @@
     "CardName": "Defend",
     "Description": "Add 5 armor",
     "Cost": 1,
-    "Effect": "Defend",
+    "Effect": "Defense",
     "Value": 5
   },
   {
     "CardName": "Defend",
     "Description": "Add 5 armor",
     "Cost": 1,
-    "Effect": "Defend",
+    "Effect": "Defense",
     "Value": 5
   },
   {
     "CardName": "Defend",
     "Description": "Add 5 armor",
     "Cost": 1,
-    "Effect": "Defend",
+    "Effect": "Defense",
     "Value": 5
   },
   {
@@ -52,7 +52,7 @@
     "CardName": "Super Shield",
     "Description": "Add 15 armor",
     "Cost": 2,
-    "Effect": "Defend",
+    "Effect": "Defense",
     "Value": 15
   }
 ]

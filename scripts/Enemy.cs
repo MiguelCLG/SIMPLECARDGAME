@@ -23,7 +23,7 @@ public partial class Enemy : Character
     public override void _Ready()
     {
         ProgressBar = GetNode<ProgressBar>("HealthBar");
-        ProgressBar.Value = Mathf.RoundToInt(Health * 100 / MaxHealth);
+        ProgressBar.Value = Utils.ConvertToPercentage(Health, MaxHealth);
     }
 
     public void SetIntent(Intent intent, int value)

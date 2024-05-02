@@ -20,6 +20,12 @@ public partial class Card : Button
 
     public int Value { get; set; }
 
+    public override void _Ready()
+    {
+        GetNode<Label>("ManaContainer/ManaCost").Text = Cost.ToString();
+        GetNode<Label>("CardName").Text = CardName;
+    }
+
     public void InitializeEffect()
     {
         switch (EffectString)
@@ -32,6 +38,7 @@ public partial class Card : Button
                 break;
             // Handle other effect types if needed
         }
+        Effect.Value = Value;
     }
 
     public void OnButtonPressed()

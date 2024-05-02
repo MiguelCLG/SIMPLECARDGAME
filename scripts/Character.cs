@@ -2,8 +2,13 @@ using Godot;
 
 public abstract partial class Character : Node2D
 {
+    [Export]
     public int Health { get; set; }
+
+    [Export]
     public int MaxHealth { get; set; }
+
+    [Export]
     public int Armor { get; set; }
 
     // Constructor

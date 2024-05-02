@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://hpf7fmhasyf7"]
+[gd_scene load_steps=9 format=3 uid="uid://hpf7fmhasyf7"]
 
 [ext_resource type="Script" path="res://scripts/Player.cs" id="1_khrn5"]
 
@@ -35,8 +35,15 @@ border_color = Color(0, 0, 0, 1)
 ProgressBar/styles/background = SubResource("StyleBoxFlat_tflnk")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_usheg")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_10oms"]
+bg_color = Color(0.811765, 0.976471, 0.980392, 1)
+
 [node name="Player" type="Node2D"]
 script = ExtResource("1_khrn5")
+MaxMana = 3
+Mana = 3
+Health = 100
+MaxHealth = 100
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 
@@ -111,3 +118,29 @@ offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 alignment = 1
+
+[node name="Armor" type="Panel" parent="PlayerUI"]
+offset_left = 62.0
+offset_top = 51.0
+offset_right = 102.0
+offset_bottom = 76.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_10oms")
+
+[node name="ArmorLabel" type="Label" parent="PlayerUI/Armor"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="PlayerUI"]
+offset_left = 239.0
+offset_top = 52.0
+offset_right = 317.0
+offset_bottom = 83.0
+text = "End Turn"
+
+[connection signal="pressed" from="PlayerUI/Button" to="." method="OnEndTurnPress"]

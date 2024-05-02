@@ -22,6 +22,7 @@ public partial class GameManager : Node2D
     {
         RegisterEvents();
         player = GetNode<Node2D>("%Player") as Player;
+        enemies = new();
         enemyContainers = new()
         {
             GetNode<Node2D>("%EnemySpawn"),
@@ -42,9 +43,12 @@ public partial class GameManager : Node2D
         EventRegistry.RegisterEvent("OnEnemyClick");
         EventSubscriber.SubscribeToEvent("OnEnemyClick", OnEnemyClick);
 
+        EventRegistry.RegisterEvent("OnEndTurnPress");
+        EventSubscriber.SubscribeToEvent("OnEndTurnPress", OnEndTurnPress);
+
         // Register inputs
         EventRegistry.RegisterEvent("OnEscapeKey");
-        EventSubscriber.SubscribeToEvent("OnEscapeKey", OnCardClick);
+        EventSubscriber.SubscribeToEvent("OnEscapeKey", OnEscapeKey);
     }
 
     public void StartGame()
@@ -75,12 +79,12 @@ public partial class GameManager : Node2D
             int enemyArmor = rng.Next(4) + 1;
             var enemyNode = enemyScene.Instantiate();
 
-            if (enemyNode is Character enemy)
+            if (enemyNode is Enemy enemy)
             {
                 enemy.Health = enemyHealth;
                 enemy.MaxHealth = enemyHealth;
                 enemy.Armor = enemyArmor;
-                // enemies.Add(enemy);
+                enemies.Add(enemy);
                 enemyContainers[i].AddChild(enemy);
             }
         }
@@ -89,7 +93,9 @@ public partial class GameManager : Node2D
     public void ResolvePlayerTurn()
     {
         // Implement player turn logic
-        // GenerateEnemyIntent();
+        GenerateEnemyIntent();
+        player.SetManaToMax();
+        player.DrawCard();
     }
 
     private void GenerateEnemyIntent()
@@ -108,6 +114,7 @@ public partial class GameManager : Node2D
     public void ResolveEnemyTurn()
     {
         // Implement enemy turn logic
+
         foreach (Enemy enemy in enemies)
         {
             enemy.PlayTurn(player);
@@ -118,9 +125,15 @@ public partial class GameManager : Node2D
     public void NextTurn()
     {
         if (turn == Turns.PlayerTurn)
+        {
+            turn = Turns.EnemyTurn;
             ResolveEnemyTurn();
+        }
         else
+        {
+            turn = Turns.PlayerTurn;
             ResolvePlayerTurn();
+        }
     }
 
     // Add other methods as needed
@@ -149,7 +162,12 @@ public partial class GameManager : Node2D
     }
 
     // Events
-    private void OnEscapeKey()
+    private void OnEndTurnPress(object sender, object obj)
+    {
+        NextTurn();
+    }
+
+    private void OnEscapeKey(object sender, object obj)
     {
         selectedCard = null;
     }
@@ -162,10 +180,13 @@ public partial class GameManager : Node2D
                 GD.Print("Enemy successfully clicked!");
                 player.PlayCard(selectedCard, enemy);
             }
+        selectedCard = null;
     }
 
     private void OnCardClick(object sender, object obj)
     {
+        if (turn != Turns.PlayerTurn)
+            return;
         if (obj is Card card)
         {
             GD.Print($"{card.CardName} clicked.");
