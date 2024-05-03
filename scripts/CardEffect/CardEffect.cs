@@ -1,7 +1,8 @@
 public enum CardEffectType
 {
     Attack,
-    Defense
+    Defense,
+    Support
 }
 
 public abstract class CardEffect

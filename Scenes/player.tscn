@@ -1,31 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://hpf7fmhasyf7"]
+[gd_scene load_steps=6 format=3 uid="uid://hpf7fmhasyf7"]
 
 [ext_resource type="Script" path="res://scripts/Player.cs" id="1_khrn5"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tflnk"]
-bg_color = Color(1, 1, 1, 1)
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_42vwu"]
-bg_color = Color(1, 0, 0, 1)
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="Theme" id="Theme_bku1k"]
-ProgressBar/styles/background = SubResource("StyleBoxFlat_tflnk")
-ProgressBar/styles/fill = SubResource("StyleBoxFlat_42vwu")
-
-[sub_resource type="Theme" id="Theme_fwkjw"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_usheg"]
-bg_color = Color(0, 0, 1, 1)
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="Theme" id="Theme_wotc4"]
-ProgressBar/styles/background = SubResource("StyleBoxFlat_tflnk")
-ProgressBar/styles/fill = SubResource("StyleBoxFlat_usheg")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_10oms"]
-bg_color = Color(0.811765, 0.976471, 0.980392, 1)
+[ext_resource type="Texture2D" uid="uid://crbgvk55u3q1f" path="res://Images/Icons/heart.png" id="2_ewmge"]
+[ext_resource type="Texture2D" uid="uid://bt16we0p7abkl" path="res://Images/Icons/shield.png" id="3_uu3mm"]
+[ext_resource type="Texture2D" uid="uid://c7r476ua1jomq" path="res://Images/Icons/mana.png" id="4_65xhf"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pgtng"]
 bg_color = Color(0.12549, 0.72549, 0, 1)
@@ -39,63 +17,43 @@ MaxHealth = 100
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 
-[node name="HealthBar" type="ProgressBar" parent="PlayerUI"]
-offset_right = 150.0
-offset_bottom = 50.0
-theme = SubResource("Theme_bku1k")
-value = 100.0
-show_percentage = false
+[node name="Heart" type="Sprite2D" parent="PlayerUI"]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(10, 9)
+scale = Vector2(0.0148148, 0.0148148)
+texture = ExtResource("2_ewmge")
 
-[node name="Control" type="BoxContainer" parent="PlayerUI/HealthBar"]
-modulate = Color(0, 0, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = SubResource("Theme_fwkjw")
-alignment = 1
+[node name="Shield" type="Sprite2D" parent="PlayerUI"]
+modulate = Color(0.372549, 0.858824, 1, 1)
+position = Vector2(10, 25)
+scale = Vector2(0.015, 0.015)
+texture = ExtResource("3_uu3mm")
 
-[node name="HealthLabel" type="Label" parent="PlayerUI/HealthBar/Control"]
+[node name="Mana" type="Sprite2D" parent="PlayerUI"]
+modulate = Color(0, 0, 1, 1)
+position = Vector2(10, 43)
+scale = Vector2(0.0203704, 0.0203704)
+texture = ExtResource("4_65xhf")
+
+[node name="HealthLabel" type="Label" parent="PlayerUI"]
 unique_name_in_owner = true
-layout_mode = 2
+offset_left = 20.0
+offset_right = 50.0
+offset_bottom = 20.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "100"
-horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ManaBar" type="ProgressBar" parent="PlayerUI"]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -151.0
-offset_right = -1.0
-offset_bottom = 50.0
-grow_horizontal = 0
-theme = SubResource("Theme_wotc4")
-value = 100.0
-show_percentage = false
-
-[node name="Control" type="BoxContainer" parent="PlayerUI/ManaBar"]
-modulate = Color(0, 0, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -1.0
-offset_right = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = SubResource("Theme_fwkjw")
-alignment = 1
-
-[node name="ManaLabel" type="Label" parent="PlayerUI/ManaBar/Control"]
+[node name="ManaLabel" type="Label" parent="PlayerUI"]
 unique_name_in_owner = true
-layout_mode = 2
+offset_left = 19.0
+offset_top = 36.0
+offset_right = 40.0
+offset_bottom = 56.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "100"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HandContainer" type="HBoxContainer" parent="PlayerUI"]
@@ -113,31 +71,26 @@ grow_horizontal = 2
 grow_vertical = 0
 alignment = 1
 
-[node name="Armor" type="Panel" parent="PlayerUI"]
-offset_top = 50.0
-offset_right = 150.0
-offset_bottom = 76.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_10oms")
-
-[node name="ArmorLabel" type="Label" parent="PlayerUI/Armor"]
+[node name="ArmorLabel" type="Label" parent="PlayerUI"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_right = 150.0
-offset_bottom = 26.0
+offset_left = 20.0
+offset_top = 17.0
+offset_right = 50.0
+offset_bottom = 37.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
 text = "0"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="EndTurnButton" type="Button" parent="PlayerUI"]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 29.0
-offset_top = 50.0
-offset_right = 179.0
-offset_bottom = 81.0
-grow_horizontal = 2
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -85.0
+offset_top = 1.0
+offset_right = -1.0
+offset_bottom = 53.0
+grow_horizontal = 0
 theme_override_styles/normal = SubResource("StyleBoxFlat_pgtng")
 text = "End Turn"
 

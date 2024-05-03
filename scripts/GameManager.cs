@@ -158,11 +158,11 @@ public partial class GameManager : Node2D
             enemy.SetIntent(intent, intentValue);
             if (intent == Intent.Attack)
                 enemy.GetNode<Sprite2D>("IntentImage").Texture = GD.Load<Texture2D>(
-                    "res://Images/sword.png"
+                    "res://Images/Icons/sword.png"
                 );
             else if (intent == Intent.Defend)
                 enemy.GetNode<Sprite2D>("IntentImage").Texture = GD.Load<Texture2D>(
-                    "res://Images/shield.png"
+                    "res://Images/Icons/shield.png"
                 );
         }
     }
@@ -236,7 +236,7 @@ public partial class GameManager : Node2D
         {
             // PLAYER LOSES ENCOUNTER
             GD.Print("PLAYER Loses");
-            Utils.TimerUtils.CreateTimer(Restart, this, .5f);
+            Utils.TimerUtils.CreateTimer(Restart, this, 1f);
         }
     }
 
@@ -272,7 +272,12 @@ public partial class GameManager : Node2D
             return;
         if (obj is Card card)
         {
-            selectedCard = card;
+            if (card.Effect.Type == CardEffectType.Attack)
+            {
+                selectedCard = card;
+                return;
+            }
+            player.PlayCard(card, null);
         }
         else
         {

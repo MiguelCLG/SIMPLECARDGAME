@@ -27,15 +27,15 @@ unique_name_in_owner = true
 
 [node name="EnemySpawn" type="Node2D" parent="CanvasLayer/Panel"]
 unique_name_in_owner = true
-position = Vector2(89, 226)
+position = Vector2(89, 225)
 
 [node name="EnemySpawn2" type="Node2D" parent="CanvasLayer/Panel"]
 unique_name_in_owner = true
-position = Vector2(277, 225)
+position = Vector2(269, 225)
 
 [node name="EnemySpawn3" type="Node2D" parent="CanvasLayer/Panel"]
 unique_name_in_owner = true
-position = Vector2(275, 467)
+position = Vector2(267, 467)
 
 [node name="EnemySpawn4" type="Node2D" parent="CanvasLayer/Panel"]
 unique_name_in_owner = true

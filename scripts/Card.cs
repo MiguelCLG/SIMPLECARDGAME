@@ -43,6 +43,10 @@ public partial class Card : Button
                 Effect = new DrawEffect();
                 Effect.Value = Value;
                 break;
+            case "Mana":
+                Effect = new ManaEffect();
+                Effect.Value = Value;
+                break;
             // Handle other effect types if needed
         }
     }

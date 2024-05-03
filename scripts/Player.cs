@@ -17,8 +17,7 @@ public partial class Player : Character
     [Export]
     public int Mana { get; set; }
 
-    private ProgressBar healthBar;
-    private ProgressBar manaBar;
+    //private ProgressBar healthBar;
     private Label healthLabel;
     private Label manaLabel;
     private Label armorLabel;
@@ -31,16 +30,11 @@ public partial class Player : Character
     public override void _Ready()
     {
         handContainer = GetNode<HBoxContainer>("%HandContainer");
-        healthBar = GetNode<ProgressBar>("PlayerUI/HealthBar");
-        manaBar = GetNode<ProgressBar>("PlayerUI/ManaBar");
         armorLabel = GetNode<Label>("%ArmorLabel");
         healthLabel = GetNode<Label>("%HealthLabel");
         manaLabel = GetNode<Label>("%ManaLabel");
 
-        healthBar.Value = ConvertToPercentage(Health, MaxHealth);
         healthLabel.Text = $"{Health}/{MaxHealth}";
-        manaBar.Value = Mana;
-        manaBar.MaxValue = MaxMana;
         manaLabel.Text = $"{Mana}/{MaxMana}";
         armorLabel.Text = Armor.ToString();
 
@@ -55,9 +49,9 @@ public partial class Player : Character
         SetManaToMax();
         Armor = 0;
         armorLabel.Text = Armor.ToString();
-        foreach (Card card in Hand)
+        foreach (var child in handContainer.GetChildren())
         {
-            handContainer.RemoveChild(card);
+            handContainer.RemoveChild(child);
         }
         Hand = new();
         DiscardPile = new();
@@ -82,11 +76,11 @@ public partial class Player : Character
             {
                 DiscardCard(card);
             }
-            Hand = new();
         }
-        TimerUtils.CreateTimer(DrawCard, this, .1f);
-        TimerUtils.CreateTimer(DrawCard, this, .5f);
-        TimerUtils.CreateTimer(DrawCard, this, 1f);
+        Hand = new();
+        DrawCard();
+        DrawCard();
+        DrawCard();
     }
 
     public void DrawCard()
@@ -133,7 +127,6 @@ public partial class Player : Character
             DiscardCard(card);
             card.Effect.ApplyEffect(this, enemy);
             Mana -= card.Cost;
-            manaBar.Value = Mana;
             manaLabel.Text = $"{Mana}/{MaxMana}";
         }
         else
@@ -178,7 +171,6 @@ public partial class Player : Character
             // game over
             EventRegistry.GetEventPublisher("OnPlayerDie").RaiseEvent(this);
         }
-        healthBar.Value = Health;
         healthLabel.Text = $"{Health}/{MaxHealth}";
     }
 
@@ -188,19 +180,21 @@ public partial class Player : Character
         armorLabel.Text = Armor.ToString();
     }
 
+    public void AddMana(int mana)
+    {
+        Mana += mana;
+        manaLabel.Text = $"{Mana}/{MaxMana}";
+    }
+
     public void SetManaToMax()
     {
         Mana = MaxMana;
-        manaBar.Value = Mana;
-        manaBar.MaxValue = MaxMana;
         manaLabel.Text = $"{Mana}/{MaxMana}";
     }
 
     public void SetHealthToMax()
     {
         Health = MaxHealth;
-        healthBar.Value = Health;
-        healthBar.MaxValue = MaxHealth;
         healthLabel.Text = $"{Health}/{MaxHealth}";
     }
 

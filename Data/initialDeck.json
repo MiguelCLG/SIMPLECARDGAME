@@ -68,5 +68,19 @@
 		"Cost": 1,
 		"Effect": "Draw",
 		"Value": 2
+	},
+	{
+		"CardName": "Rebirth",
+		"Description": "Gain 2 Mana this turn",
+		"Cost": 1,
+		"Effect": "Mana",
+		"Value": 2
+	},
+	{
+		"CardName": "Focus",
+		"Description": "Gain 1 Mana this turn",
+		"Cost": 0,
+		"Effect": "Mana",
+		"Value": 1
 	}
 ]
