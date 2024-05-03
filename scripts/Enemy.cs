@@ -7,29 +7,50 @@ public enum Intent
     Defend
 };
 
+public class EnemyDTO
+{
+    public string EnemyName { get; set; }
+    public string Sprite { get; set; }
+    public int MinHealth { get; set; }
+    public int MaxHealth { get; set; }
+    public int Armor { get; set; }
+    public int MaxIntent { get; set; }
+    public int MinIntent { get; set; }
+}
+
 public partial class Enemy : Character
 {
     private Intent intentType = Intent.Attack;
+    public int intentMinValue = 0;
+    public int intentMaxValue = 0;
     private int intentValue = 0;
 
     [Export]
-    private string EnemyName = "";
-
+    public string EnemyName = "";
+    public string SpritePath = "";
     private ProgressBar healthBar;
     private Label healthLabel;
     private Label armorLabel;
+    private Sprite2D sprite;
 
     /*public Enemy(int health, int maxHealth, int armor)
         : base(health, maxHealth, armor) { }*/
 
     public override void _Ready()
     {
+        sprite = GetNode<Sprite2D>("enemySprite");
         healthBar = GetNode<ProgressBar>("HealthBar");
         healthBar.Value = Utils.ConvertToPercentage(Health, MaxHealth);
         healthLabel = GetNode<Label>("HealthBar/HealthLabel");
         healthLabel.Text = $"{Health}/{MaxHealth}";
         armorLabel = GetNode<Label>("ArmorLabel");
         armorLabel.Text = Armor.ToString();
+        InitializeEnemy();
+    }
+
+    public void InitializeEnemy()
+    {
+        sprite.Texture = GD.Load<Texture2D>(SpritePath);
     }
 
     public void SetIntent(Intent intent, int value)
@@ -78,14 +99,13 @@ public partial class Enemy : Character
     {
         if (player.Health <= 0)
             return;
-        Random rng = new();
 
         if (intentType == Intent.Attack)
         {
             AttackPlayer(player);
         }
         else if (intentType == Intent.Defend)
-            AddArmor(rng.Next(5));
+            AddArmor(intentValue);
     }
 
     private void AttackPlayer(Player player)

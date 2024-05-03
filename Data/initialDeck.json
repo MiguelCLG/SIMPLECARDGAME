@@ -1,58 +1,72 @@
 [
   {
-    "CardName": "Strike",
-    "Description": "Deal 10 damage",
-    "Cost": 1,
-    "Effect": "Attack",
-    "Value": 10
+		"CardName": "Strike",
+		"Description": "Deal 10 damage",
+		"Cost": 1,
+		"Effect": "Attack",
+		"Value": 10
   },
   {
-    "CardName": "Strike",
-    "Description": "Deal 10 damage",
-    "Cost": 1,
-    "Effect": "Attack",
-    "Value": 10
+		"CardName": "Strike",
+		"Description": "Deal 10 damage",
+		"Cost": 1,
+		"Effect": "Attack",
+		"Value": 10
   },
   {
-    "CardName": "Strike",
-    "Description": "Deal 10 damage",
-    "Cost": 1,
-    "Effect": "Attack",
-    "Value": 10
+		"CardName": "Strike",
+		"Description": "Deal 10 damage",
+		"Cost": 1,
+		"Effect": "Attack",
+		"Value": 10
   },
   {
-    "CardName": "Defend",
-    "Description": "Add 5 armor",
-    "Cost": 1,
-    "Effect": "Defense",
-    "Value": 5
+		"CardName": "Defend",
+		"Description": "Add 5 armor",
+		"Cost": 1,
+		"Effect": "Defense",
+		"Value": 5
   },
   {
-    "CardName": "Defend",
-    "Description": "Add 5 armor",
-    "Cost": 1,
-    "Effect": "Defense",
-    "Value": 5
+		"CardName": "Defend",
+		"Description": "Add 5 armor",
+		"Cost": 1,
+		"Effect": "Defense",
+		"Value": 5
   },
   {
-    "CardName": "Defend",
-    "Description": "Add 5 armor",
-    "Cost": 1,
-    "Effect": "Defense",
-    "Value": 5
+		"CardName": "Defend",
+		"Description": "Add 5 armor",
+		"Cost": 1,
+		"Effect": "Defense",
+		"Value": 5
   },
   {
-    "CardName": "Super Strike",
-    "Description": "Attack for 25 damage",
-    "Cost": 2,
-    "Effect": "Attack",
-    "Value": 25
+		"CardName": "Super Strike",
+		"Description": "Attack for 25 damage",
+		"Cost": 2,
+		"Effect": "Attack",
+		"Value": 25
   },
-  {
-    "CardName": "Super Shield",
-    "Description": "Add 15 armor",
-    "Cost": 2,
-    "Effect": "Defense",
-    "Value": 15
-  }
+	{
+		"CardName": "Super Shield",
+		"Description": "Add 15 armor",
+		"Cost": 2,
+		"Effect": "Defense",
+		"Value": 15
+	},
+	{
+		"CardName": "Draw 1",
+		"Description": "Draw 1 Card",
+		"Cost": 0,
+		"Effect": "Draw",
+		"Value": 1
+	},
+	{
+		"CardName": "Draw 2",
+		"Description": "Draw 2 Cards",
+		"Cost": 1,
+		"Effect": "Draw",
+		"Value": 2
+	}
 ]

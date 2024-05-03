@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://n72dhq20nhys"]
 
 [ext_resource type="Script" path="res://scripts/Enemy.cs" id="1_viuwr"]
-[ext_resource type="Texture2D" uid="uid://dle83ctk0ky7k" path="res://Images/enemy-sprite-2.jpg" id="2_vkh7m"]
+[ext_resource type="Texture2D" uid="uid://cw0muk43crua" path="res://Images/Enemies/SkullFlamer.jpg" id="2_fvcfq"]
 [ext_resource type="Texture2D" uid="uid://d07u485esesqj" path="res://Images/sword.png" id="3_om845"]
 [ext_resource type="Texture2D" uid="uid://c5ie6kv450teh" path="res://Images/shield.png" id="4_kcanr"]
 
@@ -27,7 +27,7 @@ script = ExtResource("1_viuwr")
 
 [node name="enemySprite" type="Sprite2D" parent="."]
 scale = Vector2(0.0944444, 0.0944444)
-texture = ExtResource("2_vkh7m")
+texture = ExtResource("2_fvcfq")
 
 [node name="Button" type="Button" parent="enemySprite"]
 custom_minimum_size = Vector2(50, 50)

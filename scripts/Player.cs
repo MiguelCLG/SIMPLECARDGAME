@@ -98,7 +98,7 @@ public partial class Player : Character
             DiscardPile = new();
             Shuffle();
         }
-        if (Hand.Count >= 4)
+        if (Hand.Count >= 5)
         {
             Debug.Print("Hand Size Full");
             return;
@@ -129,9 +129,9 @@ public partial class Player : Character
     {
         if (Mana >= card.Cost)
         {
-            card.Effect.ApplyEffect(this, enemy);
             Hand.Remove(card);
             DiscardCard(card);
+            card.Effect.ApplyEffect(this, enemy);
             Mana -= card.Cost;
             manaBar.Value = Mana;
             manaLabel.Text = $"{Mana}/{MaxMana}";

@@ -59,6 +59,10 @@ public partial class GameManager : Node2D
 
     public void Restart()
     {
+        foreach (var enemy in enemies)
+        {
+            enemy.GetParent().RemoveChild(enemy);
+        }
         enemies = new();
         turn = Turns.PlayerTurn;
         selectedCard = null;
@@ -83,22 +87,51 @@ public partial class GameManager : Node2D
         ResolvePlayerTurn();
     }
 
+    private List<EnemyDTO> GetEnemyTypesFromJson(string filePath)
+    {
+        try
+        {
+            // Read the JSON file
+            string jsonString = File.ReadAllText(filePath);
+
+            // Deserialize the JSON into a list of cards
+            List<EnemyDTO> loadedEnemyTypes = JsonConvert.DeserializeObject<List<EnemyDTO>>(
+                jsonString
+            );
+
+            return loadedEnemyTypes;
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"Error loading enemy types from JSON file: {e.Message}");
+        }
+        return new();
+    }
+
     private void GenerateEnemies()
     {
         var enemyScene = GD.Load<PackedScene>("res://Scenes/enemy.tscn");
         Random rng = new();
         int numberOfEnemies = rng.Next(4) + 1;
+        List<EnemyDTO> enemyDTOs = GetEnemyTypesFromJson("Data/enemyTypes.json");
         for (int i = 0; i < numberOfEnemies; i++)
         {
-            int enemyHealth = rng.Next(99) + 1;
-            int enemyArmor = rng.Next(4) + 1;
             var enemyNode = enemyScene.Instantiate();
-
             if (enemyNode is Enemy enemy)
             {
+                int enemyTypeIndex = rng.Next(0, 2);
+                EnemyDTO enemyDTO = enemyDTOs[enemyTypeIndex];
+                int enemyHealth = rng.Next(enemyDTO.MinHealth, enemyDTO.MaxHealth);
+
+                enemy.intentMinValue = enemyDTO.MinIntent;
+                enemy.intentMaxValue = enemyDTO.MaxIntent;
+
+                enemy.EnemyName = enemyDTO.EnemyName;
+                enemy.SpritePath = enemyDTO.Sprite;
                 enemy.Health = enemyHealth;
                 enemy.MaxHealth = enemyHealth;
-                enemy.Armor = enemyArmor;
+                enemy.Armor = enemyDTO.Armor;
+
                 enemies.Add(enemy);
                 enemyContainers[i].AddChild(enemy);
             }
@@ -121,7 +154,7 @@ public partial class GameManager : Node2D
         {
             Random rng = new();
             Intent intent = rng.Next(2) == 0 ? Intent.Attack : Intent.Defend;
-            int intentValue = rng.Next(10) + 1;
+            int intentValue = rng.Next(enemy.intentMinValue, enemy.intentMaxValue);
             enemy.SetIntent(intent, intentValue);
             if (intent == Intent.Attack)
                 enemy.GetNode<Sprite2D>("IntentImage").Texture = GD.Load<Texture2D>(

@@ -1,10 +1,20 @@
 [
   {
-    "enemyName": "SkullSmoker",
-    "sprite": "res://Images/Enemies/SkullSmoker.png"
+    "EnemyName": "SkullSmoker",
+    "Sprite": "Images/Enemies/SkullSmoker.jpg",
+    "MinHealth": 8,
+    "MaxHealth": 32,
+    "MinIntent": 5,
+    "MaxIntent": 32,
+    "Armor": 0
   },
   {
-    "enemyName": "SkullFlamer",
-    "sprite": "res://Images/Enemies/SkullFlamer.png"
+    "EnemyName": "SkullFlamer",
+    "Sprite": "Images/Enemies/SkullFlamer.jpg",
+    "MinHealth": 8,
+    "MaxHealth": 32,
+    "MinIntent": 5,
+    "MaxIntent": 24,
+    "Armor": 0
   }
 ]
