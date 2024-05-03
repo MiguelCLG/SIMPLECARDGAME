@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Godot;
+using static Utils;
 
 public partial class Player : Character
 {
@@ -18,6 +19,8 @@ public partial class Player : Character
 
     private ProgressBar healthBar;
     private ProgressBar manaBar;
+    private Label healthLabel;
+    private Label manaLabel;
     private Label armorLabel;
     private PackedScene cardScene = GD.Load<PackedScene>("res://Scenes/card.tscn");
     private HBoxContainer handContainer;
@@ -31,12 +34,31 @@ public partial class Player : Character
         healthBar = GetNode<ProgressBar>("PlayerUI/HealthBar");
         manaBar = GetNode<ProgressBar>("PlayerUI/ManaBar");
         armorLabel = GetNode<Label>("%ArmorLabel");
+        healthLabel = GetNode<Label>("%HealthLabel");
+        manaLabel = GetNode<Label>("%ManaLabel");
 
-        healthBar.Value = Utils.ConvertToPercentage(Health, MaxHealth);
+        healthBar.Value = ConvertToPercentage(Health, MaxHealth);
+        healthLabel.Text = $"{Health}/{MaxHealth}";
         manaBar.Value = Mana;
         manaBar.MaxValue = MaxMana;
+        manaLabel.Text = $"{Mana}/{MaxMana}";
         armorLabel.Text = Armor.ToString();
 
+        Hand = new();
+        DiscardPile = new();
+        Deck = new();
+    }
+
+    public void ResetPlayer()
+    {
+        SetHealthToMax();
+        SetManaToMax();
+        Armor = 0;
+        armorLabel.Text = Armor.ToString();
+        foreach (Card card in Hand)
+        {
+            handContainer.RemoveChild(card);
+        }
         Hand = new();
         DiscardPile = new();
         Deck = new();
@@ -50,22 +72,37 @@ public partial class Player : Character
             return;
         }
         Shuffle();
-        DrawCard();
-        DrawCard();
-        DrawCard();
+    }
+
+    public void RefreshHand()
+    {
+        if (Hand.Count > 0)
+        {
+            foreach (Card card in Hand)
+            {
+                DiscardCard(card);
+            }
+            Hand = new();
+        }
+        TimerUtils.CreateTimer(DrawCard, this, .1f);
+        TimerUtils.CreateTimer(DrawCard, this, .5f);
+        TimerUtils.CreateTimer(DrawCard, this, 1f);
     }
 
     public void DrawCard()
     {
         // Implement drawing card logic
-        GD.Print(Deck.Count);
         if (Deck.Count <= 0)
         {
             Deck = DiscardPile;
             DiscardPile = new();
             Shuffle();
         }
-        Hand.Add(Deck.First());
+        if (Hand.Count >= 4)
+        {
+            Debug.Print("Hand Size Full");
+            return;
+        }
         SpawnCard(Deck.First());
         Deck.Remove(Deck.First());
     }
@@ -78,6 +115,7 @@ public partial class Player : Character
         cardInstance.Cost = card.Cost;
         cardInstance.Effect = card.Effect;
         handContainer.AddChild(cardInstance);
+        Hand.Add(cardInstance);
     }
 
     public void DiscardCard(Card card)
@@ -96,6 +134,7 @@ public partial class Player : Character
             DiscardCard(card);
             Mana -= card.Cost;
             manaBar.Value = Mana;
+            manaLabel.Text = $"{Mana}/{MaxMana}";
         }
         else
         {
@@ -137,9 +176,10 @@ public partial class Player : Character
         {
             Health = 0;
             // game over
-            return;
+            EventRegistry.GetEventPublisher("OnPlayerDie").RaiseEvent(this);
         }
-        // signal
+        healthBar.Value = Health;
+        healthLabel.Text = $"{Health}/{MaxHealth}";
     }
 
     public override void AddArmor(int armor)
@@ -152,6 +192,16 @@ public partial class Player : Character
     {
         Mana = MaxMana;
         manaBar.Value = Mana;
+        manaBar.MaxValue = MaxMana;
+        manaLabel.Text = $"{Mana}/{MaxMana}";
+    }
+
+    public void SetHealthToMax()
+    {
+        Health = MaxHealth;
+        healthBar.Value = Health;
+        healthBar.MaxValue = MaxHealth;
+        healthLabel.Text = $"{Health}/{MaxHealth}";
     }
 
     public void OnEndTurnPress()

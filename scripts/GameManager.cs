@@ -43,12 +43,27 @@ public partial class GameManager : Node2D
         EventRegistry.RegisterEvent("OnEnemyClick");
         EventSubscriber.SubscribeToEvent("OnEnemyClick", OnEnemyClick);
 
+        EventRegistry.RegisterEvent("OnEnemyDie");
+        EventSubscriber.SubscribeToEvent("OnEnemyDie", OnEnemyDie);
+
+        EventRegistry.RegisterEvent("OnPlayerDie");
+        EventSubscriber.SubscribeToEvent("OnPlayerDie", OnPlayerDie);
+
         EventRegistry.RegisterEvent("OnEndTurnPress");
         EventSubscriber.SubscribeToEvent("OnEndTurnPress", OnEndTurnPress);
 
         // Register inputs
         EventRegistry.RegisterEvent("OnEscapeKey");
         EventSubscriber.SubscribeToEvent("OnEscapeKey", OnEscapeKey);
+    }
+
+    public void Restart()
+    {
+        enemies = new();
+        turn = Turns.PlayerTurn;
+        selectedCard = null;
+        player.ResetPlayer();
+        StartGame();
     }
 
     public void StartGame()
@@ -72,7 +87,7 @@ public partial class GameManager : Node2D
     {
         var enemyScene = GD.Load<PackedScene>("res://Scenes/enemy.tscn");
         Random rng = new();
-        int numberOfEnemies = rng.Next(2) + 1;
+        int numberOfEnemies = rng.Next(4) + 1;
         for (int i = 0; i < numberOfEnemies; i++)
         {
             int enemyHealth = rng.Next(99) + 1;
@@ -95,7 +110,7 @@ public partial class GameManager : Node2D
         // Implement player turn logic
         GenerateEnemyIntent();
         player.SetManaToMax();
-        player.DrawCard();
+        player.RefreshHand();
     }
 
     private void GenerateEnemyIntent()
@@ -105,9 +120,17 @@ public partial class GameManager : Node2D
         foreach (Enemy enemy in enemies)
         {
             Random rng = new();
-            Intent intent = rng.Next(1) == 0 ? Intent.Attack : Intent.Defend;
-            int intentValue = rng.Next(10);
+            Intent intent = rng.Next(2) == 0 ? Intent.Attack : Intent.Defend;
+            int intentValue = rng.Next(10) + 1;
             enemy.SetIntent(intent, intentValue);
+            if (intent == Intent.Attack)
+                enemy.GetNode<Sprite2D>("IntentImage").Texture = GD.Load<Texture2D>(
+                    "res://Images/sword.png"
+                );
+            else if (intent == Intent.Defend)
+                enemy.GetNode<Sprite2D>("IntentImage").Texture = GD.Load<Texture2D>(
+                    "res://Images/shield.png"
+                );
         }
     }
 
@@ -117,7 +140,7 @@ public partial class GameManager : Node2D
 
         foreach (Enemy enemy in enemies)
         {
-            enemy.PlayTurn(player);
+            Timer timer = Utils.TimerUtils.CreateTimer(() => enemy.PlayTurn(player), this, .5f);
         }
         NextTurn();
     }
@@ -132,7 +155,7 @@ public partial class GameManager : Node2D
         else
         {
             turn = Turns.PlayerTurn;
-            ResolvePlayerTurn();
+            Utils.TimerUtils.CreateTimer(ResolvePlayerTurn, this, .5f);
         }
     }
 
@@ -153,6 +176,8 @@ public partial class GameManager : Node2D
                 card.InitializeEffect();
             }
             // Assign the loaded deck to the player's deck
+            player.Hand = new();
+            player.DiscardPile = new();
             player.Deck = loadedDeck;
         }
         catch (Exception e)
@@ -172,12 +197,37 @@ public partial class GameManager : Node2D
         selectedCard = null;
     }
 
+    private void OnPlayerDie(object sender, object obj)
+    {
+        if (obj is Player player)
+        {
+            // PLAYER LOSES ENCOUNTER
+            GD.Print("PLAYER Loses");
+            Utils.TimerUtils.CreateTimer(Restart, this, .5f);
+        }
+    }
+
+    private void OnEnemyDie(object sender, object obj)
+    {
+        if (obj is Enemy enemy)
+        {
+            enemies.Remove(enemy);
+            var parent = enemy.GetParent();
+            parent.RemoveChild(enemy);
+            if (enemies.Count <= 0)
+            {
+                // PLAYER WINS ENCOUNTER
+                GD.Print("PLAYER WINS");
+                Utils.TimerUtils.CreateTimer(Restart, this, .5f);
+            }
+        }
+    }
+
     private void OnEnemyClick(object sender, object obj)
     {
         if (selectedCard != null)
             if (obj is Enemy enemy)
             {
-                GD.Print("Enemy successfully clicked!");
                 player.PlayCard(selectedCard, enemy);
             }
         selectedCard = null;
@@ -189,7 +239,6 @@ public partial class GameManager : Node2D
             return;
         if (obj is Card card)
         {
-            GD.Print($"{card.CardName} clicked.");
             selectedCard = card;
         }
         else

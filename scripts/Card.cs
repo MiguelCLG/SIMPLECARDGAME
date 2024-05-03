@@ -24,6 +24,7 @@ public partial class Card : Button
     {
         GetNode<Label>("ManaContainer/ManaCost").Text = Cost.ToString();
         GetNode<Label>("CardName").Text = CardName;
+        GetNode<Label>("Description").Text = Description;
     }
 
     public void InitializeEffect()
@@ -32,18 +33,22 @@ public partial class Card : Button
         {
             case "Attack":
                 Effect = new AttackEffect();
+                Effect.Value = Value;
                 break;
             case "Defense":
                 Effect = new DefenseEffect();
+                Effect.Value = Value;
+                break;
+            case "Draw":
+                Effect = new DrawEffect();
+                Effect.Value = Value;
                 break;
             // Handle other effect types if needed
         }
-        Effect.Value = Value;
     }
 
     public void OnButtonPressed()
     {
-        GD.Print("Button Pressed");
         EventRegistry.GetEventPublisher("OnCardClick").RaiseEvent(this);
         return;
     }

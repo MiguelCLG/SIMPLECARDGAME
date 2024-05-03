@@ -1,0 +1,10 @@
+[
+  {
+    "enemyName": "SkullSmoker",
+    "sprite": "res://Images/Enemies/SkullSmoker.png"
+  },
+  {
+    "enemyName": "SkullFlamer",
+    "sprite": "res://Images/Enemies/SkullFlamer.png"
+  }
+]
