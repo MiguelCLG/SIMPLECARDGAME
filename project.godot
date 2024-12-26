@@ -12,8 +12,8 @@ config_version=5
 
 config/name="SimpleCardGame"
 run/main_scene="res://Scenes/Encounter.tscn"
-config/features=PackedStringArray("4.1", "C#", "Mobile")
-config/icon="res://icon.svg"
+config/features=PackedStringArray("4.3", "C#", "Mobile")
+config/windows_native_icon="res://Images/Icons/simplecardgameicon.ico"
 
 [display]
 
@@ -25,6 +25,16 @@ window/handheld/orientation=1
 
 project/assembly_name="SimpleCardGame"
 
+[file_customization]
+
+folder_colors={
+"res://Images/": "red",
+"res://Resources/": "yellow",
+"res://Scenes/": "purple",
+"res://scripts/": "green"
+}
+
 [rendering]
 
 renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true

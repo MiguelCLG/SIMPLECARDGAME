@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="DeckResource" load_steps=10 format=3 uid="uid://d3dq4xpqk5cjc"]
+
+[ext_resource type="Script" path="res://scripts/Resources/DeckResource.cs" id="1_3ompr"]
+[ext_resource type="Resource" uid="uid://7mxbthqhyemg" path="res://Resources/Cards/Strike.tres" id="1_jhjcv"]
+[ext_resource type="Resource" uid="uid://vm4yktngf3oe" path="res://Resources/Cards/Defend.tres" id="2_2qleg"]
+[ext_resource type="Resource" uid="uid://c8f702qdscrak" path="res://Resources/Cards/SuperStrike.tres" id="3_rotmt"]
+[ext_resource type="Resource" uid="uid://df6kqhmwpikos" path="res://Resources/Cards/SuperShield.tres" id="4_b6qsn"]
+[ext_resource type="Resource" uid="uid://6y4g2d7eo6c2" path="res://Resources/Cards/Draw_1.tres" id="5_kuops"]
+[ext_resource type="Resource" uid="uid://bjtb73qmxb6ba" path="res://Resources/Cards/Draw_2.tres" id="6_ckilj"]
+[ext_resource type="Resource" uid="uid://bwhgpaj5hubmr" path="res://Resources/Cards/Focus.tres" id="7_gyvil"]
+[ext_resource type="Resource" uid="uid://cbpi8i12flpr1" path="res://Resources/Cards/Rebirth.tres" id="8_ookun"]
+
+[resource]
+script = ExtResource("1_3ompr")
+cards = [ExtResource("1_jhjcv"), ExtResource("1_jhjcv"), ExtResource("1_jhjcv"), ExtResource("2_2qleg"), ExtResource("2_2qleg"), ExtResource("2_2qleg"), ExtResource("3_rotmt"), ExtResource("4_b6qsn"), ExtResource("5_kuops"), ExtResource("6_ckilj"), ExtResource("7_gyvil"), ExtResource("8_ookun")]

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CardResource" load_steps=2 format=3 uid="uid://7mxbthqhyemg"]
+
+[ext_resource type="Script" path="res://scripts/Resources/CardResource.cs" id="1_uaoqf"]
+
+[resource]
+script = ExtResource("1_uaoqf")
+CardName = "Strike"
+Description = "Deal 10 damage"
+Cost = 1
+Value = 10
+EffectString = "Attack"
+cardEffectType = 0

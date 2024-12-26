@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Godot;
+using Godot.Collections;
 using Newtonsoft.Json;
 
 enum Turns
@@ -17,6 +18,7 @@ public partial class GameManager : Node2D
     private Turns turn = Turns.PlayerTurn;
     private Card selectedCard;
     private List<Node2D> enemyContainers;
+    [Export] private DeckResource initialDeck;
 
     public override void _Ready()
     {
@@ -75,7 +77,8 @@ public partial class GameManager : Node2D
         // Get Cards for deck
         // Add cards to player deck
         // Starts the encounter
-        LoadDeckFromJson("Data/initialDeck.json");
+        /* LoadDeckFromJson("Data/initialDeck.json"); */
+        LoadDeck();
         StartEncounter();
     }
 
@@ -194,19 +197,47 @@ public partial class GameManager : Node2D
 
     // Add other methods as needed
 
-    public void LoadDeckFromJson(string filePath)
+    /*   public void LoadDeckFromJson(string filePath)
+      {
+          try
+          {
+              // Read the JSON file
+              string jsonString = File.ReadAllText(filePath);
+
+              // Deserialize the JSON into a list of cards
+              List<Card> loadedDeck = JsonConvert.DeserializeObject<List<Card>>(jsonString);
+
+              foreach (Card card in loadedDeck)
+              {
+                  card.InitializeEffect();
+              }
+              // Assign the loaded deck to the player's deck
+              player.Hand = new();
+              player.DiscardPile = new();
+              player.Deck = loadedDeck;
+          }
+          catch (Exception e)
+          {
+              GD.PrintErr($"Error loading deck from JSON file: {e.Message}");
+          }
+      } */
+    public void LoadDeck()
     {
         try
         {
-            // Read the JSON file
-            string jsonString = File.ReadAllText(filePath);
-
             // Deserialize the JSON into a list of cards
-            List<Card> loadedDeck = JsonConvert.DeserializeObject<List<Card>>(jsonString);
+            Array<Card> loadedDeck = new();
 
-            foreach (Card card in loadedDeck)
+            foreach (CardResource card in initialDeck.cards)
             {
-                card.InitializeEffect();
+                Card newCard = new();
+                newCard.CardName = card.CardName;
+                newCard.Description = card.Description;
+                newCard.Cost = card.Cost;
+                newCard.EffectString = card.EffectString;
+                newCard.Value = card.Value;
+                newCard.InitializeEffect();
+                loadedDeck.Add(newCard);
             }
             // Assign the loaded deck to the player's deck
             player.Hand = new();
@@ -215,7 +246,7 @@ public partial class GameManager : Node2D
         }
         catch (Exception e)
         {
-            GD.PrintErr($"Error loading deck from JSON file: {e.Message}");
+            GD.PrintErr($"Error loading deck: {e.Message}");
         }
     }
 

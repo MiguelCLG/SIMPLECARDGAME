@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://mm8pkalmgkf4"]
+[gd_scene load_steps=6 format=3 uid="uid://mm8pkalmgkf4"]
 
 [ext_resource type="Script" path="res://scripts/GameManager.cs" id="1_88b2m"]
 [ext_resource type="PackedScene" uid="uid://hpf7fmhasyf7" path="res://Scenes/player.tscn" id="1_sstfg"]
+[ext_resource type="Resource" uid="uid://d3dq4xpqk5cjc" path="res://Resources/Decks/InitialDeck.tres" id="2_5ditn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s31f2"]
 bg_color = Color(0.945098, 0.945098, 0.945098, 1)
@@ -11,6 +12,7 @@ Panel/styles/panel = SubResource("StyleBoxFlat_s31f2")
 
 [node name="Encounter" type="Node2D"]
 script = ExtResource("1_88b2m")
+initialDeck = ExtResource("2_5ditn")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

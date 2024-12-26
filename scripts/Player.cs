@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Godot;
+using Godot.Collections;
 using static Utils;
 
 public partial class Player : Character
 {
-    public List<Card> Deck { get; set; }
-    public List<Card> Hand { get; set; }
-    public List<Card> DiscardPile { get; set; }
+    public Array<Card> Deck { get; set; }
+    public Array<Card> Hand { get; set; }
+    public Array<Card> DiscardPile { get; set; }
 
     [Export]
     public int MaxMana { get; set; }
@@ -137,7 +136,7 @@ public partial class Player : Character
 
     public void Shuffle()
     {
-        Random rng = new();
+        System.Random rng = new();
         int n = Deck.Count;
         while (n > 1)
         {
