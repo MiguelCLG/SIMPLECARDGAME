@@ -52,6 +52,21 @@ public partial class Player : Character
         {
             handContainer.RemoveChild(child);
         }
+        foreach (var card in Hand)
+        {
+            card.GetParent()?.RemoveChild(card);
+            card.QueueFree();
+        }
+        foreach (var card in DiscardPile)
+        {
+            card.GetParent()?.RemoveChild(card);
+            card.QueueFree();
+        }
+        foreach (var card in Deck)
+        {
+            card.GetParent()?.RemoveChild(card);
+            card.QueueFree();
+        }
         Hand = new();
         DiscardPile = new();
         Deck = new();

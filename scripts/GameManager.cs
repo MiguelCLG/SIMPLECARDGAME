@@ -64,6 +64,7 @@ public partial class GameManager : Node2D
         foreach (var enemy in enemies)
         {
             enemy.GetParent().RemoveChild(enemy);
+            enemy.QueueFree();
         }
         enemies = new();
         turn = Turns.PlayerTurn;
