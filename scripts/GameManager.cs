@@ -17,22 +17,15 @@ public partial class GameManager : Node2D
     private List<Enemy> enemies;
     private Turns turn = Turns.PlayerTurn;
     private Card selectedCard;
-    private List<Node2D> enemyContainers;
+    private Control enemyContainer;
     [Export] private DeckResource initialDeck;
 
     public override void _Ready()
     {
         RegisterEvents();
-        player = GetNode<Node2D>("%Player") as Player;
+        player = GetNode<Control>("%Player") as Player;
         enemies = new();
-        enemyContainers = new()
-        {
-            GetNode<Node2D>("%EnemySpawn"),
-            GetNode<Node2D>("%EnemySpawn2"),
-            GetNode<Node2D>("%EnemySpawn3"),
-            GetNode<Node2D>("%EnemySpawn4")
-        };
-
+        enemyContainer = GetNode<Control>("%EnemySpawn");
         StartGame();
     }
 
@@ -137,7 +130,7 @@ public partial class GameManager : Node2D
                 enemy.Armor = enemyDTO.Armor;
 
                 enemies.Add(enemy);
-                enemyContainers[i].AddChild(enemy);
+                enemyContainer.AddChild(enemy);
             }
         }
     }
@@ -161,11 +154,11 @@ public partial class GameManager : Node2D
             int intentValue = rng.Next(enemy.intentMinValue, enemy.intentMaxValue);
             enemy.SetIntent(intent, intentValue);
             if (intent == Intent.Attack)
-                enemy.GetNode<Sprite2D>("IntentImage").Texture = GD.Load<Texture2D>(
+                enemy.GetNode<TextureRect>("%IntentImage").Texture = GD.Load<Texture2D>(
                     "res://Images/Icons/sword.png"
                 );
             else if (intent == Intent.Defend)
-                enemy.GetNode<Sprite2D>("IntentImage").Texture = GD.Load<Texture2D>(
+                enemy.GetNode<TextureRect>("%IntentImage").Texture = GD.Load<Texture2D>(
                     "res://Images/Icons/shield.png"
                 );
         }

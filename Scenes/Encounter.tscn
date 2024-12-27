@@ -1,14 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://mm8pkalmgkf4"]
+[gd_scene load_steps=4 format=3 uid="uid://mm8pkalmgkf4"]
 
 [ext_resource type="Script" path="res://scripts/GameManager.cs" id="1_88b2m"]
-[ext_resource type="PackedScene" uid="uid://hpf7fmhasyf7" path="res://Scenes/player.tscn" id="1_sstfg"]
 [ext_resource type="Resource" uid="uid://d3dq4xpqk5cjc" path="res://Resources/Decks/InitialDeck.tres" id="2_5ditn"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s31f2"]
-bg_color = Color(0.945098, 0.945098, 0.945098, 1)
-
-[sub_resource type="Theme" id="Theme_36bdi"]
-Panel/styles/panel = SubResource("StyleBoxFlat_s31f2")
+[ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="3_30d4m"]
 
 [node name="Encounter" type="Node2D"]
 script = ExtResource("1_88b2m")
@@ -16,29 +10,21 @@ initialDeck = ExtResource("2_5ditn")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Panel" type="Panel" parent="CanvasLayer"]
+[node name="Panel" type="PanelContainer" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource("Theme_36bdi")
+theme = ExtResource("3_30d4m")
 
-[node name="Player" parent="CanvasLayer/Panel" instance=ExtResource("1_sstfg")]
-unique_name_in_owner = true
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="EnemySpawn" type="Node2D" parent="CanvasLayer/Panel"]
+[node name="EnemySpawn" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer"]
 unique_name_in_owner = true
-position = Vector2(89, 225)
-
-[node name="EnemySpawn2" type="Node2D" parent="CanvasLayer/Panel"]
-unique_name_in_owner = true
-position = Vector2(269, 225)
-
-[node name="EnemySpawn3" type="Node2D" parent="CanvasLayer/Panel"]
-unique_name_in_owner = true
-position = Vector2(267, 467)
-
-[node name="EnemySpawn4" type="Node2D" parent="CanvasLayer/Panel"]
-unique_name_in_owner = true
-position = Vector2(91, 467)
+layout_mode = 2

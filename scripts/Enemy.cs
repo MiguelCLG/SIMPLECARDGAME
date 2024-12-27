@@ -29,21 +29,26 @@ public partial class Enemy : Character
     public string EnemyName = "";
     public string SpritePath = "";
     private ProgressBar healthBar;
+    private ProgressBar armorBar;
     private Label healthLabel;
     private Label armorLabel;
-    private Sprite2D sprite;
+    private TextureRect sprite;
 
     /*public Enemy(int health, int maxHealth, int armor)
         : base(health, maxHealth, armor) { }*/
 
     public override void _Ready()
     {
-        sprite = GetNode<Sprite2D>("enemySprite");
-        healthBar = GetNode<ProgressBar>("HealthBar");
-        healthBar.Value = Utils.ConvertToPercentage(Health, MaxHealth);
-        healthLabel = GetNode<Label>("HealthBar/HealthLabel");
+        sprite = GetNode<TextureRect>("%EnemyImage");
+        healthBar = GetNode<ProgressBar>("%HealthBar");
+        healthBar.Value = Health;
+        healthBar.MaxValue = MaxHealth;
+        healthLabel = GetNode<Label>("%HealthLabel");
         healthLabel.Text = $"{Health}/{MaxHealth}";
-        armorLabel = GetNode<Label>("ArmorLabel");
+        armorBar = GetNode<ProgressBar>("%ArmorBar");
+        armorBar.Value = Armor;
+        armorBar.MaxValue = Armor == 0 ? 1 : Armor;
+        armorLabel = GetNode<Label>("%ArmorLabel");
         armorLabel.Text = Armor.ToString();
         InitializeEnemy();
     }

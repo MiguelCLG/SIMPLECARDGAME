@@ -1,0 +1,80 @@
+[gd_resource type="Theme" load_steps=12 format=3 uid="uid://dbrvjx74ucqyo"]
+
+[ext_resource type="Texture2D" uid="uid://bkrxs8ivbv60m" path="res://Images/UI/Background.svg" id="1_wlrx7"]
+[ext_resource type="Texture2D" uid="uid://cnsl5ujvngfsi" path="res://Images/UI/Background.png" id="2_t2syh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6jali"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lb3cy"]
+bg_color = Color(0.647059, 0.815686, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lyvor"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pccxb"]
+bg_color = Color(0, 0.65098, 0.317647, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_of4ff"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yjdwq"]
+bg_color = Color(0.4, 0.176471, 0.568627, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2mej6"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ul4lb"]
+texture = ExtResource("1_wlrx7")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+region_rect = Rect2(61, 33, 261, 436)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cuo0n"]
+texture = ExtResource("2_t2syh")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+region_rect = Rect2(0.40686, 1.25372, 259.855, 427.575)
+
+[resource]
+ArmorBar/base_type = &"ProgressBar"
+ArmorBar/styles/background = SubResource("StyleBoxFlat_6jali")
+ArmorBar/styles/fill = SubResource("StyleBoxFlat_lb3cy")
+HealthBar/base_type = &"ProgressBar"
+HealthBar/styles/background = SubResource("StyleBoxFlat_lyvor")
+HealthBar/styles/fill = SubResource("StyleBoxFlat_pccxb")
+ManaBar/base_type = &"ProgressBar"
+ManaBar/styles/background = SubResource("StyleBoxFlat_of4ff")
+ManaBar/styles/fill = SubResource("StyleBoxFlat_yjdwq")
+PContainer/base_type = &"PanelContainer"
+PContainer/styles/panel = SubResource("StyleBoxFlat_2mej6")
+Panel/styles/panel = SubResource("StyleBoxTexture_ul4lb")
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_cuo0n")
