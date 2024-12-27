@@ -19,6 +19,7 @@ public partial class GameManager : Node2D
     private Card selectedCard;
     private Control enemyContainer;
     [Export] private DeckResource initialDeck;
+    [Export] private Array<EnemyResource> enemyTypes;
 
     public override void _Ready()
     {
@@ -107,27 +108,26 @@ public partial class GameManager : Node2D
 
     private void GenerateEnemies()
     {
-        var enemyScene = GD.Load<PackedScene>("res://Scenes/enemy.tscn");
+        var enemyScene = GD.Load<PackedScene>("res://Scenes/EnemyUI.tscn");
         Random rng = new();
         int numberOfEnemies = rng.Next(4) + 1;
-        List<EnemyDTO> enemyDTOs = GetEnemyTypesFromJson("Data/enemyTypes.json");
         for (int i = 0; i < numberOfEnemies; i++)
         {
             var enemyNode = enemyScene.Instantiate();
             if (enemyNode is Enemy enemy)
             {
                 int enemyTypeIndex = rng.Next(0, 2);
-                EnemyDTO enemyDTO = enemyDTOs[enemyTypeIndex];
-                int enemyHealth = rng.Next(enemyDTO.MinHealth, enemyDTO.MaxHealth);
+                EnemyResource enemyResource = enemyTypes[enemyTypeIndex];
+                int enemyHealth = rng.Next(enemyResource.MinHealth, enemyResource.MaxHealth);
 
-                enemy.intentMinValue = enemyDTO.MinIntent;
-                enemy.intentMaxValue = enemyDTO.MaxIntent;
+                enemy.intentMinValue = enemyResource.MinIntent;
+                enemy.intentMaxValue = enemyResource.MaxIntent;
 
-                enemy.EnemyName = enemyDTO.EnemyName;
-                enemy.SpritePath = enemyDTO.Sprite;
+                enemy.EnemyName = enemyResource.EnemyName;
+                enemy.texture = enemyResource.Texture;
                 enemy.Health = enemyHealth;
                 enemy.MaxHealth = enemyHealth;
-                enemy.Armor = enemyDTO.Armor;
+                enemy.Armor = enemyResource.Armor;
 
                 enemies.Add(enemy);
                 enemyContainer.AddChild(enemy);
@@ -141,6 +141,7 @@ public partial class GameManager : Node2D
         GenerateEnemyIntent();
         player.SetManaToMax();
         player.RefreshHand();
+        player.GetNode<Button>("%EndTurnButton").Disabled = false;
     }
 
     private void GenerateEnemyIntent()
@@ -272,6 +273,7 @@ public partial class GameManager : Node2D
             enemies.Remove(enemy);
             var parent = enemy.GetParent();
             parent.RemoveChild(enemy);
+            enemy.QueueFree();
             if (enemies.Count <= 0)
             {
                 // PLAYER WINS ENCOUNTER

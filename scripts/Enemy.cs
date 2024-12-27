@@ -33,6 +33,7 @@ public partial class Enemy : Character
     private Label healthLabel;
     private Label armorLabel;
     private TextureRect sprite;
+    public Texture2D texture;
 
     /*public Enemy(int health, int maxHealth, int armor)
         : base(health, maxHealth, armor) { }*/
@@ -55,7 +56,7 @@ public partial class Enemy : Character
 
     public void InitializeEnemy()
     {
-        sprite.Texture = GD.Load<Texture2D>(SpritePath);
+        sprite.Texture = texture;
     }
 
     public void SetIntent(Intent intent, int value)
@@ -69,6 +70,8 @@ public partial class Enemy : Character
     {
         Armor += armor;
         armorLabel.Text = Armor.ToString();
+        armorBar.MaxValue = Armor > 0 ? Armor : 1;
+        armorBar.Value = Armor;
     }
 
     public override void TakeDamage(int damage)
@@ -87,9 +90,11 @@ public partial class Enemy : Character
                 variableDamage = 0;
             }
             armorLabel.Text = Armor.ToString();
+            armorBar.MaxValue = Armor > 0 ? Armor : 1;
+            armorBar.Value = Armor;
         }
         Health -= variableDamage;
-        healthBar.Value = Mathf.RoundToInt(Health * 100 / MaxHealth);
+        healthBar.Value = Health;
         if (Health <= 0)
         {
             Health = 0;

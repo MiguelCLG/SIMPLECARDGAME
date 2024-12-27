@@ -1,45 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://celrxrn4kmdyu"]
+[gd_scene load_steps=5 format=3 uid="uid://celrxrn4kmdyu"]
 
 [ext_resource type="Script" path="res://scripts/Card.cs" id="1_ay7ty"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ya1r5"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ptxer"]
-bg_color = Color(1, 1, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0hbx1"]
-bg_color = Color(1, 0.913725, 0.827451, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pq41p"]
-bg_color = Color(0.839216, 0.643137, 0, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="Theme" id="Theme_1kucc"]
-Button/styles/disabled = SubResource("StyleBoxFlat_ya1r5")
-Button/styles/focus = SubResource("StyleBoxFlat_ptxer")
-Button/styles/hover = SubResource("StyleBoxFlat_0hbx1")
-Button/styles/normal = SubResource("StyleBoxFlat_ya1r5")
-Button/styles/pressed = SubResource("StyleBoxFlat_pq41p")
+[ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="1_qjo62"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gllfx"]
 bg_color = Color(0.294118, 0.643137, 0.815686, 1)
@@ -67,19 +29,23 @@ offset_right = -142.0
 offset_bottom = -284.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource("Theme_1kucc")
+theme = ExtResource("1_qjo62")
+theme_type_variation = &"Card"
 script = ExtResource("1_ay7ty")
 
 [node name="ManaContainer" type="Panel" parent="."]
+custom_minimum_size = Vector2(25, 25)
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.973
-anchor_right = 0.973
-offset_left = -27.975
-offset_top = 3.0
-offset_right = -0.975014
-offset_bottom = 30.0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -20.0
+offset_top = -7.0
+offset_right = 5.0
+offset_bottom = 18.0
 grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
 theme = SubResource("Theme_6l17w")
 
 [node name="ManaCost" type="Label" parent="ManaContainer"]
@@ -102,11 +68,14 @@ horizontal_alignment = 1
 
 [node name="CardName" type="Label" parent="."]
 layout_mode = 1
-offset_left = 2.0
-offset_top = 2.0
-offset_right = 46.0
-offset_bottom = 28.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 12.0
+offset_bottom = 29.0
+grow_horizontal = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 12
 text = "Name"
 horizontal_alignment = 1
@@ -115,19 +84,17 @@ autowrap_mode = 3
 
 [node name="Description" type="Label" parent="."]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 14
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = 40.0
-offset_right = -2.0
-offset_bottom = -2.0
+anchor_bottom = 0.5
+offset_top = -32.5
+offset_bottom = 32.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 10
-text = "Description
-"
+text = "Very long long description, what about this hein? "
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
