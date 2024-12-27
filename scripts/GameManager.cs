@@ -17,22 +17,16 @@ public partial class GameManager : Node2D
     private List<Enemy> enemies;
     private Turns turn = Turns.PlayerTurn;
     private Card selectedCard;
-    private List<Node2D> enemyContainers;
+    private Control enemyContainer;
     [Export] private DeckResource initialDeck;
+    [Export] private Array<EnemyResource> enemyTypes;
 
     public override void _Ready()
     {
         RegisterEvents();
-        player = GetNode<Node2D>("%Player") as Player;
+        player = GetNode<Control>("%Player") as Player;
         enemies = new();
-        enemyContainers = new()
-        {
-            GetNode<Node2D>("%EnemySpawn"),
-            GetNode<Node2D>("%EnemySpawn2"),
-            GetNode<Node2D>("%EnemySpawn3"),
-            GetNode<Node2D>("%EnemySpawn4")
-        };
-
+        enemyContainer = GetNode<Control>("%EnemySpawn");
         StartGame();
     }
 
@@ -114,30 +108,29 @@ public partial class GameManager : Node2D
 
     private void GenerateEnemies()
     {
-        var enemyScene = GD.Load<PackedScene>("res://Scenes/enemy.tscn");
+        var enemyScene = GD.Load<PackedScene>("res://Scenes/EnemyUI.tscn");
         Random rng = new();
         int numberOfEnemies = rng.Next(4) + 1;
-        List<EnemyDTO> enemyDTOs = GetEnemyTypesFromJson("Data/enemyTypes.json");
         for (int i = 0; i < numberOfEnemies; i++)
         {
             var enemyNode = enemyScene.Instantiate();
             if (enemyNode is Enemy enemy)
             {
                 int enemyTypeIndex = rng.Next(0, 2);
-                EnemyDTO enemyDTO = enemyDTOs[enemyTypeIndex];
-                int enemyHealth = rng.Next(enemyDTO.MinHealth, enemyDTO.MaxHealth);
+                EnemyResource enemyResource = enemyTypes[enemyTypeIndex];
+                int enemyHealth = rng.Next(enemyResource.MinHealth, enemyResource.MaxHealth);
 
-                enemy.intentMinValue = enemyDTO.MinIntent;
-                enemy.intentMaxValue = enemyDTO.MaxIntent;
+                enemy.intentMinValue = enemyResource.MinIntent;
+                enemy.intentMaxValue = enemyResource.MaxIntent;
 
-                enemy.EnemyName = enemyDTO.EnemyName;
-                enemy.SpritePath = enemyDTO.Sprite;
+                enemy.EnemyName = enemyResource.EnemyName;
+                enemy.texture = enemyResource.Texture;
                 enemy.Health = enemyHealth;
                 enemy.MaxHealth = enemyHealth;
-                enemy.Armor = enemyDTO.Armor;
+                enemy.Armor = enemyResource.Armor;
 
                 enemies.Add(enemy);
-                enemyContainers[i].AddChild(enemy);
+                enemyContainer.AddChild(enemy);
             }
         }
     }
@@ -148,6 +141,7 @@ public partial class GameManager : Node2D
         GenerateEnemyIntent();
         player.SetManaToMax();
         player.RefreshHand();
+        player.GetNode<Button>("%EndTurnButton").Disabled = false;
     }
 
     private void GenerateEnemyIntent()
@@ -161,11 +155,11 @@ public partial class GameManager : Node2D
             int intentValue = rng.Next(enemy.intentMinValue, enemy.intentMaxValue);
             enemy.SetIntent(intent, intentValue);
             if (intent == Intent.Attack)
-                enemy.GetNode<Sprite2D>("IntentImage").Texture = GD.Load<Texture2D>(
+                enemy.GetNode<TextureRect>("%IntentImage").Texture = GD.Load<Texture2D>(
                     "res://Images/Icons/sword.png"
                 );
             else if (intent == Intent.Defend)
-                enemy.GetNode<Sprite2D>("IntentImage").Texture = GD.Load<Texture2D>(
+                enemy.GetNode<TextureRect>("%IntentImage").Texture = GD.Load<Texture2D>(
                     "res://Images/Icons/shield.png"
                 );
         }
@@ -279,6 +273,7 @@ public partial class GameManager : Node2D
             enemies.Remove(enemy);
             var parent = enemy.GetParent();
             parent.RemoveChild(enemy);
+            enemy.QueueFree();
             if (enemies.Count <= 0)
             {
                 // PLAYER WINS ENCOUNTER

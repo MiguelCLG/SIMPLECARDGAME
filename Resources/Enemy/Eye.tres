@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EnemyResource" load_steps=3 format=3 uid="uid://cf4ijtn70kykt"]
+
+[ext_resource type="Texture2D" uid="uid://dd2bg0rgtyom0" path="res://Images/Enemies/Eye/eye_frame_5.png" id="1_gi0ko"]
+[ext_resource type="Script" path="res://scripts/Resources/EnemyResource.cs" id="1_jt0pb"]
+
+[resource]
+script = ExtResource("1_jt0pb")
+EnemyName = "Eye"
+Texture = ExtResource("1_gi0ko")
+MinHealth = 8
+MaxHealth = 32
+Armor = 0
+MaxIntent = 10
+MinIntent = 5

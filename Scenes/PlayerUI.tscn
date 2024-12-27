@@ -1,0 +1,197 @@
+[gd_scene load_steps=8 format=3 uid="uid://hacf2ofbjet2"]
+
+[ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="1_602uo"]
+[ext_resource type="Texture2D" uid="uid://b8dt1bpcs22l8" path="res://Images/UI/PlayerPortrait.svg" id="2_0rn5c"]
+[ext_resource type="Script" path="res://scripts/Player.cs" id="2_2p878"]
+[ext_resource type="Texture2D" uid="uid://bt16we0p7abkl" path="res://Images/Icons/shield.png" id="4_2i3ii"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p312s"]
+bg_color = Color(0.4, 0.176471, 0.568627, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 4.0
+expand_margin_right = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c6rko"]
+bg_color = Color(0.217597, 0.228848, 0.270139, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 4.0
+expand_margin_right = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3t8gw"]
+bg_color = Color(0.514943, 0.250581, 0.719193, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 4.0
+expand_margin_right = 4.0
+
+[node name="Player" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_2p878")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HandContainer" type="GridContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+columns = 4
+
+[node name="PlayerUI" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+theme = ExtResource("1_602uo")
+theme_type_variation = &"PlayerPanel"
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayerUI"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -63.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PlayerUI/MarginContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="PlayerUI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme = ExtResource("1_602uo")
+theme_type_variation = &"PContainer"
+
+[node name="TextureRect" type="TextureRect" parent="PlayerUI/MarginContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("2_0rn5c")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerUI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+size_flags_stretch_ratio = 10.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PlayerUI/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HealthBar" type="ProgressBar" parent="PlayerUI/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 5)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 1
+theme = ExtResource("1_602uo")
+theme_type_variation = &"HealthBar"
+step = 1.0
+value = 83.0
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="PlayerUI/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.65098, 0.317647, 1)
+theme_override_font_sizes/font_size = 12
+text = "100"
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PlayerUI/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ManaBar" type="ProgressBar" parent="PlayerUI/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 5)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 1
+theme = ExtResource("1_602uo")
+theme_type_variation = &"ManaBar"
+max_value = 3.0
+value = 2.0
+show_percentage = false
+
+[node name="ManaLabel" type="Label" parent="PlayerUI/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.176471, 0.568627, 1)
+theme_override_font_sizes/font_size = 12
+text = "100"
+vertical_alignment = 1
+
+[node name="ArmorTexture" type="TextureRect" parent="PlayerUI/MarginContainer/HBoxContainer"]
+modulate = Color(0.647059, 0.815686, 1, 1)
+layout_mode = 2
+size_flags_horizontal = 2
+texture = ExtResource("4_2i3ii")
+expand_mode = 3
+
+[node name="ArmorLabel" type="Label" parent="PlayerUI/MarginContainer/HBoxContainer/ArmorTexture"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.5
+offset_top = -8.5
+offset_right = 10.5
+offset_bottom = 8.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EndTurnButton" type="Button" parent="PlayerUI/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_stretch_ratio = 4.0
+theme_override_styles/focus = SubResource("StyleBoxFlat_p312s")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_c6rko")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_3t8gw")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_3t8gw")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3t8gw")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_p312s")
+theme_override_styles/normal = SubResource("StyleBoxFlat_p312s")
+text = "End"
+
+[connection signal="pressed" from="PlayerUI/MarginContainer/HBoxContainer/EndTurnButton" to="." method="OnEndTurnPress"]

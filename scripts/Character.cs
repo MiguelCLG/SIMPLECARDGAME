@@ -1,6 +1,6 @@
 using Godot;
 
-public abstract partial class Character : Node2D
+public abstract partial class Character : Control
 {
     [Export]
     public int Health { get; set; }

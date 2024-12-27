@@ -1,0 +1,134 @@
+[gd_resource type="Theme" load_steps=19 format=3 uid="uid://dbrvjx74ucqyo"]
+
+[ext_resource type="Texture2D" uid="uid://dc8t77vepail4" path="res://Images/UI/Card.png" id="1_refnv"]
+[ext_resource type="Texture2D" uid="uid://cnsl5ujvngfsi" path="res://Images/UI/Background.png" id="2_t2syh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6jali"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lb3cy"]
+bg_color = Color(0.647059, 0.815686, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x7d04"]
+texture = ExtResource("1_refnv")
+texture_margin_left = 12.0
+texture_margin_top = 24.0
+texture_margin_right = 12.0
+texture_margin_bottom = 24.0
+expand_margin_left = 6.0
+expand_margin_top = 6.0
+expand_margin_right = 6.0
+expand_margin_bottom = 6.0
+modulate_color = Color(0.728737, 0.707784, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ob0a3"]
+texture = ExtResource("1_refnv")
+texture_margin_left = 12.0
+texture_margin_top = 24.0
+texture_margin_right = 12.0
+texture_margin_bottom = 24.0
+expand_margin_left = 6.0
+expand_margin_top = 6.0
+expand_margin_right = 6.0
+expand_margin_bottom = 6.0
+modulate_color = Color(0.728737, 0.707784, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ds72b"]
+texture = ExtResource("1_refnv")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+expand_margin_left = 6.0
+expand_margin_top = 6.0
+expand_margin_right = 6.0
+expand_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_grmsu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kg3qt"]
+bg_color = Color(0.796078, 0.796078, 0.694118, 0.501961)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rolgm"]
+bg_color = Color(1, 1, 1, 0)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wh5ny"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lyvor"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pccxb"]
+bg_color = Color(0, 0.65098, 0.317647, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_of4ff"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yjdwq"]
+bg_color = Color(0.4, 0.176471, 0.568627, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2mej6"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cuo0n"]
+texture = ExtResource("2_t2syh")
+region_rect = Rect2(12.5, 32.4569, 236, 367.857)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p11fq"]
+bg_color = Color(0.176419, 0.176419, 0.176419, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[resource]
+ArmorBar/base_type = &"ProgressBar"
+ArmorBar/styles/background = SubResource("StyleBoxFlat_6jali")
+ArmorBar/styles/fill = SubResource("StyleBoxFlat_lb3cy")
+Card/base_type = &"Button"
+Card/styles/focus = SubResource("StyleBoxTexture_x7d04")
+Card/styles/hover = SubResource("StyleBoxTexture_ob0a3")
+Card/styles/normal = SubResource("StyleBoxTexture_ds72b")
+FlatButton/styles/disabled = SubResource("StyleBoxEmpty_grmsu")
+FlatButton/styles/hover = SubResource("StyleBoxFlat_kg3qt")
+FlatButton/styles/normal = SubResource("StyleBoxFlat_rolgm")
+FlatButton/styles/pressed = SubResource("StyleBoxEmpty_wh5ny")
+HealthBar/base_type = &"ProgressBar"
+HealthBar/styles/background = SubResource("StyleBoxFlat_lyvor")
+HealthBar/styles/fill = SubResource("StyleBoxFlat_pccxb")
+ManaBar/base_type = &"ProgressBar"
+ManaBar/styles/background = SubResource("StyleBoxFlat_of4ff")
+ManaBar/styles/fill = SubResource("StyleBoxFlat_yjdwq")
+PContainer/base_type = &"PanelContainer"
+PContainer/styles/panel = SubResource("StyleBoxFlat_2mej6")
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_cuo0n")
+PlayerPanel/base_type = &"Panel"
+PlayerPanel/styles/panel = SubResource("StyleBoxFlat_p11fq")

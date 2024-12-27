@@ -20,18 +20,26 @@ public partial class Player : Character
     private Label healthLabel;
     private Label manaLabel;
     private Label armorLabel;
+    private ProgressBar healthBar;
+    private ProgressBar manaBar;
     private PackedScene cardScene = GD.Load<PackedScene>("res://Scenes/card.tscn");
-    private HBoxContainer handContainer;
+    private GridContainer handContainer;
 
     /*public Player(int health, int maxHealth, int armor)
         : base(health, maxHealth, armor) { }*/
 
     public override void _Ready()
     {
-        handContainer = GetNode<HBoxContainer>("%HandContainer");
+        handContainer = GetNode<GridContainer>("%HandContainer");
         armorLabel = GetNode<Label>("%ArmorLabel");
         healthLabel = GetNode<Label>("%HealthLabel");
         manaLabel = GetNode<Label>("%ManaLabel");
+        healthBar = GetNode<ProgressBar>("%HealthBar");
+        manaBar = GetNode<ProgressBar>("%ManaBar");
+        healthBar.MaxValue = MaxHealth;
+        manaBar.MaxValue = MaxMana;
+        healthBar.Value = Health;
+        manaBar.Value = Mana;
 
         healthLabel.Text = $"{Health}/{MaxHealth}";
         manaLabel.Text = $"{Mana}/{MaxMana}";
@@ -142,6 +150,7 @@ public partial class Player : Character
             card.Effect.ApplyEffect(this, enemy);
             Mana -= card.Cost;
             manaLabel.Text = $"{Mana}/{MaxMana}";
+            manaBar.Value = Mana;
         }
         else
         {
@@ -185,6 +194,7 @@ public partial class Player : Character
             // game over
             EventRegistry.GetEventPublisher("OnPlayerDie").RaiseEvent(this);
         }
+        healthBar.Value = Health;
         healthLabel.Text = $"{Health}/{MaxHealth}";
     }
 
@@ -198,22 +208,27 @@ public partial class Player : Character
     {
         Mana += mana;
         manaLabel.Text = $"{Mana}/{MaxMana}";
+        manaBar.Value = Mana;
     }
 
     public void SetManaToMax()
     {
         Mana = MaxMana;
         manaLabel.Text = $"{Mana}/{MaxMana}";
+        manaBar.Value = Mana;
     }
 
     public void SetHealthToMax()
     {
         Health = MaxHealth;
         healthLabel.Text = $"{Health}/{MaxHealth}";
+        healthBar.Value = MaxHealth;
     }
 
     public void OnEndTurnPress()
     {
+        GetNode<Button>("%EndTurnButton").ReleaseFocus();
+        GetNode<Button>("%EndTurnButton").Disabled = true;
         EventRegistry.GetEventPublisher("OnEndTurnPress").RaiseEvent(this);
     }
 }
