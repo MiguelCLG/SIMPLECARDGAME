@@ -52,6 +52,7 @@ layout_mode = 2
 [node name="IntentImage" type="TextureRect" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 modulate = Color(1, 0.0980392, 0.333333, 1)
+texture_filter = 1
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 8

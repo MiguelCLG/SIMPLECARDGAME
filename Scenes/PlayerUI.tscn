@@ -155,6 +155,7 @@ vertical_alignment = 1
 
 [node name="ArmorTexture" type="TextureRect" parent="PlayerUI/MarginContainer/HBoxContainer"]
 modulate = Color(0.647059, 0.815686, 1, 1)
+texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 2
 texture = ExtResource("4_2i3ii")

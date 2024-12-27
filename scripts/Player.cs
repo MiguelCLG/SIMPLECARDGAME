@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Godot;
@@ -105,7 +106,7 @@ public partial class Player : Character
         DrawCard();
     }
 
-    public void DrawCard()
+    public override void DrawCard()
     {
         // Implement drawing card logic
         if (Deck.Count <= 0)
@@ -141,13 +142,15 @@ public partial class Player : Character
         handContainer.RemoveChild(card);
     }
 
-    public void PlayCard(Card card, Enemy enemy)
+    public void PlayCard(Card card, Array<Character> targets)
     {
         if (Mana >= card.Cost)
         {
             Hand.Remove(card);
             DiscardCard(card);
-            card.Effect.ApplyEffect(this, enemy);
+            if (!card.Effect.isMultipleTargets)
+                card.Effect.ApplyEffect(targets.FirstOrDefault());
+            else card.Effect.ApplyEffect(targets);
             Mana -= card.Cost;
             manaLabel.Text = $"{Mana}/{MaxMana}";
             manaBar.Value = Mana;
@@ -204,7 +207,7 @@ public partial class Player : Character
         armorLabel.Text = Armor.ToString();
     }
 
-    public void AddMana(int mana)
+    public override void AddMana(int mana)
     {
         Mana += mana;
         manaLabel.Text = $"{Mana}/{MaxMana}";

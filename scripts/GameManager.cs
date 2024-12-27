@@ -155,13 +155,21 @@ public partial class GameManager : Node2D
             int intentValue = rng.Next(enemy.intentMinValue, enemy.intentMaxValue);
             enemy.SetIntent(intent, intentValue);
             if (intent == Intent.Attack)
+            {
                 enemy.GetNode<TextureRect>("%IntentImage").Texture = GD.Load<Texture2D>(
-                    "res://Images/Icons/sword.png"
-                );
+                "res://Images/Icons/sword.png"
+            );
+                enemy.GetNode<TextureRect>("%IntentImage").Modulate = Color.Color8(255, 25, 85);
+                enemy.GetNode<Label>("%IntentValue").AddThemeColorOverride("font_color", Color.Color8(255, 25, 85));
+            }
             else if (intent == Intent.Defend)
+            {
                 enemy.GetNode<TextureRect>("%IntentImage").Texture = GD.Load<Texture2D>(
-                    "res://Images/Icons/shield.png"
-                );
+                "res://Images/Icons/shield.png"
+            );
+                enemy.GetNode<TextureRect>("%IntentImage").Modulate = Color.Color8(165, 208, 255);
+                enemy.GetNode<Label>("%IntentValue").AddThemeColorOverride("font_color", Color.Color8(165, 208, 255));
+            }
         }
     }
 
@@ -231,6 +239,9 @@ public partial class GameManager : Node2D
                 newCard.Cost = card.Cost;
                 newCard.EffectString = card.EffectString;
                 newCard.Value = card.Value;
+                newCard.Amount = card.Amount;
+                newCard.isTargetingSelf = card.isTargetingSelf;
+                newCard.isMultipleTargets = card.isMultipleTargets;
                 newCard.InitializeEffect();
                 loadedDeck.Add(newCard);
             }
@@ -288,7 +299,7 @@ public partial class GameManager : Node2D
         if (selectedCard != null)
             if (obj is Enemy enemy)
             {
-                player.PlayCard(selectedCard, enemy);
+                player.PlayCard(selectedCard, new Array<Character>() { enemy });
             }
         selectedCard = null;
     }
@@ -299,12 +310,24 @@ public partial class GameManager : Node2D
             return;
         if (obj is Card card)
         {
-            if (card.Effect.Type == CardEffectType.Attack)
+            if (card.Effect.Type == CardEffectType.Attack && !card.Effect.isMultipleTargets)
             {
                 selectedCard = card;
                 return;
             }
-            player.PlayCard(card, null);
+            Array<Character> characters = new();
+            if (card.Effect.isTargetingSelf)
+            {
+                characters.Add(player);
+            }
+            else
+            {
+                foreach (Enemy enemy in enemies)
+                {
+                    characters.Add(enemy);
+                }
+            }
+            player.PlayCard(card, characters);
         }
         else
         {

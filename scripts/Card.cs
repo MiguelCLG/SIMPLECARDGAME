@@ -12,13 +12,18 @@ public partial class Card : Button
     [Export]
     public int Cost { get; set; }
 
-    [JsonProperty("Effect")]
+    [Export]
     public string EffectString;
-
-    [JsonIgnore]
     public CardEffect Effect { get; set; }
 
+    [Export]
     public int Value { get; set; }
+    [Export]
+    public int Amount { get; set; }
+    [Export]
+    public bool isTargetingSelf = false;
+    [Export]
+    public bool isMultipleTargets = false;
 
     public override void _Ready()
     {
@@ -33,22 +38,29 @@ public partial class Card : Button
         {
             case "Attack":
                 Effect = new AttackEffect();
-                Effect.Value = Value;
                 break;
             case "Defense":
                 Effect = new DefenseEffect();
-                Effect.Value = Value;
+
                 break;
             case "Draw":
                 Effect = new DrawEffect();
-                Effect.Value = Value;
                 break;
             case "Mana":
                 Effect = new ManaEffect();
-                Effect.Value = Value;
                 break;
-            // Handle other effect types if needed
+            case "Cleave":
+                Effect = new CleaveEffect();
+                break;
+            case "Poison":
+                Effect = new PoisonEffect();
+                break;
+                // Handle other effect types if needed
         }
+        Effect.Value = Value;
+        Effect.Amount = Amount;
+        Effect.isMultipleTargets = isMultipleTargets;
+        Effect.isTargetingSelf = isTargetingSelf;
     }
 
     public void OnButtonPressed()

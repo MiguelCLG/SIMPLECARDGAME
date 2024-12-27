@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 public enum Intent
@@ -128,5 +129,16 @@ public partial class Enemy : Character
         EventRegistry.GetEventPublisher("OnEnemyClick").RaiseEvent(this);
     }
 
+    public override void AddMana(int mana)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void DrawCard()
+    {
+        throw new NotImplementedException();
+    }
+
     // Add other methods as needed
+
 }

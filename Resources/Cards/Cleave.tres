@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CardResource" load_steps=2 format=3 uid="uid://cg40eloq3p8tk"]
+
+[ext_resource type="Script" path="res://scripts/Resources/CardResource.cs" id="1_21m86"]
+
+[resource]
+script = ExtResource("1_21m86")
+CardName = "Cleave"
+Description = "Deal 4 Damage to all enemies"
+Cost = 1
+Value = 4
+Amount = 1
+EffectString = "Cleave"
+isTargetingSelf = false
+isMultipleTargets = true
+cardEffectType = 0
