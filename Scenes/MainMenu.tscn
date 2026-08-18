@@ -1,0 +1,174 @@
+[gd_scene format=3 uid="uid://bpmg1t8xu710r"]
+
+[ext_resource type="Script" uid="uid://chod1tdt8n4rt" path="res://scripts/MainMenu.cs" id="1_mm0i0"]
+[ext_resource type="Texture2D" uid="uid://cnsl5ujvngfsi" path="res://Images/UI/Background.png" id="2_bg0d"]
+[ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="3_th3m"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_853f1"]
+blend_mode = 3
+
+[sub_resource type="Theme" id="Theme_is14l"]
+
+[sub_resource type="Theme" id="Theme_4a6vu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
+bg_color = Color(0, 0, 0, 0.88235295)
+
+[sub_resource type="Theme" id="Theme_imx17"]
+
+[node name="MainMenu" type="Control" unique_id=242072808]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_th3m")
+script = ExtResource("1_mm0i0")
+
+[node name="Background" type="TextureRect" parent="." unique_id=825900282]
+material = SubResource("CanvasItemMaterial_853f1")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg0d")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Title" type="Label" parent="." unique_id=1114597405]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = 118.0
+offset_right = 150.0
+offset_bottom = 218.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 40
+text = "Space Odyssey"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=772431994]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuContainer" type="VBoxContainer" parent="CenterContainer" unique_id=359038692]
+layout_mode = 2
+alignment = 1
+
+[node name="StartButton" type="Button" parent="CenterContainer/MenuContainer" unique_id=1684909512]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(224, 54)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_is14l")
+theme_type_variation = &"MainMenuButton"
+text = "Start"
+
+[node name="OptionsButton" type="Button" parent="CenterContainer/MenuContainer" unique_id=413076401]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(224, 54)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_4a6vu")
+theme_type_variation = &"MainMenuButton"
+text = "Options"
+
+[node name="QuitButton" type="Button" parent="CenterContainer/MenuContainer" unique_id=1958869819]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(224, 54)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_4a6vu")
+theme_type_variation = &"MainMenuButton"
+text = "Quit"
+
+[node name="OptionsPanel" type="Panel" parent="." unique_id=302726288]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_overlay")
+
+[node name="OptionsTitle" type="Label" parent="OptionsPanel" unique_id=1561180704]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -80.0
+offset_top = 143.0
+offset_right = 80.0
+offset_bottom = 174.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "Options"
+horizontal_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="OptionsPanel" unique_id=107632508]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OptionContainer" type="VBoxContainer" parent="OptionsPanel/CenterContainer" unique_id=223540585]
+layout_mode = 2
+alignment = 1
+
+[node name="VolumeLabel" type="Label" parent="OptionsPanel/CenterContainer/OptionContainer" unique_id=1527919281]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "Master Volume"
+horizontal_alignment = 1
+
+[node name="VolumeSlider" type="HSlider" parent="OptionsPanel/CenterContainer/OptionContainer" unique_id=1272071106]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 16)
+layout_mode = 2
+size_flags_horizontal = 4
+value = 100.0
+
+[node name="BackButton" type="Button" parent="OptionsPanel" unique_id=1617330460]
+custom_minimum_size = Vector2(160, 44)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -142.0
+offset_right = 80.0
+offset_bottom = -98.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+theme = SubResource("Theme_imx17")
+theme_type_variation = &"MainMenuButton"
+text = "Back"
+
+[connection signal="pressed" from="CenterContainer/MenuContainer/StartButton" to="." method="OnStartPressed"]
+[connection signal="pressed" from="CenterContainer/MenuContainer/OptionsButton" to="." method="OnOptionsPressed"]
+[connection signal="pressed" from="CenterContainer/MenuContainer/QuitButton" to="." method="OnQuitPressed"]
+[connection signal="pressed" from="OptionsPanel/BackButton" to="." method="OnBackPressed"]

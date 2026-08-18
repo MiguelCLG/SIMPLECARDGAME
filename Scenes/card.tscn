@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://celrxrn4kmdyu"]
+[gd_scene format=3 uid="uid://celrxrn4kmdyu"]
 
-[ext_resource type="Script" path="res://scripts/Card.cs" id="1_ay7ty"]
+[ext_resource type="Script" uid="uid://b3nko2grxp1io" path="res://scripts/Card.cs" id="1_ay7ty"]
 [ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="1_qjo62"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gllfx"]
@@ -18,7 +18,7 @@ corner_radius_bottom_left = 50
 [sub_resource type="Theme" id="Theme_6l17w"]
 Panel/styles/panel = SubResource("StyleBoxFlat_gllfx")
 
-[node name="CardContainer" type="Button"]
+[node name="CardContainer" type="Button" unique_id=646478723]
 custom_minimum_size = Vector2(75, 100)
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,7 +33,7 @@ theme = ExtResource("1_qjo62")
 theme_type_variation = &"Card"
 script = ExtResource("1_ay7ty")
 
-[node name="ManaContainer" type="Panel" parent="."]
+[node name="ManaContainer" type="Panel" parent="." unique_id=193068011]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 1
 anchors_preset = 1
@@ -48,7 +48,7 @@ size_flags_horizontal = 8
 size_flags_vertical = 0
 theme = SubResource("Theme_6l17w")
 
-[node name="ManaCost" type="Label" parent="ManaContainer"]
+[node name="ManaCost" type="Label" parent="ManaContainer" unique_id=1874873813]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -61,12 +61,15 @@ offset_right = 14.5
 offset_bottom = 13.5
 grow_horizontal = 2
 grow_vertical = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, 4.835)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = "1"
 horizontal_alignment = 1
 
-[node name="CardName" type="Label" parent="."]
+[node name="CardName" type="Label" parent="." unique_id=103027886]
+custom_minimum_size = Vector2(1, 1)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -76,13 +79,14 @@ grow_horizontal = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 10
 text = "Name"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Description" type="Label" parent="."]
+[node name="Description" type="Label" parent="." unique_id=1939397027]
+custom_minimum_size = Vector2(1, 1)
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -93,7 +97,7 @@ offset_bottom = 32.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 8
 text = "Very long long description, what about this hein? "
 horizontal_alignment = 1
 vertical_alignment = 1
