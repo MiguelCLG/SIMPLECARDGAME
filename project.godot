@@ -14,7 +14,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="SimpleCardGame"
+config/name="SpaceOdyssey"
 run/main_scene="res://Scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.7", "C#", "Mobile")
 config/windows_native_icon="res://Images/Icons/simplecardgameicon.ico"
@@ -27,7 +27,7 @@ window/handheld/orientation=1
 
 [dotnet]
 
-project/assembly_name="SimpleCardGame"
+project/assembly_name="SpaceOdyssey"
 
 [file_customization]
 
@@ -37,6 +37,10 @@ folder_colors={
 "res://Scenes/": "purple",
 "res://scripts/": "green"
 }
+
+[gui]
+
+theme/custom_font="res://Themes/Fonts/BMSPA.TTF"
 
 [rendering]
 

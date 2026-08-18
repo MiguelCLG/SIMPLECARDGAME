@@ -1,4 +1,4 @@
-# Simple Card Game
+# SpaceOdyssey
 
 This is a simple card game inspired by games like Slay the Spire. The game is designed to be played on mobile devices in portrait orientation.
 

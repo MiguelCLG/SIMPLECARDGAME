@@ -1,20 +1,20 @@
-[gd_scene load_steps=7 format=3 uid="uid://mm8pkalmgkf4"]
+[gd_scene format=3 uid="uid://mm8pkalmgkf4"]
 
-[ext_resource type="Script" path="res://scripts/GameManager.cs" id="1_88b2m"]
+[ext_resource type="Script" uid="uid://c7xe4axqeat4a" path="res://scripts/GameManager.cs" id="1_88b2m"]
 [ext_resource type="Resource" uid="uid://dwvmtk3oihb0s" path="res://Resources/Decks/InitialDeck_test.tres" id="2_arw6l"]
 [ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="3_30d4m"]
 [ext_resource type="Resource" uid="uid://cf4ijtn70kykt" path="res://Resources/Enemy/Eye.tres" id="3_gl7td"]
 [ext_resource type="Resource" uid="uid://ce6nt8ddy3ix8" path="res://Resources/Enemy/Wolf.tres" id="4_8sacp"]
 [ext_resource type="PackedScene" uid="uid://hacf2ofbjet2" path="res://Scenes/PlayerUI.tscn" id="4_wcy40"]
 
-[node name="Encounter" type="Node2D"]
+[node name="Encounter" type="Node2D" unique_id=981101678]
 script = ExtResource("1_88b2m")
 initialDeck = ExtResource("2_arw6l")
 enemyTypes = Array[Object]([ExtResource("3_gl7td"), ExtResource("4_8sacp")])
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1308158913]
 
-[node name="Panel" type="PanelContainer" parent="CanvasLayer"]
+[node name="Panel" type="PanelContainer" parent="CanvasLayer" unique_id=933500395]
 self_modulate = Color(0.4, 0.4, 0.4, 1)
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,20 +23,22 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_30d4m")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Panel" unique_id=1095613459]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="EnemySpawn" type="HBoxContainer" parent="CanvasLayer/Panel/MarginContainer"]
+[node name="EnemySpawn" type="GridContainer" parent="CanvasLayer/Panel/MarginContainer" unique_id=1765357860]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 0
 size_flags_vertical = 0
+theme_override_constants/h_separation = 32
+theme_override_constants/v_separation = 32
+columns = 3
 
-[node name="Player" parent="CanvasLayer/Panel/MarginContainer" instance=ExtResource("4_wcy40")]
+[node name="Player" parent="CanvasLayer/Panel/MarginContainer" unique_id=159553283 instance=ExtResource("4_wcy40")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
