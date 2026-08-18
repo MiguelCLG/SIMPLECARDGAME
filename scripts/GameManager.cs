@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Godot;
 using Godot.Collections;
 using Newtonsoft.Json;
@@ -18,8 +19,10 @@ public partial class GameManager : Node2D
     private Turns turn = Turns.PlayerTurn;
     private Card selectedCard;
     private Control enemyContainer;
+    private bool resumedEncounter;
     [Export] private DeckResource initialDeck;
     [Export] private Array<EnemyResource> enemyTypes;
+    [Export] private ActConfig actConfig;
 
     public override void _Ready()
     {
@@ -27,7 +30,17 @@ public partial class GameManager : Node2D
         player = GetNode<Control>("%Player") as Player;
         enemies = new();
         enemyContainer = GetNode<Control>("%EnemySpawn");
-        StartGame();
+        SetupRun();
+    }
+
+    public override void _ExitTree()
+    {
+        EventSubscriber.UnsubscribeFromEvent("OnCardClick", OnCardClick);
+        EventSubscriber.UnsubscribeFromEvent("OnEnemyClick", OnEnemyClick);
+        EventSubscriber.UnsubscribeFromEvent("OnEnemyDie", OnEnemyDie);
+        EventSubscriber.UnsubscribeFromEvent("OnPlayerDie", OnPlayerDie);
+        EventSubscriber.UnsubscribeFromEvent("OnEndTurnPress", OnEndTurnPress);
+        EventSubscriber.UnsubscribeFromEvent("OnEscapeKey", OnEscapeKey);
     }
 
     private void RegisterEvents()
@@ -53,36 +66,72 @@ public partial class GameManager : Node2D
         EventSubscriber.SubscribeToEvent("OnEscapeKey", OnEscapeKey);
     }
 
-    public void Restart()
+    private void SetupRun()
     {
-        foreach (var enemy in enemies)
+        RunData run = RunManager.CurrentRun;
+        if (run == null)
         {
-            enemy.GetParent().RemoveChild(enemy);
-            enemy.QueueFree();
+            GD.PrintErr("No active run, returning to menu");
+            GetTree().ChangeSceneToFile("res://Scenes/MainMenu.tscn");
+            return;
         }
-        enemies = new();
-        turn = Turns.PlayerTurn;
-        selectedCard = null;
-        player.ResetPlayer();
-        StartGame();
-    }
 
-    public void StartGame()
-    {
-        // Get Cards for deck
-        // Add cards to player deck
-        // Starts the encounter
-        /* LoadDeckFromJson("Data/initialDeck.json"); */
-        LoadDeck();
-        StartEncounter();
-    }
+        player.ApplyState(run.PlayerState);
+        player.SetDeck(run.Deck);
+        player.SetHand(run.Hand);
+        player.SetDiscard(run.Discard);
 
-    public void StartEncounter()
-    {
-        // Implement encounter initialization
-        GenerateEnemies();
+        resumedEncounter = run.ActiveEncounter && run.Enemies.Count > 0;
+        if (resumedEncounter)
+        {
+            foreach (EnemySaveData data in run.Enemies)
+            {
+                SpawnEnemyFromSave(data);
+            }
+        }
+        else
+        {
+            GenerateEnemies();
+            run.ActiveEncounter = true;
+            PersistLiveState();
+        }
+
         player.StartEncounter();
+        if (!resumedEncounter) player.Shuffle();
         ResolvePlayerTurn();
+    }
+
+    private void PersistLiveState()
+    {
+        RunData run = RunManager.CurrentRun;
+        if (run == null) return;
+        run.PlayerState = player.CollectState();
+        player.CollectCards(out run.Deck, out run.Hand, out run.Discard);
+        run.Enemies = enemies.Select(e => e.CollectState()).ToList();
+        RunManager.SaveRun();
+    }
+
+    private void SpawnEnemyFromSave(EnemySaveData data)
+    {
+        var enemyScene = GD.Load<PackedScene>("res://Scenes/EnemyUI.tscn");
+        var enemyNode = enemyScene.Instantiate();
+        if (enemyNode is Enemy enemy)
+        {
+            enemy.ApplyState(data);
+            enemies.Add(enemy);
+            enemyContainer.AddChild(enemy);
+            enemy.ApplyIntentVisuals();
+        }
+    }
+
+    private void ReturnToMenu()
+    {
+        GetTree().ChangeSceneToFile("res://Scenes/MainMenu.tscn");
+    }
+
+    private void ReturnToPath()
+    {
+        GetTree().ChangeSceneToFile("res://Scenes/PathMap.tscn");
     }
 
     private List<EnemyDTO> GetEnemyTypesFromJson(string filePath)
@@ -110,18 +159,30 @@ public partial class GameManager : Node2D
     {
         var enemyScene = GD.Load<PackedScene>("res://Scenes/EnemyUI.tscn");
         Random rng = new();
-        int numberOfEnemies = rng.Next(4) + 1;
+        int row = RunManager.CurrentRun?.CurrentRow ?? 0;
+        float scale = 1f + row * 0.15f;
+        bool boss = RunManager.CurrentRun?.IsBossNode == true;
+        int numberOfEnemies = boss ? 1 : rng.Next(4) + 1;
         for (int i = 0; i < numberOfEnemies; i++)
         {
             var enemyNode = enemyScene.Instantiate();
             if (enemyNode is Enemy enemy)
             {
-                int enemyTypeIndex = rng.Next(0, 2);
+                int enemyTypeIndex = rng.Next(0, enemyTypes.Count);
                 EnemyResource enemyResource = enemyTypes[enemyTypeIndex];
-                int enemyHealth = rng.Next(enemyResource.MinHealth, enemyResource.MaxHealth);
+                int enemyHealth = (int)(rng.Next(enemyResource.MinHealth, enemyResource.MaxHealth) * scale);
+                if (boss) enemyHealth = (int)(enemyHealth * 1.5f);
 
-                enemy.intentMinValue = enemyResource.MinIntent;
-                enemy.intentMaxValue = enemyResource.MaxIntent;
+                float act = actConfig?.IntentMultiplier ?? 1f;
+                int attackMin = (int)((enemyResource.AttackMin + row * enemyResource.AttackGrowthPerStep) * act);
+                int attackMax = (int)((enemyResource.AttackMax + row * enemyResource.AttackGrowthPerStep) * act);
+                int defendMin = (int)((enemyResource.DefendMin + row * enemyResource.DefendGrowthPerStep) * act);
+                int defendMax = (int)((enemyResource.DefendMax + row * enemyResource.DefendGrowthPerStep) * act);
+
+                enemy.attackMinValue = attackMin;
+                enemy.attackMaxValue = attackMax;
+                enemy.defendMinValue = defendMin;
+                enemy.defendMaxValue = defendMax;
 
                 enemy.EnemyName = enemyResource.EnemyName;
                 enemy.texture = enemyResource.Texture;
@@ -138,10 +199,20 @@ public partial class GameManager : Node2D
     public void ResolvePlayerTurn()
     {
         // Implement player turn logic
-        GenerateEnemyIntent();
-        player.SetManaToMax();
-        player.RefreshHand();
+        var stats = RunManager.CurrentRun?.Stats;
+        if (stats != null) stats.TurnsPlayed++;
+        if (resumedEncounter)
+        {
+            resumedEncounter = false;
+        }
+        else
+        {
+            GenerateEnemyIntent();
+            player.SetManaToMax();
+            player.RefreshHand();
+        }
         player.GetNode<Button>("%EndTurnButton").Disabled = false;
+        PersistLiveState();
     }
 
     private void GenerateEnemyIntent()
@@ -152,24 +223,10 @@ public partial class GameManager : Node2D
         {
             Random rng = new();
             Intent intent = rng.Next(2) == 0 ? Intent.Attack : Intent.Defend;
-            int intentValue = rng.Next(enemy.intentMinValue, enemy.intentMaxValue);
-            enemy.SetIntent(intent, intentValue);
-            if (intent == Intent.Attack)
-            {
-                enemy.GetNode<TextureRect>("%IntentImage").Texture = GD.Load<Texture2D>(
-                "res://Images/Icons/sword.png"
-            );
-                enemy.GetNode<TextureRect>("%IntentImage").Modulate = Color.Color8(255, 25, 85);
-                enemy.GetNode<Label>("%IntentValue").AddThemeColorOverride("font_color", Color.Color8(255, 25, 85));
-            }
-            else if (intent == Intent.Defend)
-            {
-                enemy.GetNode<TextureRect>("%IntentImage").Texture = GD.Load<Texture2D>(
-                "res://Images/Icons/shield.png"
-            );
-                enemy.GetNode<TextureRect>("%IntentImage").Modulate = Color.Color8(165, 208, 255);
-                enemy.GetNode<Label>("%IntentValue").AddThemeColorOverride("font_color", Color.Color8(165, 208, 255));
-            }
+            int value = intent == Intent.Attack
+                ? rng.Next(enemy.attackMinValue, enemy.attackMaxValue)
+                : rng.Next(enemy.defendMinValue, enemy.defendMaxValue);
+            enemy.SetIntent(intent, value);
         }
     }
 
@@ -181,7 +238,7 @@ public partial class GameManager : Node2D
         {
             Timer timer = Utils.TimerUtils.CreateTimer(() => enemy.PlayTurn(player), this, .5f);
         }
-        NextTurn();
+        Utils.TimerUtils.CreateTimer(NextTurn, this, .5f * Math.Max(1, enemies.Count));
     }
 
     public void NextTurn()
@@ -189,6 +246,7 @@ public partial class GameManager : Node2D
         if (turn == Turns.PlayerTurn)
         {
             turn = Turns.EnemyTurn;
+            PersistLiveState();
             ResolveEnemyTurn();
         }
         else
@@ -199,62 +257,6 @@ public partial class GameManager : Node2D
     }
 
     // Add other methods as needed
-
-    /*   public void LoadDeckFromJson(string filePath)
-      {
-          try
-          {
-              // Read the JSON file
-              string jsonString = File.ReadAllText(filePath);
-
-              // Deserialize the JSON into a list of cards
-              List<Card> loadedDeck = JsonConvert.DeserializeObject<List<Card>>(jsonString);
-
-              foreach (Card card in loadedDeck)
-              {
-                  card.InitializeEffect();
-              }
-              // Assign the loaded deck to the player's deck
-              player.Hand = new();
-              player.DiscardPile = new();
-              player.Deck = loadedDeck;
-          }
-          catch (Exception e)
-          {
-              GD.PrintErr($"Error loading deck from JSON file: {e.Message}");
-          }
-      } */
-    public void LoadDeck()
-    {
-        try
-        {
-            // Deserialize the JSON into a list of cards
-            Array<Card> loadedDeck = new();
-
-            foreach (CardResource card in initialDeck.cards)
-            {
-                Card newCard = new();
-                newCard.CardName = card.CardName;
-                newCard.Description = card.Description;
-                newCard.Cost = card.Cost;
-                newCard.EffectString = card.EffectString;
-                newCard.Value = card.Value;
-                newCard.Amount = card.Amount;
-                newCard.isTargetingSelf = card.isTargetingSelf;
-                newCard.isMultipleTargets = card.isMultipleTargets;
-                newCard.InitializeEffect();
-                loadedDeck.Add(newCard);
-            }
-            // Assign the loaded deck to the player's deck
-            player.Hand = new();
-            player.DiscardPile = new();
-            player.Deck = loadedDeck;
-        }
-        catch (Exception e)
-        {
-            GD.PrintErr($"Error loading deck: {e.Message}");
-        }
-    }
 
     // Events
     private void OnEndTurnPress(object sender, object obj)
@@ -271,9 +273,10 @@ public partial class GameManager : Node2D
     {
         if (obj is Player player)
         {
-            // PLAYER LOSES ENCOUNTER
+            // PLAYER LOSES THE RUN
             GD.Print("PLAYER Loses");
-            Utils.TimerUtils.CreateTimer(Restart, this, 1f);
+            RunManager.EndRun(false);
+            Utils.TimerUtils.CreateTimer(ReturnToMenu, this, 1f);
         }
     }
 
@@ -281,15 +284,29 @@ public partial class GameManager : Node2D
     {
         if (obj is Enemy enemy)
         {
+            var stats = RunManager.CurrentRun?.Stats;
+            if (stats != null) stats.EnemiesDefeated++;
             enemies.Remove(enemy);
             var parent = enemy.GetParent();
             parent.RemoveChild(enemy);
             enemy.QueueFree();
             if (enemies.Count <= 0)
             {
-                // PLAYER WINS ENCOUNTER
-                GD.Print("PLAYER WINS");
-                Utils.TimerUtils.CreateTimer(Restart, this, .5f);
+                PersistLiveState();
+                if (RunManager.CurrentRun.IsBossNode)
+                {
+                    // PLAYER WINS THE RUN
+                    GD.Print("PLAYER WINS THE RUN");
+                    RunManager.EndRun(true);
+                    Utils.TimerUtils.CreateTimer(ReturnToMenu, this, 1f);
+                }
+                else
+                {
+                    // PLAYER WINS ENCOUNTER
+                    GD.Print("PLAYER WINS");
+                    RunManager.CompleteCurrentNode();
+                    Utils.TimerUtils.CreateTimer(ReturnToPath, this, .5f);
+                }
             }
         }
     }
@@ -300,6 +317,7 @@ public partial class GameManager : Node2D
             if (obj is Enemy enemy)
             {
                 player.PlayCard(selectedCard, new Array<Character>() { enemy });
+                PersistLiveState();
             }
         selectedCard = null;
     }
@@ -328,6 +346,7 @@ public partial class GameManager : Node2D
                 }
             }
             player.PlayCard(card, characters);
+            PersistLiveState();
         }
         else
         {

@@ -168,7 +168,77 @@ theme = SubResource("Theme_imx17")
 theme_type_variation = &"MainMenuButton"
 text = "Back"
 
+[node name="GamePanel" type="Panel" parent="." unique_id=302726289]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_overlay")
+
+[node name="GameTitle" type="Label" parent="GamePanel" unique_id=1114597406]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = 118.0
+offset_right = 150.0
+offset_bottom = 218.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 40
+text = "Space Odyssey"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="GamePanel" unique_id=107632509]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameContainer" type="VBoxContainer" parent="GamePanel/CenterContainer" unique_id=223540586]
+layout_mode = 2
+alignment = 1
+
+[node name="NewGameButton" type="Button" parent="GamePanel/CenterContainer/GameContainer" unique_id=1684909520]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(224, 54)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"MainMenuButton"
+text = "New Game"
+
+[node name="ContinueButton" type="Button" parent="GamePanel/CenterContainer/GameContainer" unique_id=413076402]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(224, 54)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"MainMenuButton"
+text = "Continue"
+
+[node name="BackToMenuButton" type="Button" parent="GamePanel/CenterContainer/GameContainer" unique_id=1958869820]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(224, 54)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"MainMenuButton"
+text = "Back"
+
 [connection signal="pressed" from="CenterContainer/MenuContainer/StartButton" to="." method="OnStartPressed"]
 [connection signal="pressed" from="CenterContainer/MenuContainer/OptionsButton" to="." method="OnOptionsPressed"]
 [connection signal="pressed" from="CenterContainer/MenuContainer/QuitButton" to="." method="OnQuitPressed"]
 [connection signal="pressed" from="OptionsPanel/BackButton" to="." method="OnBackPressed"]
+[connection signal="pressed" from="GamePanel/CenterContainer/GameContainer/NewGameButton" to="." method="OnNewGamePressed"]
+[connection signal="pressed" from="GamePanel/CenterContainer/GameContainer/ContinueButton" to="." method="OnContinuePressed"]
+[connection signal="pressed" from="GamePanel/CenterContainer/GameContainer/BackToMenuButton" to="." method="OnBackToMenuPressed"]

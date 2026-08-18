@@ -56,6 +56,9 @@ public partial class Card : Button
                 Effect = new PoisonEffect();
                 break;
                 // Handle other effect types if needed
+            default:
+                GD.PushError($"Card.InitializeEffect: unknown EffectString '{EffectString}' for card '{CardName}'");
+                return;
         }
         Effect.Value = Value;
         Effect.Amount = Amount;

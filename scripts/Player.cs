@@ -7,9 +7,9 @@ using static Utils;
 
 public partial class Player : Character
 {
-    public Array<Card> Deck { get; set; }
+    public List<CardSaveData> Deck { get; set; }
     public Array<Card> Hand { get; set; }
-    public Array<Card> DiscardPile { get; set; }
+    public List<CardSaveData> DiscardPile { get; set; }
 
     [Export]
     public int MaxMana { get; set; }
@@ -51,34 +51,72 @@ public partial class Player : Character
         Deck = new();
     }
 
-    public void ResetPlayer()
+    public void ClearCards()
     {
-        SetHealthToMax();
-        SetManaToMax();
-        Armor = 0;
-        armorLabel.Text = Armor.ToString();
-        foreach (var child in handContainer.GetChildren())
-        {
-            handContainer.RemoveChild(child);
-        }
-        foreach (var card in Hand)
-        {
-            card.GetParent()?.RemoveChild(card);
-            card.QueueFree();
-        }
-        foreach (var card in DiscardPile)
-        {
-            card.GetParent()?.RemoveChild(card);
-            card.QueueFree();
-        }
-        foreach (var card in Deck)
-        {
-            card.GetParent()?.RemoveChild(card);
-            card.QueueFree();
-        }
         Hand = new();
         DiscardPile = new();
         Deck = new();
+    }
+
+    public override void _ExitTree()
+    {
+        ClearCards();
+    }
+
+    public RunData.PlayerSaveState CollectState()
+    {
+        return new RunData.PlayerSaveState
+        {
+            Health = Health,
+            MaxHealth = MaxHealth,
+            Armor = Armor,
+            Mana = Mana,
+            MaxMana = MaxMana
+        };
+    }
+
+    public void ApplyState(RunData.PlayerSaveState state)
+    {
+        if (state == null) return;
+        Health = state.Health;
+        MaxHealth = state.MaxHealth;
+        Armor = state.Armor;
+        Mana = state.Mana;
+        MaxMana = state.MaxMana;
+        healthBar.MaxValue = MaxHealth;
+        manaBar.MaxValue = MaxMana;
+        healthBar.Value = Health;
+        manaBar.Value = Mana;
+        healthLabel.Text = $"{Health}/{MaxHealth}";
+        manaLabel.Text = $"{Mana}/{MaxMana}";
+        armorLabel.Text = Armor.ToString();
+    }
+
+    public void CollectCards(out List<CardSaveData> deck, out List<CardSaveData> hand, out List<CardSaveData> discard)
+    {
+        deck = new List<CardSaveData>(Deck);
+        hand = Hand.Select(CardSaveData.FromCard).ToList();
+        discard = new List<CardSaveData>(DiscardPile);
+    }
+
+    public void SetDeck(List<CardSaveData> deckData)
+    {
+        ClearCards();
+        Deck = deckData == null ? new() : new List<CardSaveData>(deckData);
+    }
+
+    public void SetHand(List<CardSaveData> handData)
+    {
+        if (handData == null) return;
+        foreach (CardSaveData data in handData)
+        {
+            SpawnCard(data);
+        }
+    }
+
+    public void SetDiscard(List<CardSaveData> discardData)
+    {
+        DiscardPile = discardData == null ? new() : new List<CardSaveData>(discardData);
     }
 
     public void StartEncounter()
@@ -88,7 +126,6 @@ public partial class Player : Character
             GD.PrintErr("Player has no deck");
             return;
         }
-        Shuffle();
     }
 
     public void RefreshHand()
@@ -111,8 +148,8 @@ public partial class Player : Character
         // Implement drawing card logic
         if (Deck.Count <= 0)
         {
-            Deck = DiscardPile;
-            DiscardPile = new();
+            Deck.AddRange(DiscardPile);
+            DiscardPile.Clear();
             Shuffle();
         }
         if (Hand.Count >= 5)
@@ -120,17 +157,23 @@ public partial class Player : Character
             Debug.Print("Hand Size Full");
             return;
         }
-        SpawnCard(Deck.First());
-        Deck.Remove(Deck.First());
+        CardSaveData data = Deck[0];
+        Deck.RemoveAt(0);
+        SpawnCard(data);
     }
 
-    public void SpawnCard(Card card)
+    public void SpawnCard(CardSaveData data)
     {
         var cardInstance = cardScene.Instantiate<Card>();
-        cardInstance.CardName = card.CardName;
-        cardInstance.Description = card.Description;
-        cardInstance.Cost = card.Cost;
-        cardInstance.Effect = card.Effect;
+        cardInstance.CardName = data.CardName;
+        cardInstance.Description = data.Description;
+        cardInstance.Cost = data.Cost;
+        cardInstance.EffectString = data.EffectString;
+        cardInstance.Value = data.Value;
+        cardInstance.Amount = data.Amount;
+        cardInstance.isTargetingSelf = data.isTargetingSelf;
+        cardInstance.isMultipleTargets = data.isMultipleTargets;
+        cardInstance.InitializeEffect();
         handContainer.AddChild(cardInstance);
         Hand.Add(cardInstance);
     }
@@ -138,8 +181,9 @@ public partial class Player : Character
     public void DiscardCard(Card card)
     {
         // Implement discarding card logic
-        DiscardPile.Add(card);
+        DiscardPile.Add(CardSaveData.FromCard(card));
         handContainer.RemoveChild(card);
+        card.QueueFree();
     }
 
     public void PlayCard(Card card, Array<Character> targets)
@@ -154,6 +198,8 @@ public partial class Player : Character
             Mana -= card.Cost;
             manaLabel.Text = $"{Mana}/{MaxMana}";
             manaBar.Value = Mana;
+            var stats = RunManager.CurrentRun?.Stats;
+            if (stats != null) stats.CardsPlayed++;
         }
         else
         {
@@ -191,6 +237,8 @@ public partial class Player : Character
             armorLabel.Text = Armor.ToString();
         }
         Health -= variableDamage;
+        var stats = RunManager.CurrentRun?.Stats;
+        if (stats != null) stats.DamageTaken += variableDamage;
         if (Health <= 0)
         {
             Health = 0;

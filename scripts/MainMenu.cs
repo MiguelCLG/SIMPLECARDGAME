@@ -8,6 +8,10 @@ public partial class MainMenu : Control
     private Button quitButton;
     private Panel optionsPanel;
     private HSlider volumeSlider;
+    private Panel gamePanel;
+    private Button newGameButton;
+    private Button continueButton;
+    private Button backToMenuButton;
     private readonly Dictionary<Button, Tween> hoverTweens = new();
 
     public override async void _Ready()
@@ -17,10 +21,16 @@ public partial class MainMenu : Control
         quitButton = GetNode<Button>("%QuitButton");
         optionsPanel = GetNode<Panel>("%OptionsPanel");
         volumeSlider = GetNode<HSlider>("%VolumeSlider");
+        gamePanel = GetNode<Panel>("%GamePanel");
+        newGameButton = GetNode<Button>("%NewGameButton");
+        continueButton = GetNode<Button>("%ContinueButton");
+        backToMenuButton = GetNode<Button>("%BackToMenuButton");
 
         ConnectHover(startButton);
         ConnectHover(optionsButton);
         ConnectHover(quitButton);
+
+        continueButton.Disabled = !RunManager.HasSave();
 
         int masterBus = AudioServer.GetBusIndex("Master");
         volumeSlider.Value = Mathf.Clamp(Mathf.DbToLinear(AudioServer.GetBusVolumeDb(masterBus)) * 100f, 0f, 100f);
@@ -54,7 +64,7 @@ public partial class MainMenu : Control
 
     private void ScaleButton(Button button, Vector2 targetScale)
     {
-        if (hoverTweens.TryGetValue(button, out Tween previous))
+        if (hoverTweens.TryGetValue(button, out Tween previous) && IsInstanceValid(previous))
             previous.Kill();
         Tween tween = CreateTween();
         hoverTweens[button] = tween;
@@ -77,7 +87,27 @@ public partial class MainMenu : Control
 
     private void OnStartPressed()
     {
-        GetTree().ChangeSceneToFile("res://Scenes/Encounter.tscn");
+        gamePanel.Visible = true;
+    }
+
+    private void OnNewGamePressed()
+    {
+        RunManager.NewRun();
+        GetTree().ChangeSceneToFile("res://Scenes/PathMap.tscn");
+    }
+
+    private void OnContinuePressed()
+    {
+        if (!RunManager.LoadSave()) return;
+        if (RunManager.CurrentRun.ActiveEncounter)
+            GetTree().ChangeSceneToFile("res://Scenes/Encounter.tscn");
+        else
+            GetTree().ChangeSceneToFile("res://Scenes/PathMap.tscn");
+    }
+
+    private void OnBackToMenuPressed()
+    {
+        gamePanel.Visible = false;
     }
 
     private void OnOptionsPressed()
