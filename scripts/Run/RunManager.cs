@@ -56,13 +56,18 @@ public static class RunManager
 
     public static bool IsSelectable(int row, int col)
     {
-        if (CurrentRun == null) return false;
-        if (row != CurrentRun.CurrentRow) return false;
-        if (row >= CurrentRun.Path.Count) return false;
-        if (col < 0 || col >= CurrentRun.Path[row].Count) return false;
+        return IsSelectable(CurrentRun, row, col);
+    }
+
+    public static bool IsSelectable(RunData run, int row, int col)
+    {
+        if (run == null) return false;
+        if (row != run.CurrentRow) return false;
+        if (row >= run.Path.Count) return false;
+        if (col < 0 || col >= run.Path[row].Count) return false;
         if (row == 0) return true;
-        if (CurrentRun.Path[row].Count == 1) return true;
-        int prev = CurrentRun.ChosenColumns[row - 1];
+        if (run.Path[row].Count == 1) return true;
+        int prev = run.ChosenColumns[row - 1];
         return col >= prev - 1 && col <= prev + 1;
     }
 

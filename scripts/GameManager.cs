@@ -160,9 +160,9 @@ public partial class GameManager : Node2D
         var enemyScene = GD.Load<PackedScene>("res://Scenes/EnemyUI.tscn");
         Random rng = new();
         int row = RunManager.CurrentRun?.CurrentRow ?? 0;
-        float scale = 1f + row * 0.15f;
         bool boss = RunManager.CurrentRun?.IsBossNode == true;
-        int numberOfEnemies = boss ? 1 : rng.Next(4) + 1;
+        float act = actConfig?.IntentMultiplier ?? 1f;
+        int numberOfEnemies = EnemyScaler.EnemyCount(rng, boss);
         for (int i = 0; i < numberOfEnemies; i++)
         {
             var enemyNode = enemyScene.Instantiate();
@@ -170,14 +170,20 @@ public partial class GameManager : Node2D
             {
                 int enemyTypeIndex = rng.Next(0, enemyTypes.Count);
                 EnemyResource enemyResource = enemyTypes[enemyTypeIndex];
-                int enemyHealth = (int)(rng.Next(enemyResource.MinHealth, enemyResource.MaxHealth) * scale);
-                if (boss) enemyHealth = (int)(enemyHealth * 1.5f);
+                int enemyHealth = EnemyScaler.ComputeHealth(enemyResource.MinHealth, enemyResource.MaxHealth, row, boss, rng);
 
-                float act = actConfig?.IntentMultiplier ?? 1f;
-                int attackMin = (int)((enemyResource.AttackMin + row * enemyResource.AttackGrowthPerStep) * act);
-                int attackMax = (int)((enemyResource.AttackMax + row * enemyResource.AttackGrowthPerStep) * act);
-                int defendMin = (int)((enemyResource.DefendMin + row * enemyResource.DefendGrowthPerStep) * act);
-                int defendMax = (int)((enemyResource.DefendMax + row * enemyResource.DefendGrowthPerStep) * act);
+                (int attackMin, int attackMax) = EnemyScaler.ComputeAttack(
+                    enemyResource.AttackMin,
+                    enemyResource.AttackMax,
+                    enemyResource.AttackGrowthPerStep,
+                    row,
+                    act);
+                (int defendMin, int defendMax) = EnemyScaler.ComputeDefend(
+                    enemyResource.DefendMin,
+                    enemyResource.DefendMax,
+                    enemyResource.DefendGrowthPerStep,
+                    row,
+                    act);
 
                 enemy.attackMinValue = attackMin;
                 enemy.attackMaxValue = attackMax;
