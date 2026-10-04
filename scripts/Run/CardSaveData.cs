@@ -17,9 +17,7 @@ public class CardSaveData
         string effectString = card.EffectString;
         if (string.IsNullOrEmpty(effectString) && card.Effect != null)
             effectString = card.Effect.GetType().Name.Replace("Effect", "");
-        GD.Print(card.CardImage);
-        GD.Print(card.CardName);
-        GD.Print(card.Value);
+        
         return new CardSaveData
         {
             CardName = card.CardName,

@@ -46,27 +46,19 @@ texture = ExtResource("8_v87ff")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="TopBar" type="HBoxContainer" parent="." unique_id=1421911101]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=910932019]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 44.0
+offset_bottom = 39.0
 grow_horizontal = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
 
-[node name="Title" type="Label" parent="TopBar" unique_id=644831664]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 22
-text = "Map"
-vertical_alignment = 1
-
-[node name="QuitButton" type="Button" parent="TopBar" unique_id=2104329986]
+[node name="QuitButton" type="Button" parent="MarginContainer" unique_id=2104329986]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 8
 theme_type_variation = &"MainMenuButton"
 text = "Save & Quit"
 
@@ -102,8 +94,9 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
-text = "Choose a node"
+text = "Choose a planet"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="RestPanel" type="Panel" parent="." unique_id=1360739554]
 unique_name_in_owner = true
@@ -121,17 +114,21 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -4.0
+offset_right = 4.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelBox" type="PanelContainer" parent="RestPanel/CenterContainer" unique_id=80064797]
-custom_minimum_size = Vector2(280, 0)
+custom_minimum_size = Vector2(280, 200)
+custom_maximum_size = Vector2(280, 200)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
 [node name="VBox" type="VBoxContainer" parent="RestPanel/CenterContainer/PanelBox" unique_id=483992155]
 layout_mode = 2
 theme_override_constants/separation = 14
+alignment = 1
 
 [node name="RestTitle" type="Label" parent="RestPanel/CenterContainer/PanelBox/VBox" unique_id=162517417]
 layout_mode = 2
@@ -142,24 +139,29 @@ horizontal_alignment = 1
 
 [node name="RestHealthLabel" type="Label" parent="RestPanel/CenterContainer/PanelBox/VBox" unique_id=56540998]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-text = "HP"
+text = "Restore HP"
 horizontal_alignment = 1
+vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="RestButton" type="Button" parent="RestPanel/CenterContainer/PanelBox/VBox" unique_id=2071179904]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(180, 46)
+[node name="HBoxContainer" type="HBoxContainer" parent="RestPanel/CenterContainer/PanelBox/VBox" unique_id=2113637022]
 layout_mode = 2
-size_flags_horizontal = 4
+
+[node name="RestButton" type="Button" parent="RestPanel/CenterContainer/PanelBox/VBox/HBoxContainer" unique_id=2071179904]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"MainMenuButton"
 text = "Rest"
 
-[node name="SkipButton" type="Button" parent="RestPanel/CenterContainer/PanelBox/VBox" unique_id=630773475]
+[node name="SkipButton" type="Button" parent="RestPanel/CenterContainer/PanelBox/VBox/HBoxContainer" unique_id=630773475]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(180, 46)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 theme_type_variation = &"MainMenuButton"
 text = "Skip"

@@ -60,12 +60,20 @@ public partial class PathMap : Control
             List<PathNode> nodes = run.Path[row];
             for (int col = 0; col < nodes.Count; col++)
             {
-                GD.Print(nodes.Count);
-                int random = new RandomNumberGenerator().RandiRange(0, rowTextures.Count - 1);
-                Texture2D nodeTexture = rowTextures[random];
-                rowTextures.Remove(nodeTexture);
                 PathNode node = nodes[col];
-                Button button = CreateNodeButton(node, nodeTexture);
+                int random = new RandomNumberGenerator().RandiRange(0, rowTextures.Count - 1);
+                Button button;
+                if (node.Type == NodeType.Rest)
+                {
+                    Texture2D RestTexture = ResourceLoader.Load<Texture2D>("res://Images/inkscape_exports/planets/rest.png");
+                    button = CreateNodeButton(node, RestTexture);
+                }
+                else
+                {
+                    Texture2D nodeTexture = rowTextures[random];
+                    rowTextures.Remove(nodeTexture);
+                    button = CreateNodeButton(node, nodeTexture);
+                }
                 bool completed = row < run.CurrentRow;
                 if (completed)
                 {

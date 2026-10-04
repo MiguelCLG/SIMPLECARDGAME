@@ -4,7 +4,7 @@
 [ext_resource type="Resource" uid="uid://dwvmtk3oihb0s" path="res://Resources/Decks/InitialDeck_test.tres" id="2_arw6l"]
 [ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="3_30d4m"]
 [ext_resource type="Resource" uid="uid://cf4ijtn70kykt" path="res://Resources/Enemy/Eye.tres" id="3_gl7td"]
-[ext_resource type="Resource" uid="uid://ce6nt8ddy3ix8" path="res://Resources/Enemy/Wolf.tres" id="4_8sacp"]
+[ext_resource type="Resource" uid="uid://ce6nt8ddy3ix8" path="res://Resources/Enemy/Star.tres" id="4_8sacp"]
 [ext_resource type="PackedScene" uid="uid://hacf2ofbjet2" path="res://Scenes/PlayerUI.tscn" id="4_wcy40"]
 [ext_resource type="Resource" path="res://Resources/Acts/Act1.tres" id="9_act1"]
 
