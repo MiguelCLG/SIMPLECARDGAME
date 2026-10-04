@@ -2,11 +2,6 @@
 
 [ext_resource type="Script" uid="uid://vwkwc4ps4fyb" path="res://scripts/PathMap.cs" id="1_pmap"]
 [ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="3_th3m"]
-[ext_resource type="Texture2D" uid="uid://b22nl21nkkrjd" path="res://Images/inkscape_exports/planets/green_planet_ring.webp" id="3_v87ff"]
-[ext_resource type="Texture2D" uid="uid://bfqfmlboaw1wp" path="res://Images/inkscape_exports/planets/moon.webp" id="4_q8h2y"]
-[ext_resource type="Texture2D" uid="uid://ovo7stdpgiac" path="res://Images/inkscape_exports/planets/orange_yellow_planet_ring.webp" id="5_tlq7r"]
-[ext_resource type="Texture2D" uid="uid://bfqloatu1k4cj" path="res://Images/inkscape_exports/planets/purple_planet_ring.webp" id="6_8fehj"]
-[ext_resource type="Texture2D" uid="uid://cye7a57rm0vj2" path="res://Images/inkscape_exports/planets/red_planet_ring.webp" id="7_exhmp"]
 [ext_resource type="Texture2D" uid="uid://c7bcf57vugvie" path="res://Images/inkscape_exports/backgrounds/background-1080x1920.webp" id="8_v87ff"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
@@ -33,7 +28,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_th3m")
 script = ExtResource("1_pmap")
-nodeTextures = Array[Texture2D]([ExtResource("3_v87ff"), ExtResource("4_q8h2y"), ExtResource("5_tlq7r"), ExtResource("6_8fehj"), ExtResource("7_exhmp")])
 
 [node name="Background" type="TextureRect" parent="." unique_id=918933898]
 layout_mode = 1

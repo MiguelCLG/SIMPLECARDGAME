@@ -85,12 +85,12 @@ namespace SpaceOdyssey.Tests.Logic
         }
 
         [TestCase]
-        public void EnemyCount_NormalEncounterBetweenOneAndFour()
+        public void EnemyCount_NormalEncounterBetweenOneAndTwo()
         {
             for (int i = 0; i < 100; i++)
             {
                 int count = EnemyScaler.EnemyCount(new Random(i), false);
-                AssertThat(count >= 1 && count <= 4).IsTrue();
+                AssertThat(count >= 1 && count <= 2).IsTrue();
             }
         }
     }

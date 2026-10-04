@@ -1,7 +1,6 @@
 [gd_resource type="Resource" format=3 uid="uid://clqyixw5ddsxy"]
 
-[ext_resource type="Resource" uid="uid://cf4ijtn70kykt" path="res://Resources/Enemy/Eye.tres" id="1_yfmqk"]
-[ext_resource type="Resource" uid="uid://ce6nt8ddy3ix8" path="res://Resources/Enemy/Star.tres" id="2_w8ggg"]
+[ext_resource type="Resource" uid="uid://l2o5hwcjfngk" path="res://Resources/Enemy/Atlas.tres" id="1_t43yx"]
 [ext_resource type="Texture2D" uid="uid://cye7a57rm0vj2" path="res://Images/inkscape_exports/planets/red_planet_ring.webp" id="3_nexom"]
 [ext_resource type="Texture2D" uid="uid://ynuncnbt721a" path="res://Images/inkscape_exports/backgrounds/bg-red-planet.webp" id="4_yfmqk"]
 [ext_resource type="Script" uid="uid://vwdcm7yum3e8" path="res://scripts/Resources/PathDistribution.cs" id="5_aft5f"]
@@ -10,4 +9,4 @@
 script = ExtResource("5_aft5f")
 Planet = ExtResource("3_nexom")
 PlanetBackground = ExtResource("4_yfmqk")
-Enemies = Array[Object]([ExtResource("1_yfmqk"), ExtResource("2_w8ggg")])
+Enemies = Array[Object]([ExtResource("1_t43yx")])

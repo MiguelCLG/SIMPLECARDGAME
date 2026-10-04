@@ -4,8 +4,6 @@ using Godot.Collections;
 
 public partial class PathMap : Control
 {
-    [Export]
-    private Array<Texture2D> nodeTextures;
     private VBoxContainer pathContainer;
     private Panel restPanel;
     private Label restHealthLabel;
@@ -48,9 +46,6 @@ public partial class PathMap : Control
         RunData run = RunManager.CurrentRun;
         for (int row = 0; row < run.Path.Count; row++)
         {
-            GD.Print("Refresh Textures", nodeTextures.Count);
-            Array<Texture2D> rowTextures = new Array<Texture2D>();
-            rowTextures.AddRange(nodeTextures);
             HBoxContainer rowBox = new();
             rowBox.Alignment = BoxContainer.AlignmentMode.Center;
             rowBox.AddThemeConstantOverride("separation", 16);
@@ -61,19 +56,21 @@ public partial class PathMap : Control
             for (int col = 0; col < nodes.Count; col++)
             {
                 PathNode node = nodes[col];
-                int random = new RandomNumberGenerator().RandiRange(0, rowTextures.Count - 1);
                 Button button;
-                if (node.Type == NodeType.Rest)
+                Texture2D nodeTexture = null;
+                if (!string.IsNullOrEmpty(node.DistributionPath))
                 {
-                    Texture2D RestTexture = ResourceLoader.Load<Texture2D>("res://Images/inkscape_exports/planets/rest.png");
-                    button = CreateNodeButton(node, RestTexture);
+                    var dist = GD.Load<PathDistribution>(node.DistributionPath);
+                    if (dist != null)
+                    {
+                        nodeTexture = dist.Planet;
+                    }
                 }
-                else
+                if (nodeTexture == null)
                 {
-                    Texture2D nodeTexture = rowTextures[random];
-                    rowTextures.Remove(nodeTexture);
-                    button = CreateNodeButton(node, nodeTexture);
+                    nodeTexture = ResourceLoader.Load<Texture2D>("res://Images/inkscape_exports/planets/rest.png");
                 }
+                button = CreateNodeButton(node, nodeTexture);
                 bool completed = row < run.CurrentRow;
                 if (completed)
                 {

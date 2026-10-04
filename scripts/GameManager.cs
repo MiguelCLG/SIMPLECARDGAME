@@ -43,6 +43,8 @@ public partial class GameManager : Control
             return;
         }
 
+        SetEncounterBackground(run);
+
         player.ApplyState(run.PlayerState);
         player.SetDeck(run.Deck);
         player.SetHand(run.Hand);
@@ -76,6 +78,22 @@ public partial class GameManager : Control
         player.CollectCards(out run.Deck, out run.Hand, out run.Discard);
         run.Enemies = enemies.Select(e => e.CollectState()).ToList();
         RunManager.SaveRun();
+    }
+
+    private void SetEncounterBackground(RunData run)
+    {
+        if (run == null) return;
+        int chosenCol = run.ChosenColumns[run.CurrentRow];
+        if (chosenCol < 0 || chosenCol >= run.Path[run.CurrentRow].Count) return;
+        var chosenNode = run.Path[run.CurrentRow][chosenCol];
+        if (string.IsNullOrEmpty(chosenNode.DistributionPath)) return;
+        var dist = GD.Load<PathDistribution>(chosenNode.DistributionPath);
+        if (dist == null || dist.PlanetBackground == null) return;
+        var panel = GetNode<PanelContainer>("Panel");
+        if (panel == null) return;
+        var styleBox = new StyleBoxTexture();
+        styleBox.Texture = dist.PlanetBackground;
+        panel.AddThemeStyleboxOverride("panel", styleBox);
     }
 
     private void SpawnEnemyFromSave(EnemySaveData data)
@@ -126,17 +144,41 @@ public partial class GameManager : Control
     {
         var enemyScene = GD.Load<PackedScene>("res://Scenes/EnemyUI.tscn");
         Random rng = new();
-        int row = RunManager.CurrentRun?.CurrentRow ?? 0;
-        bool boss = RunManager.CurrentRun?.IsBossNode == true;
+        RunData run = RunManager.CurrentRun;
+        int row = run?.CurrentRow ?? 0;
+        bool boss = run?.IsBossNode == true;
         float act = actConfig?.IntentMultiplier ?? 1f;
-        int numberOfEnemies = EnemyScaler.EnemyCount(rng, boss);
-        for (int i = 0; i < numberOfEnemies; i++)
+
+        Godot.Collections.Array<EnemyResource> pool = enemyTypes;
+        if (run != null)
+        {
+            int chosenCol = run.ChosenColumns[run.CurrentRow];
+            if (chosenCol >= 0 && chosenCol < run.Path[run.CurrentRow].Count)
+            {
+                var chosenNode = run.Path[run.CurrentRow][chosenCol];
+                if (!string.IsNullOrEmpty(chosenNode.DistributionPath))
+                {
+                    var dist = GD.Load<PathDistribution>(chosenNode.DistributionPath);
+                    if (dist != null && dist.Enemies != null && dist.Enemies.Count > 0)
+                    {
+                        pool = dist.Enemies;
+                    }
+                }
+            }
+        }
+
+        int requested = EnemyScaler.EnemyCount(rng, boss);
+        int count = pool.Count == 0 ? requested : Math.Min(requested, pool.Count);
+        if (count <= 0) count = Math.Min(requested, enemyTypes.Count > 0 ? 1 : 0);
+        if (count <= 0) return;
+
+        for (int i = 0; i < count; i++)
         {
             var enemyNode = enemyScene.Instantiate();
             if (enemyNode is Enemy enemy)
             {
-                int enemyTypeIndex = rng.Next(0, enemyTypes.Count);
-                EnemyResource enemyResource = enemyTypes[enemyTypeIndex];
+                int enemyTypeIndex = rng.Next(0, pool.Count);
+                EnemyResource enemyResource = pool[enemyTypeIndex];
                 int enemyHealth = EnemyScaler.ComputeHealth(enemyResource.MinHealth, enemyResource.MaxHealth, row, boss, rng);
 
                 (int attackMin, int attackMax) = EnemyScaler.ComputeAttack(
