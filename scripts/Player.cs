@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Godot;
 using Godot.Collections;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Utils;
 
 public partial class Player : Character
@@ -165,7 +166,10 @@ public partial class Player : Character
     public void SpawnCard(CardSaveData data)
     {
         var cardInstance = cardScene.Instantiate<Card>();
+        Texture2D cardImage = ResourceLoader.Load<Texture2D>(data.CardImage);
+        GD.Print(cardImage);
         cardInstance.CardName = data.CardName;
+        cardInstance.CardImage = cardImage;
         cardInstance.Description = data.Description;
         cardInstance.Cost = data.Cost;
         cardInstance.EffectString = data.EffectString;

@@ -1,6 +1,9 @@
+using Godot;
+
 public class CardSaveData
 {
     public string CardName;
+    public string CardImage;
     public string Description;
     public int Cost;
     public string EffectString;
@@ -14,10 +17,13 @@ public class CardSaveData
         string effectString = card.EffectString;
         if (string.IsNullOrEmpty(effectString) && card.Effect != null)
             effectString = card.Effect.GetType().Name.Replace("Effect", "");
-
+        GD.Print(card.CardImage);
+        GD.Print(card.CardName);
+        GD.Print(card.Value);
         return new CardSaveData
         {
             CardName = card.CardName,
+            CardImage = card.CardImage.ResourcePath,
             Description = card.Description,
             Cost = card.Cost,
             EffectString = effectString,
@@ -33,6 +39,7 @@ public class CardSaveData
         return new CardSaveData
         {
             CardName = resource.CardName,
+            CardImage = resource.CardImage.ResourcePath,
             Description = resource.Description,
             Cost = resource.Cost,
             EffectString = resource.EffectString,
@@ -45,9 +52,11 @@ public class CardSaveData
 
     public Card ToCard()
     {
+        Texture2D cardImage = ResourceLoader.Load<Texture2D>(CardImage);
         Card card = new();
         card.CardName = CardName;
         card.Description = Description;
+        card.CardImage = cardImage;
         card.Cost = Cost;
         card.EffectString = EffectString;
         card.Value = Value;

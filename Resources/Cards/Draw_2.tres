@@ -1,15 +1,16 @@
-[gd_resource type="Resource" script_class="CardResource" load_steps=2 format=3 uid="uid://bjtb73qmxb6ba"]
+[gd_resource type="Resource" script_class="CardResource" format=3 uid="uid://bjtb73qmxb6ba"]
 
-[ext_resource type="Script" path="res://scripts/Resources/CardResource.cs" id="1_tn0v2"]
+[ext_resource type="Texture2D" uid="uid://blsgalbw532n4" path="res://Images/inkscape_exports/card-icons/draw-cards.webp" id="1_06xhm"]
+[ext_resource type="Script" uid="uid://htm5qpc8jsmd" path="res://scripts/Resources/CardResource.cs" id="1_tn0v2"]
 
 [resource]
 script = ExtResource("1_tn0v2")
 CardName = "Draw 2"
+CardImage = ExtResource("1_06xhm")
 Description = "Draw 2 card"
 Cost = 1
 Value = 2
 Amount = 2
 EffectString = "Draw"
 isTargetingSelf = true
-isMultipleTargets = false
 cardEffectType = 2

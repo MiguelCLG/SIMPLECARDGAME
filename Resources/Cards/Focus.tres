@@ -1,15 +1,15 @@
-[gd_resource type="Resource" script_class="CardResource" load_steps=2 format=3 uid="uid://bwhgpaj5hubmr"]
+[gd_resource type="Resource" script_class="CardResource" format=3 uid="uid://bwhgpaj5hubmr"]
 
-[ext_resource type="Script" path="res://scripts/Resources/CardResource.cs" id="1_3nhji"]
+[ext_resource type="Texture2D" uid="uid://do0lhicgc5mr5" path="res://Images/inkscape_exports/card-icons/rebirth.webp" id="1_2ex5o"]
+[ext_resource type="Script" uid="uid://htm5qpc8jsmd" path="res://scripts/Resources/CardResource.cs" id="1_3nhji"]
 
 [resource]
 script = ExtResource("1_3nhji")
-CardName = "Rebirth"
-Description = "Gain 2 Mana this turn"
-Cost = 1
-Value = 2
-Amount = 2
+CardName = "Focus"
+CardImage = ExtResource("1_2ex5o")
+Description = "Gain 1 Mana this turn"
+Value = 1
+Amount = 1
 EffectString = "Mana"
 isTargetingSelf = true
-isMultipleTargets = false
 cardEffectType = 2

@@ -12,7 +12,7 @@ enum Turns
     EnemyTurn
 }
 
-public partial class GameManager : Node2D
+public partial class GameManager : Control
 {
     private Player player;
     private List<Enemy> enemies;
@@ -31,39 +31,6 @@ public partial class GameManager : Node2D
         enemies = new();
         enemyContainer = GetNode<Control>("%EnemySpawn");
         SetupRun();
-    }
-
-    public override void _ExitTree()
-    {
-        EventSubscriber.UnsubscribeFromEvent("OnCardClick", OnCardClick);
-        EventSubscriber.UnsubscribeFromEvent("OnEnemyClick", OnEnemyClick);
-        EventSubscriber.UnsubscribeFromEvent("OnEnemyDie", OnEnemyDie);
-        EventSubscriber.UnsubscribeFromEvent("OnPlayerDie", OnPlayerDie);
-        EventSubscriber.UnsubscribeFromEvent("OnEndTurnPress", OnEndTurnPress);
-        EventSubscriber.UnsubscribeFromEvent("OnEscapeKey", OnEscapeKey);
-    }
-
-    private void RegisterEvents()
-    {
-        // Register card clicks
-        EventRegistry.RegisterEvent("OnCardClick");
-        EventSubscriber.SubscribeToEvent("OnCardClick", OnCardClick);
-
-        EventRegistry.RegisterEvent("OnEnemyClick");
-        EventSubscriber.SubscribeToEvent("OnEnemyClick", OnEnemyClick);
-
-        EventRegistry.RegisterEvent("OnEnemyDie");
-        EventSubscriber.SubscribeToEvent("OnEnemyDie", OnEnemyDie);
-
-        EventRegistry.RegisterEvent("OnPlayerDie");
-        EventSubscriber.SubscribeToEvent("OnPlayerDie", OnPlayerDie);
-
-        EventRegistry.RegisterEvent("OnEndTurnPress");
-        EventSubscriber.SubscribeToEvent("OnEndTurnPress", OnEndTurnPress);
-
-        // Register inputs
-        EventRegistry.RegisterEvent("OnEscapeKey");
-        EventSubscriber.SubscribeToEvent("OnEscapeKey", OnEscapeKey);
     }
 
     private void SetupRun()
@@ -358,5 +325,38 @@ public partial class GameManager : Node2D
         {
             GD.PrintErr("ERROR: Not a card, what the fudge?");
         }
+    }
+
+     public override void _ExitTree()
+    {
+        EventSubscriber.UnsubscribeFromEvent("OnCardClick", OnCardClick);
+        EventSubscriber.UnsubscribeFromEvent("OnEnemyClick", OnEnemyClick);
+        EventSubscriber.UnsubscribeFromEvent("OnEnemyDie", OnEnemyDie);
+        EventSubscriber.UnsubscribeFromEvent("OnPlayerDie", OnPlayerDie);
+        EventSubscriber.UnsubscribeFromEvent("OnEndTurnPress", OnEndTurnPress);
+        EventSubscriber.UnsubscribeFromEvent("OnEscapeKey", OnEscapeKey);
+    }
+
+    private void RegisterEvents()
+    {
+        // Register card clicks
+        EventRegistry.RegisterEvent("OnCardClick");
+        EventSubscriber.SubscribeToEvent("OnCardClick", OnCardClick);
+
+        EventRegistry.RegisterEvent("OnEnemyClick");
+        EventSubscriber.SubscribeToEvent("OnEnemyClick", OnEnemyClick);
+
+        EventRegistry.RegisterEvent("OnEnemyDie");
+        EventSubscriber.SubscribeToEvent("OnEnemyDie", OnEnemyDie);
+
+        EventRegistry.RegisterEvent("OnPlayerDie");
+        EventSubscriber.SubscribeToEvent("OnPlayerDie", OnPlayerDie);
+
+        EventRegistry.RegisterEvent("OnEndTurnPress");
+        EventSubscriber.SubscribeToEvent("OnEndTurnPress", OnEndTurnPress);
+
+        // Register inputs
+        EventRegistry.RegisterEvent("OnEscapeKey");
+        EventSubscriber.SubscribeToEvent("OnEscapeKey", OnEscapeKey);
     }
 }

@@ -1,6 +1,7 @@
 [gd_resource type="Theme" format=3 uid="uid://dbrvjx74ucqyo"]
 
-[ext_resource type="Texture2D" uid="uid://dc8t77vepail4" path="res://Images/UI/Card.png" id="1_refnv"]
+[ext_resource type="Texture2D" uid="uid://cuw4puh8icr77" path="res://Images/inkscape_exports/backgrounds/bg-green-planet.webp" id="1_1uobn"]
+[ext_resource type="Texture2D" uid="uid://drhuwcpoi1cw1" path="res://Images/inkscape_exports/card-icons/front-card.webp" id="1_iuvqu"]
 [ext_resource type="Texture2D" uid="uid://cnsl5ujvngfsi" path="res://Images/UI/Background.png" id="2_t2syh"]
 [ext_resource type="FontFile" uid="uid://g1opv875pnbe" path="res://Themes/Fonts/BMSPA.TTF" id="3_font"]
 
@@ -18,36 +19,11 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_imx17"]
+texture = ExtResource("1_1uobn")
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x7d04"]
-texture = ExtResource("1_refnv")
-texture_margin_left = 12.0
-texture_margin_top = 24.0
-texture_margin_right = 12.0
-texture_margin_bottom = 24.0
-expand_margin_left = 6.0
-expand_margin_top = 6.0
-expand_margin_right = 6.0
-expand_margin_bottom = 6.0
-modulate_color = Color(0.728737, 0.707784, 0, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ob0a3"]
-texture = ExtResource("1_refnv")
-texture_margin_left = 12.0
-texture_margin_top = 24.0
-texture_margin_right = 12.0
-texture_margin_bottom = 24.0
-expand_margin_left = 6.0
-expand_margin_top = 6.0
-expand_margin_right = 6.0
-expand_margin_bottom = 6.0
-modulate_color = Color(0.728737, 0.707784, 0, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ds72b"]
-texture = ExtResource("1_refnv")
-texture_margin_left = 24.0
-texture_margin_top = 24.0
-texture_margin_right = 24.0
-texture_margin_bottom = 24.0
+texture = ExtResource("1_iuvqu")
 expand_margin_left = 6.0
 expand_margin_top = 6.0
 expand_margin_right = 6.0
@@ -115,10 +91,12 @@ default_font = ExtResource("3_font")
 ArmorBar/base_type = &"ProgressBar"
 ArmorBar/styles/background = SubResource("StyleBoxFlat_6jali")
 ArmorBar/styles/fill = SubResource("StyleBoxFlat_lb3cy")
+BG_Encounter/base_type = &"PanelContainer"
+BG_Encounter/styles/panel = SubResource("StyleBoxTexture_imx17")
 Card/base_type = &"Button"
 Card/styles/focus = SubResource("StyleBoxTexture_x7d04")
-Card/styles/hover = SubResource("StyleBoxTexture_ob0a3")
-Card/styles/normal = SubResource("StyleBoxTexture_ds72b")
+Card/styles/hover = SubResource("StyleBoxTexture_x7d04")
+Card/styles/normal = SubResource("StyleBoxTexture_x7d04")
 FlatButton/styles/disabled = SubResource("StyleBoxEmpty_grmsu")
 FlatButton/styles/hover = SubResource("StyleBoxFlat_kg3qt")
 FlatButton/styles/normal = SubResource("StyleBoxFlat_rolgm")

@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using Godot;
+using Godot.Collections;
 
 public partial class PathMap : Control
 {
+    [Export]
+    private Array<Texture2D> nodeTextures;
     private VBoxContainer pathContainer;
     private Panel restPanel;
     private Label restHealthLabel;
@@ -45,6 +48,9 @@ public partial class PathMap : Control
         RunData run = RunManager.CurrentRun;
         for (int row = 0; row < run.Path.Count; row++)
         {
+            GD.Print("Refresh Textures", nodeTextures.Count);
+            Array<Texture2D> rowTextures = new Array<Texture2D>();
+            rowTextures.AddRange(nodeTextures);
             HBoxContainer rowBox = new();
             rowBox.Alignment = BoxContainer.AlignmentMode.Center;
             rowBox.AddThemeConstantOverride("separation", 16);
@@ -54,26 +60,30 @@ public partial class PathMap : Control
             List<PathNode> nodes = run.Path[row];
             for (int col = 0; col < nodes.Count; col++)
             {
+                GD.Print(nodes.Count);
+                int random = new RandomNumberGenerator().RandiRange(0, rowTextures.Count - 1);
+                Texture2D nodeTexture = rowTextures[random];
+                rowTextures.Remove(nodeTexture);
                 PathNode node = nodes[col];
-                Button button = CreateNodeButton(node);
+                Button button = CreateNodeButton(node, nodeTexture);
                 bool completed = row < run.CurrentRow;
                 if (completed)
                 {
                     button.Disabled = true;
                     bool chosen = col == run.ChosenColumns[row];
-                    button.Modulate = chosen ? Colors.Gold : new Color(1, 1, 1, 0.25f);
+                    button.Modulate = chosen ? Colors.Gold : new Color(1, 1, 1, 0.75f);
                 }
                 else if (row == run.CurrentRow)
                 {
                     bool selectable = RunManager.IsSelectable(row, col);
                     button.Disabled = !selectable;
                     if (!selectable)
-                        button.Modulate = new Color(1, 1, 1, 0.25f);
+                        button.Modulate = new Color(1, 1, 1, 0.75f);
                 }
                 else
                 {
                     button.Disabled = true;
-                    button.Modulate = new Color(1, 1, 1, 0.15f);
+                    button.Modulate = new Color(1, 1, 1, 0.75f);
                 }
 
                 int captureRow = row;
@@ -88,22 +98,15 @@ public partial class PathMap : Control
         hintLabel.Text = currentRow >= run.Path.Count ? "Map complete" : $"Step {currentRow + 1}/{run.Path.Count}  HP {p.Health}/{p.MaxHealth}";
     }
 
-    private Button CreateNodeButton(PathNode node)
+    private Button CreateNodeButton(PathNode node, Texture2D nodeTexture)
     {
         Button button = new();
-        button.Icon = GD.Load<Texture2D>("res://icon.svg");
+        button.Icon = nodeTexture;
         button.IconAlignment = HorizontalAlignment.Center;
         button.ExpandIcon = true;
         button.CustomMinimumSize = new Vector2(56, 56);
         button.ThemeTypeVariation = "PathNodeButton";
         button.FocusMode = Control.FocusModeEnum.None;
-
-        if (node.Type == NodeType.Encounter)
-            button.Modulate = new Color(0.9f, 0.55f, 0.4f);
-        else if (node.Type == NodeType.Rest)
-            button.Modulate = new Color(0.45f, 0.85f, 0.55f);
-        else if (node.Type == NodeType.Boss)
-            button.Modulate = new Color(1f, 0.84f, 0.3f);
 
         return button;
     }

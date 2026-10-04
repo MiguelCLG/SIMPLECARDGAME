@@ -1,8 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://b7c3m1q0p2xjr"]
+[gd_scene format=3 uid="uid://b7c3m1q0p2xjr"]
 
-[ext_resource type="Script" path="res://scripts/PathMap.cs" id="1_pmap"]
-[ext_resource type="Texture2D" uid="uid://cnsl5ujvngfsi" path="res://Images/UI/Background.png" id="2_bg0d"]
+[ext_resource type="Script" uid="uid://vwkwc4ps4fyb" path="res://scripts/PathMap.cs" id="1_pmap"]
 [ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="3_th3m"]
+[ext_resource type="Texture2D" uid="uid://b22nl21nkkrjd" path="res://Images/inkscape_exports/planets/green_planet_ring.webp" id="3_v87ff"]
+[ext_resource type="Texture2D" uid="uid://bfqfmlboaw1wp" path="res://Images/inkscape_exports/planets/moon.webp" id="4_q8h2y"]
+[ext_resource type="Texture2D" uid="uid://ovo7stdpgiac" path="res://Images/inkscape_exports/planets/orange_yellow_planet_ring.webp" id="5_tlq7r"]
+[ext_resource type="Texture2D" uid="uid://bfqloatu1k4cj" path="res://Images/inkscape_exports/planets/purple_planet_ring.webp" id="6_8fehj"]
+[ext_resource type="Texture2D" uid="uid://cye7a57rm0vj2" path="res://Images/inkscape_exports/planets/red_planet_ring.webp" id="7_exhmp"]
+[ext_resource type="Texture2D" uid="uid://c7bcf57vugvie" path="res://Images/inkscape_exports/backgrounds/background-1080x1920.webp" id="8_v87ff"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
 bg_color = Color(0, 0, 0, 0.88235295)
@@ -19,7 +24,7 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[node name="PathMap" type="Control"]
+[node name="PathMap" type="Control" unique_id=426448292]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,26 +33,27 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_th3m")
 script = ExtResource("1_pmap")
+nodeTextures = Array[Texture2D]([ExtResource("3_v87ff"), ExtResource("4_q8h2y"), ExtResource("5_tlq7r"), ExtResource("6_8fehj"), ExtResource("7_exhmp")])
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=918933898]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_bg0d")
+texture = ExtResource("8_v87ff")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="TopBar" type="HBoxContainer" parent="."]
+[node name="TopBar" type="HBoxContainer" parent="." unique_id=1421911101]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 44.0
 grow_horizontal = 2
 
-[node name="Title" type="Label" parent="TopBar"]
+[node name="Title" type="Label" parent="TopBar" unique_id=644831664]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -58,13 +64,13 @@ theme_override_font_sizes/font_size = 22
 text = "Map"
 vertical_alignment = 1
 
-[node name="QuitButton" type="Button" parent="TopBar"]
+[node name="QuitButton" type="Button" parent="TopBar" unique_id=2104329986]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MainMenuButton"
 text = "Save & Quit"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1705116950]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -74,14 +80,15 @@ offset_bottom = -36.0
 grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
 
-[node name="PathContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="PathContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=536682796]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 18
 
-[node name="HintLabel" type="Label" parent="."]
+[node name="HintLabel" type="Label" parent="." unique_id=1013411186]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 12
@@ -98,7 +105,7 @@ theme_override_constants/shadow_offset_y = 2
 text = "Choose a node"
 horizontal_alignment = 1
 
-[node name="RestPanel" type="Panel" parent="."]
+[node name="RestPanel" type="Panel" parent="." unique_id=1360739554]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -109,7 +116,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_overlay")
 
-[node name="CenterContainer" type="CenterContainer" parent="RestPanel"]
+[node name="CenterContainer" type="CenterContainer" parent="RestPanel" unique_id=873350086]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -117,23 +124,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelBox" type="PanelContainer" parent="RestPanel/CenterContainer"]
+[node name="PanelBox" type="PanelContainer" parent="RestPanel/CenterContainer" unique_id=80064797]
 custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="VBox" type="VBoxContainer" parent="RestPanel/CenterContainer/PanelBox"]
+[node name="VBox" type="VBoxContainer" parent="RestPanel/CenterContainer/PanelBox" unique_id=483992155]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="RestTitle" type="Label" parent="RestPanel/CenterContainer/PanelBox/VBox"]
+[node name="RestTitle" type="Label" parent="RestPanel/CenterContainer/PanelBox/VBox" unique_id=162517417]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.843137, 0, 1)
 theme_override_font_sizes/font_size = 26
 text = "Rest Site"
 horizontal_alignment = 1
 
-[node name="RestHealthLabel" type="Label" parent="RestPanel/CenterContainer/PanelBox/VBox"]
+[node name="RestHealthLabel" type="Label" parent="RestPanel/CenterContainer/PanelBox/VBox" unique_id=56540998]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -141,7 +148,7 @@ text = "HP"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="RestButton" type="Button" parent="RestPanel/CenterContainer/PanelBox/VBox"]
+[node name="RestButton" type="Button" parent="RestPanel/CenterContainer/PanelBox/VBox" unique_id=2071179904]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(180, 46)
 layout_mode = 2
@@ -149,7 +156,7 @@ size_flags_horizontal = 4
 theme_type_variation = &"MainMenuButton"
 text = "Rest"
 
-[node name="SkipButton" type="Button" parent="RestPanel/CenterContainer/PanelBox/VBox"]
+[node name="SkipButton" type="Button" parent="RestPanel/CenterContainer/PanelBox/VBox" unique_id=630773475]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(180, 46)
 layout_mode = 2
