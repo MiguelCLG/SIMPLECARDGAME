@@ -1,0 +1,161 @@
+[gd_scene format=3 uid="uid://b7c3m1q0p2xjr"]
+
+[ext_resource type="Script" uid="uid://vwkwc4ps4fyb" path="res://scripts/PathMap.cs" id="1_pmap"]
+[ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="3_th3m"]
+[ext_resource type="Texture2D" uid="uid://c7bcf57vugvie" path="res://Images/inkscape_exports/backgrounds/background-1080x1920.webp" id="8_v87ff"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
+bg_color = Color(0, 0, 0, 0.88235295)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.176419, 0.176419, 0.176419, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.843137, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="PathMap" type="Control" unique_id=426448292]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_th3m")
+script = ExtResource("1_pmap")
+
+[node name="Background" type="TextureRect" parent="." unique_id=918933898]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_v87ff")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=910932019]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 39.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="QuitButton" type="Button" parent="MarginContainer" unique_id=2104329986]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+theme_type_variation = &"MainMenuButton"
+text = "Save & Quit"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1705116950]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 44.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="PathContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=536682796]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 18
+
+[node name="HintLabel" type="Label" parent="." unique_id=1013411186]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -36.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+text = "Choose a planet"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RestPanel" type="Panel" parent="." unique_id=1360739554]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_overlay")
+
+[node name="CenterContainer" type="CenterContainer" parent="RestPanel" unique_id=873350086]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_right = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelBox" type="PanelContainer" parent="RestPanel/CenterContainer" unique_id=80064797]
+custom_minimum_size = Vector2(280, 200)
+custom_maximum_size = Vector2(280, 200)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="RestPanel/CenterContainer/PanelBox" unique_id=483992155]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="RestTitle" type="Label" parent="RestPanel/CenterContainer/PanelBox/VBox" unique_id=162517417]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.843137, 0, 1)
+theme_override_font_sizes/font_size = 26
+text = "Rest Site"
+horizontal_alignment = 1
+
+[node name="RestHealthLabel" type="Label" parent="RestPanel/CenterContainer/PanelBox/VBox" unique_id=56540998]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Restore HP"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="RestPanel/CenterContainer/PanelBox/VBox" unique_id=2113637022]
+layout_mode = 2
+
+[node name="RestButton" type="Button" parent="RestPanel/CenterContainer/PanelBox/VBox/HBoxContainer" unique_id=2071179904]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"MainMenuButton"
+text = "Rest"
+
+[node name="SkipButton" type="Button" parent="RestPanel/CenterContainer/PanelBox/VBox/HBoxContainer" unique_id=630773475]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"MainMenuButton"
+text = "Skip"

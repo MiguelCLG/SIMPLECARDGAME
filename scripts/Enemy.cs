@@ -22,8 +22,10 @@ public class EnemyDTO
 public partial class Enemy : Character
 {
     private Intent intentType = Intent.Attack;
-    public int intentMinValue = 0;
-    public int intentMaxValue = 0;
+    public int attackMinValue = 0;
+    public int attackMaxValue = 0;
+    public int defendMinValue = 0;
+    public int defendMaxValue = 0;
     private int intentValue = 0;
 
     [Export]
@@ -64,7 +66,60 @@ public partial class Enemy : Character
     {
         intentType = intent;
         intentValue = value;
-        GetNode<Label>("%IntentValue").Text = value.ToString();
+        ApplyIntentVisuals();
+    }
+
+    public void ApplyIntentVisuals()
+    {
+        if (!IsInsideTree()) return;
+        var intentImage = GetNode<TextureRect>("%IntentImage");
+        if (intentType == Intent.Attack)
+        {
+            intentImage.Texture = GD.Load<Texture2D>("res://Images/Icons/sword.png");
+            intentImage.Modulate = Color.Color8(255, 25, 85);
+            GetNode<Label>("%IntentValue").AddThemeColorOverride("font_color", Color.Color8(255, 25, 85));
+        }
+        else
+        {
+            intentImage.Texture = GD.Load<Texture2D>("res://Images/Icons/shield.png");
+            intentImage.Modulate = Color.Color8(165, 208, 255);
+            GetNode<Label>("%IntentValue").AddThemeColorOverride("font_color", Color.Color8(165, 208, 255));
+        }
+        GetNode<Label>("%IntentValue").Text = intentValue.ToString();
+    }
+
+    public EnemySaveData CollectState()
+    {
+        return new EnemySaveData
+        {
+            EnemyName = EnemyName,
+            TexturePath = texture?.ResourcePath,
+            Health = Health,
+            MaxHealth = MaxHealth,
+            Armor = Armor,
+            AttackMin = attackMinValue,
+            AttackMax = attackMaxValue,
+            DefendMin = defendMinValue,
+            DefendMax = defendMaxValue,
+            IntentType = intentType,
+            IntentValue = intentValue
+        };
+    }
+
+    public void ApplyState(EnemySaveData data)
+    {
+        if (data == null) return;
+        EnemyName = data.EnemyName;
+        texture = GD.Load<Texture2D>(data.TexturePath);
+        Health = data.Health;
+        MaxHealth = data.MaxHealth;
+        Armor = data.Armor;
+        attackMinValue = data.AttackMin;
+        attackMaxValue = data.AttackMax;
+        defendMinValue = data.DefendMin;
+        defendMaxValue = data.DefendMax;
+        intentType = data.IntentType;
+        intentValue = data.IntentValue;
     }
 
     public override void AddArmor(int armor)
@@ -95,6 +150,8 @@ public partial class Enemy : Character
             armorBar.Value = Armor;
         }
         Health -= variableDamage;
+        var stats = RunManager.CurrentRun?.Stats;
+        if (stats != null) stats.DamageDealt += variableDamage;
         healthBar.Value = Health;
         if (Health <= 0)
         {

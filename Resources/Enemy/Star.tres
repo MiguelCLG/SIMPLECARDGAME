@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://ce6nt8ddy3ix8"]
+
+[ext_resource type="Texture2D" uid="uid://cae6mnm8gu1k4" path="res://Images/inkscape_exports/monsters/star.webp" id="1_7h8j6"]
+[ext_resource type="Script" uid="uid://bbyhbtx2ctcr2" path="res://scripts/Resources/EnemyResource.cs" id="2_fcdm5"]
+
+[resource]
+script = ExtResource("2_fcdm5")
+EnemyName = "Star"
+Texture = ExtResource("1_7h8j6")
+MinHealth = 10
+MaxHealth = 32
+AttackMin = 7
+AttackMax = 12
+AttackGrowthPerStep = 1
+DefendMin = 3
+DefendMax = 6
+DefendGrowthPerStep = 1

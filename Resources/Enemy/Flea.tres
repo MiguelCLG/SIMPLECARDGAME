@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://2ve5mfrjkla4"]
+
+[ext_resource type="Texture2D" uid="uid://u2wimnlwaaty" path="res://Images/inkscape_exports/monsters/green-flea.webp" id="1_qvdo4"]
+[ext_resource type="Script" uid="uid://bbyhbtx2ctcr2" path="res://scripts/Resources/EnemyResource.cs" id="2_y41ob"]
+
+[resource]
+script = ExtResource("2_y41ob")
+EnemyName = "Flea"
+Texture = ExtResource("1_qvdo4")
+MinHealth = 8
+MaxHealth = 32
+AttackMin = 4
+AttackMax = 8
+AttackGrowthPerStep = 1
+DefendMin = 2
+DefendMax = 5
+DefendGrowthPerStep = 1

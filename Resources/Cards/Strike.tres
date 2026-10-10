@@ -1,15 +1,14 @@
-[gd_resource type="Resource" script_class="CardResource" load_steps=2 format=3 uid="uid://7mxbthqhyemg"]
+[gd_resource type="Resource" script_class="CardResource" format=3 uid="uid://7mxbthqhyemg"]
 
-[ext_resource type="Script" path="res://scripts/Resources/CardResource.cs" id="1_uaoqf"]
+[ext_resource type="Texture2D" uid="uid://xq2cqugh0b78" path="res://Images/inkscape_exports/card-icons/attack.webp" id="1_f584r"]
+[ext_resource type="Script" uid="uid://htm5qpc8jsmd" path="res://scripts/Resources/CardResource.cs" id="1_uaoqf"]
 
 [resource]
 script = ExtResource("1_uaoqf")
 CardName = "Strike"
+CardImage = ExtResource("1_f584r")
 Description = "Deal 10 damage"
 Cost = 1
 Value = 10
 Amount = 1
 EffectString = "Attack"
-isTargetingSelf = false
-isMultipleTargets = false
-cardEffectType = 0

@@ -2,24 +2,11 @@
 
 [ext_resource type="Script" uid="uid://b3nko2grxp1io" path="res://scripts/Card.cs" id="1_ay7ty"]
 [ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="1_qjo62"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gllfx"]
-bg_color = Color(0.294118, 0.643137, 0.815686, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 50
-corner_radius_top_right = 50
-corner_radius_bottom_right = 50
-corner_radius_bottom_left = 50
-
-[sub_resource type="Theme" id="Theme_6l17w"]
-Panel/styles/panel = SubResource("StyleBoxFlat_gllfx")
+[ext_resource type="Texture2D" uid="uid://xq2cqugh0b78" path="res://Images/inkscape_exports/card-icons/attack.webp" id="3_brehn"]
 
 [node name="CardContainer" type="Button" unique_id=646478723]
-custom_minimum_size = Vector2(75, 100)
+custom_minimum_size = Vector2(81, 150)
+custom_maximum_size = Vector2(81, 150)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -33,51 +20,44 @@ theme = ExtResource("1_qjo62")
 theme_type_variation = &"Card"
 script = ExtResource("1_ay7ty")
 
-[node name="ManaContainer" type="Panel" parent="." unique_id=193068011]
-custom_minimum_size = Vector2(25, 25)
+[node name="ManaCost" type="Label" parent="." unique_id=1874873813]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -20.0
-offset_top = -7.0
-offset_right = 5.0
-offset_bottom = 18.0
+offset_left = -17.0
+offset_bottom = 21.0
 grow_horizontal = 0
-size_flags_horizontal = 8
-size_flags_vertical = 0
-theme = SubResource("Theme_6l17w")
-
-[node name="ManaCost" type="Label" parent="ManaContainer" unique_id=1874873813]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -12.5
-offset_top = -12.5
-offset_right = 14.5
-offset_bottom = 13.5
-grow_horizontal = 2
-grow_vertical = 2
 offset_transform_enabled = true
 offset_transform_position = Vector2(0, 4.835)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.5803922, 0.43137255, 0.15294118, 1)
+theme_override_font_sizes/font_size = 12
 text = "1"
 horizontal_alignment = 1
 
-[node name="CardName" type="Label" parent="." unique_id=103027886]
-custom_minimum_size = Vector2(1, 1)
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2087820685]
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 15
 anchor_right = 1.0
-offset_top = 12.0
-offset_bottom = 29.0
+anchor_bottom = 1.0
+offset_top = 23.0
 grow_horizontal = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="CardImage" type="TextureRect" parent="VBoxContainer" unique_id=1798335592]
+unique_name_in_owner = true
+custom_maximum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("3_brehn")
+stretch_mode = 5
+
+[node name="CardName" type="Label" parent="VBoxContainer" unique_id=103027886]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_vertical = 1
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 10
 text = "Name"
@@ -85,19 +65,13 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Description" type="Label" parent="." unique_id=1939397027]
-custom_minimum_size = Vector2(1, 1)
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -32.5
-offset_bottom = 32.5
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Description" type="Label" parent="VBoxContainer" unique_id=1939397027]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1, 40)
+custom_maximum_size = Vector2(-1, 40)
+layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 6
 text = "Very long long description, what about this hein? "
 horizontal_alignment = 1
 vertical_alignment = 1

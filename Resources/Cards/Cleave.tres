@@ -1,15 +1,15 @@
-[gd_resource type="Resource" script_class="CardResource" load_steps=2 format=3 uid="uid://cg40eloq3p8tk"]
+[gd_resource type="Resource" script_class="CardResource" format=3 uid="uid://cg40eloq3p8tk"]
 
-[ext_resource type="Script" path="res://scripts/Resources/CardResource.cs" id="1_21m86"]
+[ext_resource type="Texture2D" uid="uid://ddo2pklj3jcbq" path="res://Images/inkscape_exports/card-icons/cleave.webp" id="1_6vueq"]
+[ext_resource type="Script" uid="uid://htm5qpc8jsmd" path="res://scripts/Resources/CardResource.cs" id="1_21m86"]
 
 [resource]
 script = ExtResource("1_21m86")
 CardName = "Cleave"
+CardImage = ExtResource("1_6vueq")
 Description = "Deal 4 Damage to all enemies"
 Cost = 1
 Value = 4
 Amount = 1
 EffectString = "Cleave"
-isTargetingSelf = false
 isMultipleTargets = true
-cardEffectType = 0

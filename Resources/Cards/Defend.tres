@@ -1,15 +1,16 @@
-[gd_resource type="Resource" script_class="CardResource" load_steps=2 format=3 uid="uid://vm4yktngf3oe"]
+[gd_resource type="Resource" script_class="CardResource" format=3 uid="uid://vm4yktngf3oe"]
 
-[ext_resource type="Script" path="res://scripts/Resources/CardResource.cs" id="1_24utc"]
+[ext_resource type="Script" uid="uid://htm5qpc8jsmd" path="res://scripts/Resources/CardResource.cs" id="1_24utc"]
+[ext_resource type="Texture2D" uid="uid://rqlu2tsvghue" path="res://Images/inkscape_exports/card-icons/shield.webp" id="1_aj00y"]
 
 [resource]
 script = ExtResource("1_24utc")
 CardName = "Defend"
+CardImage = ExtResource("1_aj00y")
 Description = "Add 5 armor"
 Cost = 1
 Value = 5
 Amount = 1
 EffectString = "Defense"
 isTargetingSelf = true
-isMultipleTargets = false
 cardEffectType = 1

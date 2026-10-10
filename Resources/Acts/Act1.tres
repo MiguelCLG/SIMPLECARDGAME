@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="ActConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/Resources/ActConfig.cs" id="1_act"]
+
+[resource]
+script = ExtResource("1_act")
+ActName = "Act I"
+IntentMultiplier = 1.0

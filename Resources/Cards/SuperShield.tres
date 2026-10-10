@@ -1,15 +1,16 @@
-[gd_resource type="Resource" script_class="CardResource" load_steps=2 format=3 uid="uid://df6kqhmwpikos"]
+[gd_resource type="Resource" script_class="CardResource" format=3 uid="uid://df6kqhmwpikos"]
 
-[ext_resource type="Script" path="res://scripts/Resources/CardResource.cs" id="1_a1snr"]
+[ext_resource type="Script" uid="uid://htm5qpc8jsmd" path="res://scripts/Resources/CardResource.cs" id="1_a1snr"]
+[ext_resource type="Texture2D" uid="uid://dqx76mapvnxs3" path="res://Images/inkscape_exports/card-icons/great-shield.webp" id="1_h04a7"]
 
 [resource]
 script = ExtResource("1_a1snr")
 CardName = "Super Shield"
+CardImage = ExtResource("1_h04a7")
 Description = "Add 15 armor"
 Cost = 2
 Value = 15
 Amount = 1
 EffectString = "Defense"
 isTargetingSelf = true
-isMultipleTargets = false
 cardEffectType = 1

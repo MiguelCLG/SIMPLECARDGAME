@@ -7,6 +7,9 @@ public partial class Card : Button
     public string CardName { get; set; }
 
     [Export]
+    public Texture2D CardImage { get; set; }
+
+    [Export]
     public string Description { get; set; }
 
     [Export]
@@ -27,9 +30,10 @@ public partial class Card : Button
 
     public override void _Ready()
     {
-        GetNode<Label>("ManaContainer/ManaCost").Text = Cost.ToString();
-        GetNode<Label>("CardName").Text = CardName;
-        GetNode<Label>("Description").Text = Description;
+        GetNode<Label>("ManaCost").Text = Cost.ToString();
+        GetNode<TextureRect>("%CardImage").Texture = CardImage;
+        GetNode<Label>("%CardName").Text = CardName;
+        GetNode<Label>("%Description").Text = Description;
     }
 
     public void InitializeEffect()
@@ -56,6 +60,9 @@ public partial class Card : Button
                 Effect = new PoisonEffect();
                 break;
                 // Handle other effect types if needed
+            default:
+                GD.PushError($"Card.InitializeEffect: unknown EffectString '{EffectString}' for card '{CardName}'");
+                return;
         }
         Effect.Value = Value;
         Effect.Amount = Amount;

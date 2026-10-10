@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3 uid="uid://xl5fbqh7uhic"]
+
+[ext_resource type="Resource" uid="uid://2ve5mfrjkla4" path="res://Resources/Enemy/Flea.tres" id="1_5a11i"]
+[ext_resource type="Texture2D" uid="uid://b22nl21nkkrjd" path="res://Images/inkscape_exports/planets/green_planet_ring.webp" id="1_7igls"]
+[ext_resource type="Script" uid="uid://vwdcm7yum3e8" path="res://scripts/Resources/PathDistribution.cs" id="1_u7ldr"]
+[ext_resource type="Resource" uid="uid://djeenfg0amlv5" path="res://Resources/Enemy/Drop.tres" id="2_iohta"]
+[ext_resource type="Texture2D" uid="uid://cuw4puh8icr77" path="res://Images/inkscape_exports/backgrounds/bg-green-planet.webp" id="2_y6odr"]
+
+[resource]
+script = ExtResource("1_u7ldr")
+Planet = ExtResource("1_7igls")
+PlanetBackground = ExtResource("2_y6odr")
+Enemies = Array[Object]([ExtResource("1_5a11i"), ExtResource("2_iohta")])
