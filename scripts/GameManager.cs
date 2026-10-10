@@ -87,7 +87,7 @@ public partial class GameManager : Control
         if (chosenCol < 0 || chosenCol >= run.Path[run.CurrentRow].Count) return;
         var chosenNode = run.Path[run.CurrentRow][chosenCol];
         if (string.IsNullOrEmpty(chosenNode.DistributionPath)) return;
-        var dist = GD.Load<PathDistribution>(chosenNode.DistributionPath);
+        var dist = ResourceCache.Load<PathDistribution>(chosenNode.DistributionPath);
         if (dist == null || dist.PlanetBackground == null) return;
         var panel = GetNode<PanelContainer>("Panel");
         if (panel == null) return;
@@ -158,7 +158,7 @@ public partial class GameManager : Control
                 var chosenNode = run.Path[run.CurrentRow][chosenCol];
                 if (!string.IsNullOrEmpty(chosenNode.DistributionPath))
                 {
-                    var dist = GD.Load<PathDistribution>(chosenNode.DistributionPath);
+                    var dist = ResourceCache.Load<PathDistribution>(chosenNode.DistributionPath);
                     if (dist != null && dist.Enemies != null && dist.Enemies.Count > 0)
                     {
                         pool = dist.Enemies;

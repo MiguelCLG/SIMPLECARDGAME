@@ -30,6 +30,6 @@ public static class EnemyScaler
 
     public static int EnemyCount(Random rng, bool isBoss)
     {
-        return isBoss ? 1 : rng.Next(2) + 1;
+        return isBoss ? 1 : rng.Next(3) + 1;
     }
 }

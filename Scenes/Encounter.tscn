@@ -55,7 +55,7 @@ MaxHealth = 100
 [node name="EnemySpawn" type="GridContainer" parent="Encounter/Panel/MarginContainer/VBoxContainer" unique_id=1765357860]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 8
+size_flags_vertical = 10
 theme_override_constants/h_separation = 32
 theme_override_constants/v_separation = 32
-columns = 3
+columns = 2

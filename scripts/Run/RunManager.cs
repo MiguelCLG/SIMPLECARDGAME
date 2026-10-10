@@ -23,7 +23,7 @@ public static class RunManager
             MaxMana = 3
         };
 
-        DeckResource deck = GD.Load<DeckResource>("res://Resources/Decks/InitialDeck_test.tres");
+        DeckResource deck = ResourceCache.Load<DeckResource>("res://Resources/Decks/InitialDeck_test.tres");
         if (deck != null)
         {
             foreach (CardResource card in deck.cards)

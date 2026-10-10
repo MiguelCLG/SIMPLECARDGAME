@@ -60,7 +60,7 @@ public partial class PathMap : Control
                 Texture2D nodeTexture = null;
                 if (!string.IsNullOrEmpty(node.DistributionPath))
                 {
-                    var dist = GD.Load<PathDistribution>(node.DistributionPath);
+                    var dist = ResourceCache.Load<PathDistribution>(node.DistributionPath);
                     if (dist != null)
                     {
                         nodeTexture = dist.Planet;
