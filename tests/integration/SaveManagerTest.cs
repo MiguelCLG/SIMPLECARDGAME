@@ -22,6 +22,7 @@ namespace SpaceOdyssey.Tests.Integration
             {
                 CurrentRow = 3,
                 ActiveEncounter = true,
+                Seed = 987654321,
                 PlayerState = new RunData.PlayerSaveState
                 {
                     Health = 50,
@@ -41,6 +42,7 @@ namespace SpaceOdyssey.Tests.Integration
             AssertThat(loaded).IsNotNull();
             AssertThat(loaded.CurrentRow).IsEqual(3);
             AssertThat(loaded.ActiveEncounter).IsTrue();
+            AssertThat(loaded.Seed).IsEqual(987654321);
             AssertThat(loaded.PlayerState.Health).IsEqual(50);
             AssertThat(loaded.PlayerState.Armor).IsEqual(2);
 

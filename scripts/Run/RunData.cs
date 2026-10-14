@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class RunData
 {
     public int SchemaVersion = 1;
+    public int Seed;
     public DateTime GeneratedAt;
     public DateTime StartedAt;
     public List<List<PathNode>> Path = new();

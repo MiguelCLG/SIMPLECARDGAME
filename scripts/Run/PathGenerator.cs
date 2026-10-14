@@ -17,9 +17,12 @@ public static class PathGenerator
 
     private const string RestDistributionPath = "res://Resources/PathDistribution/rest.tres";
 
-    public static List<List<PathNode>> Generate()
+    /// <summary>Convenience overload: generates a fresh random seed for one-off (non-persisted) paths.</summary>
+    public static List<List<PathNode>> Generate() => Generate(Random.Shared.Next(1, int.MaxValue));
+
+    public static List<List<PathNode>> Generate(int seed)
     {
-        Random rng = new();
+        Random rng = new(seed);
         List<List<PathNode>> path = new();
         for (int r = 0; r < StepRows; r++)
         {
@@ -38,8 +41,8 @@ public static class PathGenerator
             }
             path.Add(row);
         }
-        PlaceRest(path[2]);
-        PlaceRest(path[5]);
+        PlaceRest(path[2], rng);
+        PlaceRest(path[5], rng);
         string bossDist = EncounterDistributionPaths[rng.Next(EncounterDistributionPaths.Length)];
         path.Add(new List<PathNode> { new PathNode { Row = StepRows, Column = 0, Type = NodeType.Boss, DistributionPath = bossDist } });
 
@@ -81,9 +84,8 @@ public static class PathGenerator
         return result;
     }
 
-    private static void PlaceRest(List<PathNode> row)
+    private static void PlaceRest(List<PathNode> row, Random rng)
     {
-        Random rng = new();
         int col = rng.Next(row.Count);
         row[col].Type = NodeType.Rest;
         row[col].DistributionPath = RestDistributionPath;

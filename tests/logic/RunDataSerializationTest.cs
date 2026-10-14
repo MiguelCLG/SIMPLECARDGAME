@@ -21,6 +21,7 @@ namespace SpaceOdyssey.Tests.Logic
             AssertThat(loaded.CurrentRow).IsEqual(4);
             AssertThat(loaded.ActiveEncounter).IsTrue();
             AssertThat(loaded.IsBossNode).IsFalse();
+            AssertThat(loaded.Seed).IsEqual(424242);
 
             AssertThat(loaded.ChosenColumns.Count).IsEqual(3);
             AssertThat(loaded.ChosenColumns[1]).IsEqual(2);
@@ -71,10 +72,21 @@ namespace SpaceOdyssey.Tests.Logic
             AssertThat(loaded.Enemies.Count).IsEqual(0);
         }
 
+        [TestCase]
+        public void Deserialize_LegacySaveWithoutSeedHasZeroSeed()
+        {
+            const string legacyJson = "{\"SchemaVersion\":1,\"CurrentRow\":2}";
+            RunData loaded = JsonConvert.DeserializeObject<RunData>(legacyJson);
+
+            AssertThat(loaded).IsNotNull();
+            AssertThat(loaded.Seed).IsEqual(0);
+        }
+
         private static RunData BuildSampleRun()
         {
             var run = new RunData
             {
+                Seed = 424242,
                 GeneratedAt = DateTime.Now,
                 StartedAt = DateTime.Now,
                 CurrentRow = 4,

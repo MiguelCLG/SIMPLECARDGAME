@@ -196,6 +196,77 @@ namespace SpaceOdyssey.Tests.Logic
             AssertThat(run.Path[0][1].Connections.Contains(0)).IsTrue();
         }
 
+        [TestCase]
+        public void Generate_SameSeedProducesIdenticalPath()
+        {
+            int seed = 123456789;
+            var first = PathGenerator.Generate(seed);
+            var second = PathGenerator.Generate(seed);
+            AssertPathsEqual(first, second);
+        }
+
+        [TestCase]
+        public void Generate_DifferentSeedsProduceDifferentPaths()
+        {
+            int differences = 0;
+            int[][] pairs =
+            {
+                new[] { 1, 2 },
+                new[] { 42, 1337 },
+                new[] { 999, 1000 }
+            };
+            foreach (int[] pair in pairs)
+            {
+                var a = PathGenerator.Generate(pair[0]);
+                var b = PathGenerator.Generate(pair[1]);
+                if (!PathsEqual(a, b))
+                    differences++;
+            }
+            AssertThat(differences >= 1).IsTrue();
+        }
+
+        private static void AssertPathsEqual(List<List<PathNode>> a, List<List<PathNode>> b)
+        {
+            AssertThat(a.Count).IsEqual(b.Count);
+            for (int r = 0; r < a.Count; r++)
+            {
+                AssertThat(a[r].Count).IsEqual(b[r].Count);
+                for (int c = 0; c < a[r].Count; c++)
+                {
+                    PathNode x = a[r][c];
+                    PathNode y = b[r][c];
+                    AssertThat(x.Type).IsEqual(y.Type);
+                    AssertThat(x.DistributionPath).IsEqual(y.DistributionPath);
+                    AssertThat(x.Row).IsEqual(y.Row);
+                    AssertThat(x.Column).IsEqual(y.Column);
+                    AssertThat(x.Connections.Count).IsEqual(y.Connections.Count);
+                    for (int i = 0; i < x.Connections.Count; i++)
+                        AssertThat(x.Connections[i]).IsEqual(y.Connections[i]);
+                }
+            }
+        }
+
+        private static bool PathsEqual(List<List<PathNode>> a, List<List<PathNode>> b)
+        {
+            if (a.Count != b.Count) return false;
+            for (int r = 0; r < a.Count; r++)
+            {
+                if (a[r].Count != b[r].Count) return false;
+                for (int c = 0; c < a[r].Count; c++)
+                {
+                    PathNode x = a[r][c];
+                    PathNode y = b[r][c];
+                    if (x.Type != y.Type) return false;
+                    if (x.DistributionPath != y.DistributionPath) return false;
+                    if (x.Row != y.Row || x.Column != y.Column) return false;
+                    if (x.Connections.Count != y.Connections.Count) return false;
+                    for (int i = 0; i < x.Connections.Count; i++)
+                        if (x.Connections[i] != y.Connections[i]) return false;
+                }
+            }
+            return true;
+        }
+
         private static PathNode N(int row, int col)
         {
             return new PathNode { Row = row, Column = col, Type = NodeType.Encounter };
