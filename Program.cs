@@ -1,0 +1,1 @@
+// Godot auto-generated entry stub. Intentionally left empty.

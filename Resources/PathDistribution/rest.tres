@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3 uid="uid://ceg0i5o2kq6jd"]
+
+[ext_resource type="Texture2D" uid="uid://ditk074ehlfgp" path="res://Images/inkscape_exports/planets/rest.png" id="1_h3b7x"]
+[ext_resource type="Texture2D" uid="uid://b0m0i0mlpw5wm" path="res://Images/inkscape_exports/backgrounds/background-no-planet-1080x1920.webp" id="2_bwk85"]
+[ext_resource type="Script" uid="uid://vwdcm7yum3e8" path="res://scripts/Resources/PathDistribution.cs" id="5_1l7ri"]
+
+[resource]
+script = ExtResource("5_1l7ri")
+Planet = ExtResource("1_h3b7x")
+PlanetBackground = ExtResource("2_bwk85")
+Enemies = Array[Object]([])

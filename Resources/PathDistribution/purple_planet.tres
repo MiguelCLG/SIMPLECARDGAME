@@ -1,0 +1,12 @@
+[gd_resource type="Resource" format=3 uid="uid://byncl4j3vtq4x"]
+
+[ext_resource type="Resource" uid="uid://bbms04w01hjae" path="res://Resources/Enemy/Helm.tres" id="1_womh6"]
+[ext_resource type="Texture2D" uid="uid://bfqloatu1k4cj" path="res://Images/inkscape_exports/planets/purple_planet_ring.webp" id="2_84puy"]
+[ext_resource type="Texture2D" uid="uid://dr5rg46xmql0k" path="res://Images/inkscape_exports/backgrounds/bg-purple-planet.webp" id="3_d06b8"]
+[ext_resource type="Script" uid="uid://vwdcm7yum3e8" path="res://scripts/Resources/PathDistribution.cs" id="5_lhou2"]
+
+[resource]
+script = ExtResource("5_lhou2")
+Planet = ExtResource("2_84puy")
+PlanetBackground = ExtResource("3_d06b8")
+Enemies = Array[Object]([ExtResource("1_womh6")])

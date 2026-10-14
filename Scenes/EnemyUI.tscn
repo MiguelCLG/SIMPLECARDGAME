@@ -1,14 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://baf4bfhjp3hr4"]
+[gd_scene format=3 uid="uid://baf4bfhjp3hr4"]
 
 [ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="1_a1a36"]
-[ext_resource type="Script" path="res://scripts/Enemy.cs" id="1_ket8h"]
-[ext_resource type="Texture2D" uid="uid://bddtrbuyrixtv" path="res://Images/UI/EnemyPortrait.png" id="2_ah8vt"]
-[ext_resource type="Texture2D" uid="uid://dd2bg0rgtyom0" path="res://Images/Enemies/Eye/eye_frame_5.png" id="3_mcx52"]
+[ext_resource type="Script" uid="uid://bcmtuyn56khfy" path="res://scripts/Enemy.cs" id="1_ket8h"]
+[ext_resource type="Texture2D" uid="uid://d2ls28b2qj4kp" path="res://Images/inkscape_exports/monsters/atlas.png" id="3_5qp8m"]
 [ext_resource type="Texture2D" uid="uid://dyvku3ds5t5hf" path="res://Images/Icons/sword.png" id="4_rgi1j"]
 
-[node name="EnemyUI" type="Button"]
+[node name="EnemyUI" type="Button" unique_id=2027285424]
 z_index = 1
-custom_minimum_size = Vector2(77, 83)
+custom_minimum_size = Vector2(150, 200)
 offset_right = 77.0
 offset_bottom = 83.0
 size_flags_horizontal = 3
@@ -17,39 +16,57 @@ theme = ExtResource("1_a1a36")
 theme_type_variation = &"FlatButton"
 script = ExtResource("1_ket8h")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="Panel" type="Panel" parent="." unique_id=1786913242]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1319808711]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1950687688]
+layout_mode = 2
 mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1913581732]
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1301785138]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
 mouse_filter = 1
 theme = ExtResource("1_a1a36")
 theme_type_variation = &"PContainer"
 
-[node name="PortraitBG" type="TextureRect" parent="VBoxContainer/HBoxContainer/PanelContainer"]
-modulate = Color(0, 0, 0, 0.501961)
-layout_mode = 2
-size_flags_horizontal = 0
-texture = ExtResource("2_ah8vt")
-
-[node name="EnemyImage" type="TextureRect" parent="VBoxContainer/HBoxContainer/PanelContainer"]
+[node name="EnemyImage" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer/PanelContainer" unique_id=947527910]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-texture = ExtResource("3_mcx52")
+texture = ExtResource("3_5qp8m")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1265801097]
 layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+size_flags_stretch_ratio = 0.0
 
-[node name="IntentImage" type="TextureRect" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="IntentImage" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1880701446]
 unique_name_in_owner = true
 modulate = Color(1, 0.0980392, 0.333333, 1)
 texture_filter = 1
@@ -60,7 +77,7 @@ size_flags_vertical = 8
 texture = ExtResource("4_rgi1j")
 expand_mode = 1
 
-[node name="IntentValue" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="IntentValue" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1913871670]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.0980392, 0.333333, 1)
@@ -69,20 +86,23 @@ text = "100"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1557398328]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_vertical = 8
 size_flags_stretch_ratio = 10.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=340809864]
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="HealthBar" type="ProgressBar" parent="VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=87267429]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 5)
+custom_minimum_size = Vector2(100, 5)
+custom_maximum_size = Vector2(121, -1)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 3
 size_flags_vertical = 1
+size_flags_stretch_ratio = 5.0
 mouse_filter = 1
 theme = ExtResource("1_a1a36")
 theme_type_variation = &"HealthBar"
@@ -90,23 +110,27 @@ step = 1.0
 value = 83.0
 show_percentage = false
 
-[node name="HealthLabel" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="HealthLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=2114551264]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 0.65098, 0.317647, 1)
 theme_override_font_sizes/font_size = 10
 text = "100"
 vertical_alignment = 1
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1773449576]
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="ArmorBar" type="ProgressBar" parent="VBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="ArmorBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1203579813]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 5)
+custom_minimum_size = Vector2(100, 5)
+custom_maximum_size = Vector2(121, -1)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 3
 size_flags_vertical = 1
+size_flags_stretch_ratio = 5.0
 mouse_filter = 1
 theme = ExtResource("1_a1a36")
 theme_type_variation = &"ArmorBar"
@@ -114,9 +138,10 @@ max_value = 3.0
 value = 2.0
 show_percentage = false
 
-[node name="ArmorLabel" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="ArmorLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1691196163]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.647059, 0.815686, 1, 1)
 theme_override_font_sizes/font_size = 10
 text = "100"

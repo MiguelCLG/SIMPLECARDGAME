@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://djeenfg0amlv5"]
+
+[ext_resource type="Texture2D" uid="uid://3m8gw6jf5ahr" path="res://Images/inkscape_exports/monsters/drop.webp" id="1_7sp1n"]
+[ext_resource type="Script" uid="uid://bbyhbtx2ctcr2" path="res://scripts/Resources/EnemyResource.cs" id="2_0uluy"]
+
+[resource]
+script = ExtResource("2_0uluy")
+EnemyName = "Drop"
+Texture = ExtResource("1_7sp1n")
+MinHealth = 8
+MaxHealth = 32
+AttackMin = 4
+AttackMax = 8
+AttackGrowthPerStep = 1
+DefendMin = 2
+DefendMax = 5
+DefendGrowthPerStep = 1

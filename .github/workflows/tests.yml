@@ -1,0 +1,41 @@
+name: tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+          cache: true
+
+      - uses: chickensoft-games/setup-godot@v2
+        with:
+          version: '4.7.1'
+          use-dotnet: true
+
+      - name: Resolve Godot binary path
+        run: |
+          if command -v godot >/dev/null 2>&1; then
+            echo "GODOT_BIN=$(command -v godot)" >> "$GITHUB_ENV"
+          else
+            echo "GODOT_BIN=${{ github.workspace }}/bin/godot" >> "$GITHUB_ENV"
+          fi
+
+      - name: Run tests
+        run: dotnet test --settings .runsettings
+
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults/test-results.trx

@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="ActConfig" format=3 uid="uid://cwpp6sql1s15l"]
+
+[ext_resource type="Script" uid="uid://bex8cyiurl2m0" path="res://scripts/Resources/ActConfig.cs" id="1_act"]
+
+[resource]
+script = ExtResource("1_act")
+ActName = "Act I"

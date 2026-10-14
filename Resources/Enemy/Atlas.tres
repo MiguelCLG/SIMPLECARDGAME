@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://l2o5hwcjfngk"]
+
+[ext_resource type="Texture2D" uid="uid://d2ls28b2qj4kp" path="res://Images/inkscape_exports/monsters/atlas.png" id="1_0j3yx"]
+[ext_resource type="Script" uid="uid://bbyhbtx2ctcr2" path="res://scripts/Resources/EnemyResource.cs" id="2_d4nh3"]
+
+[resource]
+script = ExtResource("2_d4nh3")
+EnemyName = "Atlas"
+Texture = ExtResource("1_0j3yx")
+MinHealth = 12
+MaxHealth = 24
+AttackMin = 7
+AttackMax = 12
+AttackGrowthPerStep = 1
+DefendMin = 3
+DefendMax = 6
+DefendGrowthPerStep = 1

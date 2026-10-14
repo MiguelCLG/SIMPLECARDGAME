@@ -1,15 +1,14 @@
-[gd_resource type="Resource" script_class="CardResource" load_steps=2 format=3 uid="uid://c8f702qdscrak"]
+[gd_resource type="Resource" script_class="CardResource" format=3 uid="uid://c8f702qdscrak"]
 
-[ext_resource type="Script" path="res://scripts/Resources/CardResource.cs" id="1_1yeyq"]
+[ext_resource type="Script" uid="uid://htm5qpc8jsmd" path="res://scripts/Resources/CardResource.cs" id="1_1yeyq"]
+[ext_resource type="Texture2D" uid="uid://cim0kcwkarsk1" path="res://Images/inkscape_exports/card-icons/great-attack.webp" id="1_2xtf2"]
 
 [resource]
 script = ExtResource("1_1yeyq")
 CardName = "Super Strike"
+CardImage = ExtResource("1_2xtf2")
 Description = "Deal 25 damage"
 Cost = 2
 Value = 25
 Amount = 1
 EffectString = "Attack"
-isTargetingSelf = false
-isMultipleTargets = false
-cardEffectType = 0
