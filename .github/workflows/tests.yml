@@ -16,6 +16,7 @@ jobs:
         with:
           dotnet-version: '9.0.x'
           cache: true
+          cache-dependency-path: packages.lock.json
 
       - uses: chickensoft-games/setup-godot@v2
         with:
@@ -30,8 +31,11 @@ jobs:
             echo "GODOT_BIN=${{ github.workspace }}/bin/godot" >> "$GITHUB_ENV"
           fi
 
+      - name: Restore dependencies (locked)
+        run: dotnet restore --locked-mode
+
       - name: Run tests
-        run: dotnet test --settings .runsettings
+        run: dotnet test --no-restore --settings .runsettings
 
       - name: Upload test results
         if: ${{ !cancelled() }}
