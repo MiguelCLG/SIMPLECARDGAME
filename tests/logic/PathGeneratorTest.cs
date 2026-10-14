@@ -16,7 +16,7 @@ namespace SpaceOdyssey.Tests.Logic
         }
 
         [TestCase]
-        public void Generate_EveryStepRowHasThreeToFourNodes()
+        public void Generate_EveryStepRowHasOneToFourNodes()
         {
             for (int i = 0; i < 25; i++)
             {
@@ -24,7 +24,7 @@ namespace SpaceOdyssey.Tests.Logic
                 for (int r = 0; r < PathGenerator.StepRows; r++)
                 {
                     int count = path[r].Count;
-                    AssertThat(count >= 3 && count <= 4).IsTrue();
+                    AssertThat(count >= 1 && count <= 4).IsTrue();
                 }
             }
         }
@@ -70,49 +70,130 @@ namespace SpaceOdyssey.Tests.Logic
         }
 
         [TestCase]
-        public void GetSelectableColumns_FirstRowReturnsAllColumns()
+        public void Generate_EveryNodeLeadsSomewhere()
         {
-            var path = PathGenerator.Generate();
-            var cols = PathGenerator.GetSelectableColumns(path, 0, 0);
-            AssertThat(cols.Count).IsEqual(path[0].Count);
+            for (int i = 0; i < 25; i++)
+            {
+                var path = PathGenerator.Generate();
+                for (int r = 0; r < path.Count - 1; r++)
+                {
+                    foreach (var node in path[r])
+                        AssertThat(node.Connections.Count >= 1).IsTrue();
+                }
+            }
         }
 
         [TestCase]
-        public void GetSelectableColumns_ReturnsPreviousPlusMinusOne()
+        public void Generate_EveryNodeIsReachableFromPreviousRow()
         {
-            var path = new List<List<PathNode>>
+            for (int i = 0; i < 25; i++)
             {
-                new List<PathNode> { N(0, 0), N(0, 1), N(0, 2) },
-                new List<PathNode> { N(1, 0), N(1, 1), N(1, 2), N(1, 3) }
+                var path = PathGenerator.Generate();
+                for (int r = 1; r < path.Count; r++)
+                {
+                    for (int c = 0; c < path[r].Count; c++)
+                    {
+                        bool hasParent = path[r - 1].Any(n => n.Connections.Contains(c));
+                        AssertThat(hasParent).IsTrue();
+                    }
+                }
+            }
+        }
+
+        [TestCase]
+        public void Generate_EveryLastStepNodeConnectsToBoss()
+        {
+            for (int i = 0; i < 25; i++)
+            {
+                var path = PathGenerator.Generate();
+                foreach (var node in path[PathGenerator.StepRows - 1])
+                    AssertThat(node.Connections.Contains(0)).IsTrue();
+            }
+        }
+
+        [TestCase]
+        public void Generate_ConnectionsAreUniqueAndWithinNextRow()
+        {
+            for (int i = 0; i < 25; i++)
+            {
+                var path = PathGenerator.Generate();
+                for (int r = 0; r < path.Count - 1; r++)
+                {
+                    foreach (var node in path[r])
+                    {
+                        AssertThat(node.Connections.Count).IsEqual(node.Connections.Distinct().Count());
+                        foreach (int c in node.Connections)
+                            AssertThat(c >= 0 && c < path[r + 1].Count).IsTrue();
+                    }
+                }
+            }
+        }
+
+        [TestCase]
+        public void BuildConnections_EqualCountsMakeOneRoutePerNode()
+        {
+            var connections = PathGenerator.BuildConnections(3, 3);
+            AssertThat(connections.Length).IsEqual(3);
+            for (int i = 0; i < 3; i++)
+            {
+                AssertThat(connections[i].Count).IsEqual(1);
+                AssertThat(connections[i][0]).IsEqual(i);
+            }
+        }
+
+        [TestCase]
+        public void BuildConnections_WideningBranchesSomeNodes()
+        {
+            var connections = PathGenerator.BuildConnections(2, 3);
+            int branching = connections.Count(list => list.Count > 1);
+            int single = connections.Count(list => list.Count == 1);
+            AssertThat(branching >= 1).IsTrue();
+            AssertThat(single >= 1).IsTrue();
+        }
+
+        [TestCase]
+        public void BuildConnections_NarrowingMergesSomeNodes()
+        {
+            var connections = PathGenerator.BuildConnections(4, 1);
+            for (int i = 0; i < 4; i++)
+            {
+                AssertThat(connections[i].Count).IsEqual(1);
+                AssertThat(connections[i][0]).IsEqual(0);
+            }
+        }
+
+        [TestCase]
+        public void BuildConnections_EveryNodeAndTargetIsCovered()
+        {
+            for (int n = 1; n <= 4; n++)
+            {
+                for (int m = 1; m <= 4; m++)
+                {
+                    var connections = PathGenerator.BuildConnections(n, m);
+                    for (int i = 0; i < n; i++)
+                        AssertThat(connections[i].Count >= 1).IsTrue();
+                    for (int j = 0; j < m; j++)
+                        AssertThat(connections.Any(list => list.Contains(j))).IsTrue();
+                }
+            }
+        }
+
+        [TestCase]
+        public void RepairConnections_FillsMissingEdgesOnly()
+        {
+            var run = new RunData
+            {
+                Path = new List<List<PathNode>>
+                {
+                    new List<PathNode> { N(0, 0), N(0, 1) },
+                    new List<PathNode> { N(1, 0) }
+                }
             };
 
-            var cols = PathGenerator.GetSelectableColumns(path, 1, 0);
-            AssertThat(cols.Count).IsEqual(2);
-            AssertThat(cols.Contains(0)).IsTrue();
-            AssertThat(cols.Contains(1)).IsTrue();
-        }
+            PathGenerator.RepairConnections(run);
 
-        [TestCase]
-        public void GetSelectableColumns_ClampsToRowBounds()
-        {
-            var path = new List<List<PathNode>>
-            {
-                new List<PathNode> { N(0, 0), N(0, 1), N(0, 2) },
-                new List<PathNode> { N(1, 0), N(1, 1), N(1, 2), N(1, 3) }
-            };
-
-            var cols = PathGenerator.GetSelectableColumns(path, 1, 3);
-            AssertThat(cols.Count).IsEqual(2);
-            AssertThat(cols.Contains(2)).IsTrue();
-            AssertThat(cols.Contains(3)).IsTrue();
-        }
-
-        [TestCase]
-        public void GetSelectableColumns_OutOfRangeRowReturnsEmpty()
-        {
-            var path = PathGenerator.Generate();
-            var cols = PathGenerator.GetSelectableColumns(path, 99, 0);
-            AssertThat(cols.Count).IsEqual(0);
+            AssertThat(run.Path[0][0].Connections.Count >= 1).IsTrue();
+            AssertThat(run.Path[0][1].Connections.Contains(0)).IsTrue();
         }
 
         private static PathNode N(int row, int col)

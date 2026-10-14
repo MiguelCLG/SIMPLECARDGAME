@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
@@ -44,6 +45,7 @@ public static class RunManager
     {
         RunData loaded = SaveManager.LoadRun();
         if (loaded == null) return false;
+        PathGenerator.RepairConnections(loaded);
         CurrentRun = loaded;
         return true;
     }
@@ -63,12 +65,13 @@ public static class RunManager
     {
         if (run == null) return false;
         if (row != run.CurrentRow) return false;
-        if (row >= run.Path.Count) return false;
+        if (row < 0 || row >= run.Path.Count) return false;
         if (col < 0 || col >= run.Path[row].Count) return false;
         if (row == 0) return true;
-        if (run.Path[row].Count == 1) return true;
-        int prev = run.ChosenColumns[row - 1];
-        return col >= prev - 1 && col <= prev + 1;
+        int prev = run.ChosenColumns.Count > row - 1 ? run.ChosenColumns[row - 1] : -1;
+        if (prev < 0 || prev >= run.Path[row - 1].Count) return false;
+        List<int> connections = run.Path[row - 1][prev].Connections;
+        return connections != null && connections.Contains(col);
     }
 
     public static bool ChooseNode(int row, int col)

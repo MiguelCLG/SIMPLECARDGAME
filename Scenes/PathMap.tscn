@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b7c3m1q0p2xjr"]
 
 [ext_resource type="Script" uid="uid://vwkwc4ps4fyb" path="res://scripts/PathMap.cs" id="1_pmap"]
+[ext_resource type="Script" uid="uid://clymt3ti1gg1g" path="res://scripts/PathCanvas.cs" id="2_pcanvas"]
 [ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="3_th3m"]
 [ext_resource type="Texture2D" uid="uid://c7bcf57vugvie" path="res://Images/inkscape_exports/backgrounds/background-1080x1920.webp" id="8_v87ff"]
 
@@ -68,11 +69,11 @@ grow_vertical = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
 
-[node name="PathContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=536682796]
+[node name="PathCanvas" type="Control" parent="ScrollContainer" unique_id=536682796]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 18
+script = ExtResource("2_pcanvas")
 
 [node name="HintLabel" type="Label" parent="." unique_id=1013411186]
 unique_name_in_owner = true

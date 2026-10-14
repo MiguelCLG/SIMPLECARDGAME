@@ -51,6 +51,8 @@ namespace SpaceOdyssey.Tests.Logic
 
             AssertThat(loaded.Path.Count).IsEqual(2);
             AssertThat(loaded.Path[1][0].Type).IsEqual(NodeType.Rest);
+            AssertThat(loaded.Path[0][0].Connections.Count).IsEqual(1);
+            AssertThat(loaded.Path[0][0].Connections[0]).IsEqual(0);
 
             AssertThat(loaded.Stats.Success).IsFalse();
             AssertThat(loaded.Stats.CardsPlayed).IsEqual(9);
@@ -91,8 +93,8 @@ namespace SpaceOdyssey.Tests.Logic
                 {
                     new List<PathNode>
                     {
-                        new PathNode { Row = 0, Column = 0, Type = NodeType.Encounter },
-                        new PathNode { Row = 0, Column = 1, Type = NodeType.Encounter }
+                        new PathNode { Row = 0, Column = 0, Type = NodeType.Encounter, Connections = new List<int> { 0 } },
+                        new PathNode { Row = 0, Column = 1, Type = NodeType.Encounter, Connections = new List<int> { 0 } }
                     },
                     new List<PathNode>
                     {

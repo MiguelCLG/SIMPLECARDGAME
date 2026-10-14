@@ -4,7 +4,7 @@ using Godot.Collections;
 
 public partial class PathMap : Control
 {
-    private VBoxContainer pathContainer;
+    private PathCanvas pathCanvas;
     private Panel restPanel;
     private Label restHealthLabel;
     private Button quitButton;
@@ -14,7 +14,7 @@ public partial class PathMap : Control
 
     public override void _Ready()
     {
-        pathContainer = GetNode<VBoxContainer>("%PathContainer");
+        pathCanvas = GetNode<PathCanvas>("%PathCanvas");
         restPanel = GetNode<Panel>("%RestPanel");
         restHealthLabel = GetNode<Label>("%RestHealthLabel");
         quitButton = GetNode<Button>("%QuitButton");
@@ -37,83 +37,12 @@ public partial class PathMap : Control
 
     private void BuildPath()
     {
-        foreach (Node child in pathContainer.GetChildren())
-        {
-            pathContainer.RemoveChild(child);
-            child.QueueFree();
-        }
-
         RunData run = RunManager.CurrentRun;
-        for (int row = 0; row < run.Path.Count; row++)
-        {
-            HBoxContainer rowBox = new();
-            rowBox.Alignment = BoxContainer.AlignmentMode.Center;
-            rowBox.AddThemeConstantOverride("separation", 16);
-            rowBox.MouseFilter = Control.MouseFilterEnum.Ignore;
-            pathContainer.AddChild(rowBox);
-
-            List<PathNode> nodes = run.Path[row];
-            for (int col = 0; col < nodes.Count; col++)
-            {
-                PathNode node = nodes[col];
-                Button button;
-                Texture2D nodeTexture = null;
-                if (!string.IsNullOrEmpty(node.DistributionPath))
-                {
-                    var dist = ResourceCache.Load<PathDistribution>(node.DistributionPath);
-                    if (dist != null)
-                    {
-                        nodeTexture = dist.Planet;
-                    }
-                }
-                if (nodeTexture == null)
-                {
-                    nodeTexture = ResourceLoader.Load<Texture2D>("res://Images/inkscape_exports/planets/rest.png");
-                }
-                button = CreateNodeButton(node, nodeTexture);
-                bool completed = row < run.CurrentRow;
-                if (completed)
-                {
-                    button.Disabled = true;
-                    bool chosen = col == run.ChosenColumns[row];
-                    button.Modulate = chosen ? Colors.Gold : new Color(1, 1, 1, 0.75f);
-                }
-                else if (row == run.CurrentRow)
-                {
-                    bool selectable = RunManager.IsSelectable(row, col);
-                    button.Disabled = !selectable;
-                    if (!selectable)
-                        button.Modulate = new Color(1, 1, 1, 0.75f);
-                }
-                else
-                {
-                    button.Disabled = true;
-                    button.Modulate = new Color(1, 1, 1, 0.75f);
-                }
-
-                int captureRow = row;
-                int captureCol = col;
-                button.Pressed += () => OnNodePressed(captureRow, captureCol);
-                rowBox.AddChild(button);
-            }
-        }
+        pathCanvas.Render(run, OnNodePressed);
 
         RunData.PlayerSaveState p = run.PlayerState;
         int currentRow = run.CurrentRow;
         hintLabel.Text = currentRow >= run.Path.Count ? "Map complete" : $"Step {currentRow + 1}/{run.Path.Count}  HP {p.Health}/{p.MaxHealth}";
-    }
-
-    private Button CreateNodeButton(PathNode node, Texture2D nodeTexture)
-    {
-        Button button = new();
-        button.Icon = nodeTexture;
-        button.IconAlignment = HorizontalAlignment.Center;
-        button.ExpandIcon = true;
-        button.CustomMinimumSize = new Vector2(56, 56);
-        button.ThemeTypeVariation = "PathNodeButton";
-        button.FocusMode = Control.FocusModeEnum.None;
-
-        return button;
     }
 
     private void OnNodePressed(int row, int col)
