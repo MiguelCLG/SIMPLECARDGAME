@@ -10,7 +10,7 @@ namespace SpaceOdyssey.Tests.Integration
         [RequireGodotRuntime]
         public void FromCard_CapturesAllFields()
         {
-            var card = new Card
+            var card = AutoFree(new Card
             {
                 CardName = "Strike",
                 Description = "Deal damage",
@@ -20,7 +20,7 @@ namespace SpaceOdyssey.Tests.Integration
                 Amount = 1,
                 isTargetingSelf = false,
                 isMultipleTargets = false
-            };
+            });
 
             CardSaveData data = CardSaveData.FromCard(card);
 
@@ -38,11 +38,11 @@ namespace SpaceOdyssey.Tests.Integration
         [RequireGodotRuntime]
         public void FromCard_FallsBackToEffectClassName()
         {
-            var card = new Card
+            var card = AutoFree(new Card
             {
                 EffectString = "",
                 Effect = new AttackEffect()
-            };
+            });
 
             CardSaveData data = CardSaveData.FromCard(card);
 
@@ -63,7 +63,7 @@ namespace SpaceOdyssey.Tests.Integration
                 Amount = 1
             };
 
-            Card card = data.ToCard();
+            Card card = AutoFree(data.ToCard());
 
             AssertThat(card.Effect).IsInstanceOf<AttackEffect>();
             AssertThat(card.Effect.Value).IsEqual(6);
@@ -74,7 +74,7 @@ namespace SpaceOdyssey.Tests.Integration
         [RequireGodotRuntime]
         public void RoundTrip_PreservesFields()
         {
-            var card = new Card
+            var card = AutoFree(new Card
             {
                 CardName = "Defend",
                 Description = "Block",
@@ -82,9 +82,9 @@ namespace SpaceOdyssey.Tests.Integration
                 EffectString = "Defense",
                 Value = 5,
                 Amount = 1
-            };
+            });
 
-            Card restored = CardSaveData.FromCard(card).ToCard();
+            Card restored = AutoFree(CardSaveData.FromCard(card).ToCard());
 
             AssertThat(restored.CardName).IsEqual("Defend");
             AssertThat(restored.Description).IsEqual("Block");
@@ -107,7 +107,7 @@ namespace SpaceOdyssey.Tests.Integration
 
         private static Card MakeCard(string effectString)
         {
-            var card = new Card { EffectString = effectString };
+            var card = AutoFree(new Card { EffectString = effectString });
             card.InitializeEffect();
             return card;
         }

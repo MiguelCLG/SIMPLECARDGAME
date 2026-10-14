@@ -14,7 +14,7 @@ namespace SpaceOdyssey.Tests.Integration
         {
             RunManager.NewRun();
 
-            ISceneRunner sceneRunner = ISceneRunner.Load("res://Scenes/Encounter.tscn");
+            ISceneRunner sceneRunner = ISceneRunner.Load("res://Scenes/Encounter.tscn", autoFree: true);
             await sceneRunner.SimulateFrames(30);
 
             Player player = sceneRunner.FindChild("Player") as Player;
