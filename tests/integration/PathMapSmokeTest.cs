@@ -19,7 +19,7 @@ namespace SpaceOdyssey.Tests.Integration
             foreach (var row in run.Path)
                 expectedNodes += row.Count;
 
-            ISceneRunner sceneRunner = ISceneRunner.Load("res://Scenes/PathMap.tscn");
+            ISceneRunner sceneRunner = ISceneRunner.Load("res://Scenes/PathMap.tscn", autoFree: true);
             await sceneRunner.SimulateFrames(30);
 
             Node sceneRoot = sceneRunner.Scene();

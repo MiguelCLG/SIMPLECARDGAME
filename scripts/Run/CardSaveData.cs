@@ -21,7 +21,7 @@ public class CardSaveData
         return new CardSaveData
         {
             CardName = card.CardName,
-            CardImage = card.CardImage.ResourcePath,
+            CardImage = card.CardImage?.ResourcePath,
             Description = card.Description,
             Cost = card.Cost,
             EffectString = effectString,
@@ -37,7 +37,7 @@ public class CardSaveData
         return new CardSaveData
         {
             CardName = resource.CardName,
-            CardImage = resource.CardImage.ResourcePath,
+            CardImage = resource.CardImage?.ResourcePath,
             Description = resource.Description,
             Cost = resource.Cost,
             EffectString = resource.EffectString,
@@ -50,7 +50,9 @@ public class CardSaveData
 
     public Card ToCard()
     {
-        Texture2D cardImage = ResourceLoader.Load<Texture2D>(CardImage);
+        Texture2D cardImage = string.IsNullOrEmpty(CardImage)
+            ? null
+            : ResourceCache.Load<Texture2D>(CardImage);
         Card card = new();
         card.CardName = CardName;
         card.Description = Description;
