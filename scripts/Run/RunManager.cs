@@ -5,14 +5,17 @@ using Godot;
 
 public static class RunManager
 {
+    private const string PrintSeedSetting = "application/config/debug/print_run_seed";
+
     public static RunData CurrentRun { get; private set; }
 
     public static void NewRun()
     {
         RunData run = new();
+        run.Seed = Random.Shared.Next(1, int.MaxValue);
         run.GeneratedAt = DateTime.Now;
         run.StartedAt = run.GeneratedAt;
-        run.Path = PathGenerator.Generate();
+        run.Path = PathGenerator.Generate(run.Seed);
         run.CurrentRow = 0;
         run.ChosenColumns = run.Path.Select(row => -1).ToList();
         run.PlayerState = new RunData.PlayerSaveState
@@ -39,15 +42,25 @@ public static class RunManager
 
         CurrentRun = run;
         SaveRun();
+        PrintSeedIfEnabled(run.Seed);
     }
 
     public static bool LoadSave()
     {
         RunData loaded = SaveManager.LoadRun();
         if (loaded == null) return false;
+        if (loaded.Seed == 0) // save created before seeds existed
+            loaded.Seed = Random.Shared.Next(1, int.MaxValue);
         PathGenerator.RepairConnections(loaded);
         CurrentRun = loaded;
+        PrintSeedIfEnabled(loaded.Seed);
         return true;
+    }
+
+    private static void PrintSeedIfEnabled(int seed)
+    {
+        if (ProjectSettings.GetSetting(PrintSeedSetting, true).AsBool())
+            GD.Print($"[RunSeed] {seed}");
     }
 
     public static bool HasSave() => SaveManager.HasSave();

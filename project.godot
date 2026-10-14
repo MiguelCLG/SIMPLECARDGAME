@@ -18,6 +18,7 @@ config/name="SpaceOdyssey"
 run/main_scene="res://Scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.7", "C#", "Mobile")
 config/windows_native_icon="res://Images/Icons/simplecardgameicon.ico"
+config/debug/print_run_seed=true
 
 [display]
 
