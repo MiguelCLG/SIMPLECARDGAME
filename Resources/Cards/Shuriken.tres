@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardResource" format=3]
+
+[ext_resource type="Texture2D" path="res://Images/inkscape_exports/card-icons/attack.webp" id="1"]
+[ext_resource type="Script" path="res://scripts/Resources/CardResource.cs" id="2"]
+
+[resource]
+script = ExtResource("2")
+CardName = "Shuriken"
+CardImage = ExtResource("1")
+Description = "Deal 4 damage"
+Cost = 0
+Value = 4
+Amount = 1
+EffectString = "Attack"
+isTargetingSelf = false
+isMultipleTargets = false

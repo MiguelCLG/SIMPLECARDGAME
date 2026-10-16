@@ -7,16 +7,22 @@ public class CardSaveData
     public string Description;
     public int Cost;
     public string EffectString;
+    public string OnDiscardEffectString;
     public int Value;
     public int Amount;
     public bool isTargetingSelf;
     public bool isMultipleTargets;
+    public string SummonCardPath;
 
     public static CardSaveData FromCard(Card card)
     {
         string effectString = card.EffectString;
         if (string.IsNullOrEmpty(effectString) && card.Effect != null)
             effectString = card.Effect.GetType().Name.Replace("Effect", "");
+        
+        string onDiscard = card.OnDiscardEffectString;
+        if (string.IsNullOrEmpty(onDiscard) && card.OnDiscardEffect != null)
+            onDiscard = card.OnDiscardEffect.GetType().Name.Replace("Effect", "");
         
         return new CardSaveData
         {
@@ -25,10 +31,12 @@ public class CardSaveData
             Description = card.Description,
             Cost = card.Cost,
             EffectString = effectString,
+            OnDiscardEffectString = onDiscard,
             Value = card.Value,
             Amount = card.Amount,
             isTargetingSelf = card.isTargetingSelf,
-            isMultipleTargets = card.isMultipleTargets
+            isMultipleTargets = card.isMultipleTargets,
+            SummonCardPath = card.SummonCardPath
         };
     }
 
@@ -41,10 +49,12 @@ public class CardSaveData
             Description = resource.Description,
             Cost = resource.Cost,
             EffectString = resource.EffectString,
+            OnDiscardEffectString = resource.OnDiscardEffectString,
             Value = resource.Value,
             Amount = resource.Amount,
             isTargetingSelf = resource.isTargetingSelf,
-            isMultipleTargets = resource.isMultipleTargets
+            isMultipleTargets = resource.isMultipleTargets,
+            SummonCardPath = resource.SummonCardPath
         };
     }
 
@@ -59,10 +69,12 @@ public class CardSaveData
         card.CardImage = cardImage;
         card.Cost = Cost;
         card.EffectString = EffectString;
+        card.OnDiscardEffectString = OnDiscardEffectString;
         card.Value = Value;
         card.Amount = Amount;
         card.isTargetingSelf = isTargetingSelf;
         card.isMultipleTargets = isMultipleTargets;
+        card.SummonCardPath = SummonCardPath;
         card.InitializeEffect();
         return card;
     }

@@ -10,7 +10,9 @@ public partial class CardResource : Resource
   [Export] public int Value { get; set; }
   [Export] public int Amount { get; set; }
   [Export] public string EffectString;
+  [Export] public string OnDiscardEffectString;
   [Export] public bool isTargetingSelf { get; set; }
   [Export] public bool isMultipleTargets { get; set; }
   [Export] public CardEffectType cardEffectType { get; set; }
+  [Export] public string SummonCardPath;
 }

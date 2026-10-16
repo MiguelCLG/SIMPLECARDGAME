@@ -173,10 +173,12 @@ public partial class Player : Character
         cardInstance.Description = data.Description;
         cardInstance.Cost = data.Cost;
         cardInstance.EffectString = data.EffectString;
+        cardInstance.OnDiscardEffectString = data.OnDiscardEffectString;
         cardInstance.Value = data.Value;
         cardInstance.Amount = data.Amount;
         cardInstance.isTargetingSelf = data.isTargetingSelf;
         cardInstance.isMultipleTargets = data.isMultipleTargets;
+        cardInstance.SummonCardPath = data.SummonCardPath;
         cardInstance.InitializeEffect();
         handContainer.AddChild(cardInstance);
         Hand.Add(cardInstance);
@@ -186,7 +188,14 @@ public partial class Player : Character
     {
         // Implement discarding card logic
         DiscardPile.Add(CardSaveData.FromCard(card));
-        handContainer.RemoveChild(card);
+        if (card.OnDiscardEffect != null)
+        {
+            card.OnDiscardEffect.ApplyEffect(this);
+        }
+        if (handContainer != null && card.IsInsideTree())
+        {
+            handContainer.RemoveChild(card);
+        }
         card.QueueFree();
     }
 
