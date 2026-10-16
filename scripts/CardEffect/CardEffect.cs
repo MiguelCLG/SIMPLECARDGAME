@@ -15,6 +15,9 @@ public abstract class CardEffect
     public int Amount = 1;
     public bool isMultipleTargets = false;
     public bool isTargetingSelf = false;
+    public virtual bool RequiresHandTarget => false;
+    public virtual void SetDiscardTarget(Card card) { }
+    public virtual CardEffect Find<T>() where T : CardEffect => this as T;
     public abstract void ApplyEffect(Array<Character> character);
     public abstract void ApplyEffect(Character character);
 }
