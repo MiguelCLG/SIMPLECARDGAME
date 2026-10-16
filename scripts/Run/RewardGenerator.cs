@@ -75,11 +75,19 @@ public static class RewardGenerator
         return distinct;
     }
 
+    // At reward time RunData holds the live encounter split: Deck is the draw pile only,
+    // so all three piles must be counted for the cap to reflect the real deck.
     private static int CountInDeck(RunData run, string cardName)
     {
-        if (run?.Deck == null || string.IsNullOrEmpty(cardName)) return 0;
+        if (run == null || string.IsNullOrEmpty(cardName)) return 0;
+        return CountIn(run.Deck, cardName) + CountIn(run.Hand, cardName) + CountIn(run.Discard, cardName);
+    }
+
+    private static int CountIn(List<CardSaveData> pile, string cardName)
+    {
+        if (pile == null) return 0;
         int count = 0;
-        foreach (CardSaveData card in run.Deck)
+        foreach (CardSaveData card in pile)
         {
             if (card != null && card.CardName == cardName) count++;
         }

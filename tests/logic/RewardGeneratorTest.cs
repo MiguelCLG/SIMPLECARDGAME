@@ -55,6 +55,43 @@ namespace SpaceOdyssey.Tests.Logic
 
         [TestCase]
         [RequireGodotRuntime]
+        public void PickRewardCards_CountsCopiesAcrossDrawHandAndDiscard()
+        {
+            // In-game RunData.Deck is only the draw pile at reward time: the other copies of a
+            // card sit in Hand/Discard. The cap must count all three piles.
+            var pool = Pool("Strike", "Cleave", "Focus", "Rebirth");
+            var run = RunWithSplitPiles(
+                deck: new[] { "Defend" },
+                hand: new[] { "Strike", "Strike" },
+                discard: new[] { "Strike" });
+
+            for (int seed = 0; seed < 20; seed++)
+            {
+                List<CardSaveData> rewards = RewardGenerator.PickRewardCards(run, pool, 3, new Random(seed));
+                AssertThat(rewards.Any(c => c.CardName == "Strike")).IsFalse();
+            }
+        }
+
+        [TestCase]
+        [RequireGodotRuntime]
+        public void PickRewardCards_CountsCardsAtCapSplitBetweenPiles()
+        {
+            // Exactly at the cap (1 drawn away from the draw pile) must already be excluded.
+            var pool = Pool("Strike", "Cleave", "Focus", "Rebirth");
+            var run = RunWithSplitPiles(
+                deck: new[] { "Strike" },
+                hand: new[] { "Strike" },
+                discard: System.Array.Empty<string>());
+
+            for (int seed = 0; seed < 20; seed++)
+            {
+                List<CardSaveData> rewards = RewardGenerator.PickRewardCards(run, pool, 3, new Random(seed));
+                AssertThat(rewards.Any(c => c.CardName == "Strike")).IsFalse();
+            }
+        }
+
+        [TestCase]
+        [RequireGodotRuntime]
         public void PickRewardCards_FallsBackToFullPoolWhenFilteredTooSmall()
         {
             // Every card is at the cap except one -> filtering leaves < 3 options.
@@ -141,6 +178,18 @@ namespace SpaceOdyssey.Tests.Logic
             var run = new RunData();
             foreach (string name in cardNames)
                 run.Deck.Add(new CardSaveData { CardName = name });
+            return run;
+        }
+
+        private static RunData RunWithSplitPiles(string[] deck, string[] hand, string[] discard)
+        {
+            var run = new RunData();
+            foreach (string name in deck)
+                run.Deck.Add(new CardSaveData { CardName = name });
+            foreach (string name in hand)
+                run.Hand.Add(new CardSaveData { CardName = name });
+            foreach (string name in discard)
+                run.Discard.Add(new CardSaveData { CardName = name });
             return run;
         }
     }
