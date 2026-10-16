@@ -97,6 +97,13 @@ public static class RunManager
         return true;
     }
 
+    public static void AddCardToDeck(CardSaveData card)
+    {
+        if (CurrentRun == null || card == null) return;
+        CurrentRun.Deck.Add(card);
+        SaveRun();
+    }
+
     public static void HealPlayer(int percent)
     {
         if (CurrentRun == null) return;

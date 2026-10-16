@@ -86,6 +86,9 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reward_overlay"]
+bg_color = Color(0, 0, 0, 0.88235295)
+
 [resource]
 default_font = ExtResource("3_font")
 ArmorBar/base_type = &"ProgressBar"
@@ -135,3 +138,5 @@ PathNodeButton/styles/normal = SubResource("StyleBoxEmpty_wh5ny")
 PathNodeButton/styles/pressed = SubResource("StyleBoxEmpty_wh5ny")
 PlayerPanel/base_type = &"Panel"
 PlayerPanel/styles/panel = SubResource("StyleBoxFlat_p11fq")
+RewardPanel/base_type = &"Panel"
+RewardPanel/styles/panel = SubResource("StyleBoxFlat_reward_overlay")
