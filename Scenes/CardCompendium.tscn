@@ -1,0 +1,59 @@
+[gd_scene load_steps=5 format=3 uid="uid://c7x7v8gx4h2kr"]
+
+[ext_resource type="Script" uid="uid://h85cep6igwst" path="res://scripts/CardCompendium.cs" id="1_8k2p3"]
+[ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="2_9m1n7"]
+[ext_resource type="PackedScene" uid="uid://bx7k2vf8dlsrj" path="res://Scenes/CardGrid.tscn" id="3_x5j8d"]
+[ext_resource type="Texture2D" uid="uid://cnsl5ujvngfsi" path="res://Images/UI/Background.png" id="4_bg0d"]
+
+[node name="CardCompendium" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_9m1n7")
+script = ExtResource("1_8k2p3")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_bg0d")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Cards"
+horizontal_alignment = 1
+
+[node name="CardGrid" parent="VBoxContainer" instance=ExtResource("3_x5j8d")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BackButton" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"MainMenuButton"
+text = "Back"
+
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="OnBackPressed"]

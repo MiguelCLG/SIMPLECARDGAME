@@ -86,6 +86,17 @@ theme = SubResource("Theme_4a6vu")
 theme_type_variation = &"MainMenuButton"
 text = "Options"
 
+[node name="CardsButton" type="Button" parent="CenterContainer/MenuContainer" unique_id=413076402]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(224, 54)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_4a6vu")
+theme_type_variation = &"MainMenuButton"
+text = "Cards"
+
+[connection signal="pressed" from="CenterContainer/MenuContainer/CardsButton" to="." method="OnCardsPressed"]
+
 [node name="QuitButton" type="Button" parent="CenterContainer/MenuContainer" unique_id=1958869819]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(224, 54)

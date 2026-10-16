@@ -310,4 +310,10 @@ public partial class Player : Character
         GetNode<Button>("%EndTurnButton").Disabled = true;
         EventRegistry.GetEventPublisher("OnEndTurnPress").RaiseEvent(this);
     }
+
+    public void OnDeckViewPress()
+    {
+        GetNode<Button>("%DeckButton").ReleaseFocus();
+        EventRegistry.GetEventPublisher("OnDeckViewPress").RaiseEvent(this);
+    }
 }
