@@ -5,6 +5,7 @@ public partial class MainMenu : Control
 {
     private Button startButton;
     private Button optionsButton;
+    private Button cardsButton;
     private Button quitButton;
     private Panel optionsPanel;
     private HSlider volumeSlider;
@@ -18,6 +19,7 @@ public partial class MainMenu : Control
     {
         startButton = GetNode<Button>("%StartButton");
         optionsButton = GetNode<Button>("%OptionsButton");
+        cardsButton = GetNode<Button>("%CardsButton");
         quitButton = GetNode<Button>("%QuitButton");
         optionsPanel = GetNode<Panel>("%OptionsPanel");
         volumeSlider = GetNode<HSlider>("%VolumeSlider");
@@ -28,6 +30,7 @@ public partial class MainMenu : Control
 
         ConnectHover(startButton);
         ConnectHover(optionsButton);
+        ConnectHover(cardsButton);
         ConnectHover(quitButton);
 
         continueButton.Disabled = !RunManager.HasSave();
@@ -42,7 +45,7 @@ public partial class MainMenu : Control
 
     private void AnimateMenuIn()
     {
-        Button[] buttons = { startButton, optionsButton, quitButton };
+        Button[] buttons = { startButton, optionsButton, cardsButton, quitButton };
         Tween tween = CreateTween();
         foreach (Button button in buttons)
         {
@@ -118,6 +121,11 @@ public partial class MainMenu : Control
     private void OnBackPressed()
     {
         optionsPanel.Visible = false;
+    }
+
+    private void OnCardsPressed()
+    {
+        GetTree().ChangeSceneToFile("res://Scenes/CardCompendium.tscn");
     }
 
     private void OnQuitPressed()

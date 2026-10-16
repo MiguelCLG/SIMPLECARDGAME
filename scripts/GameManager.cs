@@ -20,6 +20,9 @@ public partial class GameManager : Control
     private Card selectedCard;
     private Control enemyContainer;
     private bool resumedEncounter;
+    private Panel deckOverlay;
+    private CardGrid deckGrid;
+    private Label deckCountLabel;
     [Export] private DeckResource initialDeck;
     [Export] private Array<EnemyResource> enemyTypes;
     [Export] private ActConfig actConfig;
@@ -30,6 +33,10 @@ public partial class GameManager : Control
         player = GetNode<Control>("%Player") as Player;
         enemies = new();
         enemyContainer = GetNode<Control>("%EnemySpawn");
+        deckOverlay = GetNode<Panel>("%DeckOverlay");
+        deckGrid = GetNode<CardGrid>("%CardGrid");
+        deckCountLabel = GetNode<Label>("%DeckCountLabel");
+        GetNode<Button>("%DeckCloseButton").Pressed += HideDeckOverlay;
         SetupRun();
     }
 
@@ -273,6 +280,39 @@ public partial class GameManager : Control
 
     // Add other methods as needed
 
+    private void OnDeckViewPress(object sender, object obj) => ToggleDeckOverlay();
+
+    private void ToggleDeckOverlay()
+    {
+        if (deckOverlay.Visible)
+        {
+            HideDeckOverlay();
+            return;
+        }
+        RefreshDeckOverlay();
+        deckOverlay.Visible = true;
+    }
+
+    private void HideDeckOverlay()
+    {
+        deckOverlay.Visible = false;
+    }
+
+    private void RefreshDeckOverlay()
+    {
+        int draw = player.Deck?.Count ?? 0;
+        int hand = player.Hand?.Count ?? 0;
+        int discard = player.DiscardPile?.Count ?? 0;
+
+        List<CardSaveData> all = new();
+        if (player.Deck != null) all.AddRange(player.Deck);
+        if (player.DiscardPile != null) all.AddRange(player.DiscardPile);
+        if (player.Hand != null) all.AddRange(player.Hand.Select(CardSaveData.FromCard));
+
+        deckCountLabel.Text = $"Draw {draw} · Hand {hand} · Discard {discard}";
+        deckGrid.Show(all);
+    }
+
     // Events
     private void OnEndTurnPress(object sender, object obj)
     {
@@ -377,6 +417,7 @@ public partial class GameManager : Control
         EventSubscriber.UnsubscribeFromEvent("OnPlayerDie", OnPlayerDie);
         EventSubscriber.UnsubscribeFromEvent("OnEndTurnPress", OnEndTurnPress);
         EventSubscriber.UnsubscribeFromEvent("OnEscapeKey", OnEscapeKey);
+        EventSubscriber.UnsubscribeFromEvent("OnDeckViewPress", OnDeckViewPress);
     }
 
     private void RegisterEvents()
@@ -396,6 +437,9 @@ public partial class GameManager : Control
 
         EventRegistry.RegisterEvent("OnEndTurnPress");
         EventSubscriber.SubscribeToEvent("OnEndTurnPress", OnEndTurnPress);
+
+        EventRegistry.RegisterEvent("OnDeckViewPress");
+        EventSubscriber.SubscribeToEvent("OnDeckViewPress", OnDeckViewPress);
 
         // Register inputs
         EventRegistry.RegisterEvent("OnEscapeKey");
