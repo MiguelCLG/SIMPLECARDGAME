@@ -280,6 +280,12 @@ public partial class Player : Character
         healthBar.Value = MaxHealth;
     }
 
+    public void ResetArmor()
+    {
+        Armor = 0;
+        armorLabel.Text = Armor.ToString();
+    }
+
     public void OnEndTurnPress()
     {
         GetNode<Button>("%EndTurnButton").ReleaseFocus();

@@ -32,5 +32,54 @@ namespace SpaceOdyssey.Tests.Integration
 
             AssertThat(player.Mana >= 0).IsTrue();
         }
+
+        [TestCase]
+        [RequireGodotRuntime]
+        public async Task FreshEncounter_ResetsCarriedOverArmor()
+        {
+            RunManager.NewRun();
+            RunManager.CurrentRun.PlayerState.Armor = 5;
+
+            ISceneRunner sceneRunner = ISceneRunner.Load("res://Scenes/Encounter.tscn", autoFree: true);
+            await sceneRunner.SimulateFrames(30);
+
+            Player player = sceneRunner.FindChild("Player") as Player;
+            AssertThat(player).IsNotNull();
+            AssertThat(player.Armor).IsEqual(0);
+        }
+
+        [TestCase]
+        [RequireGodotRuntime]
+        public async Task ResumedEncounter_KeepsArmor()
+        {
+            RunManager.NewRun();
+            RunData run = RunManager.CurrentRun;
+            run.ActiveEncounter = true;
+            run.PlayerState.Armor = 5;
+            run.Enemies.Add(
+                new EnemySaveData
+                {
+                    EnemyName = "TestEnemy",
+                    TexturePath = "res://Images/Icons/sword.png",
+                    Health = 10,
+                    MaxHealth = 10,
+                    Armor = 0,
+                    AttackMin = 1,
+                    AttackMax = 2,
+                    DefendMin = 1,
+                    DefendMax = 2,
+                    IntentType = Intent.Attack,
+                    IntentValue = 1
+                }
+            );
+            RunManager.SaveRun();
+
+            ISceneRunner sceneRunner = ISceneRunner.Load("res://Scenes/Encounter.tscn", autoFree: true);
+            await sceneRunner.SimulateFrames(30);
+
+            Player player = sceneRunner.FindChild("Player") as Player;
+            AssertThat(player).IsNotNull();
+            AssertThat(player.Armor).IsEqual(5);
+        }
     }
 }
