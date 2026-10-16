@@ -47,7 +47,7 @@ layout_mode = 2
 
 [node name="Player" parent="Encounter/Panel/MarginContainer/VBoxContainer" unique_id=159553283 instance=ExtResource("4_wcy40")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 64)
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 size_flags_vertical = 8
 MaxMana = 3

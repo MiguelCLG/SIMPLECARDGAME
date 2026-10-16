@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cuw4puh8icr77" path="res://Images/inkscape_exports/backgrounds/bg-green-planet.webp" id="1_1uobn"]
 [ext_resource type="Texture2D" uid="uid://drhuwcpoi1cw1" path="res://Images/inkscape_exports/card-icons/front-card.webp" id="1_iuvqu"]
 [ext_resource type="Texture2D" uid="uid://cnsl5ujvngfsi" path="res://Images/UI/Background.png" id="2_t2syh"]
+[ext_resource type="Texture2D" uid="uid://lnt15vvgp8r0" path="res://Images/inkscape_exports/end_button.webp" id="4_endbt"]
 [ext_resource type="FontFile" uid="uid://g1opv875pnbe" path="res://Themes/Fonts/BMSPA.TTF" id="3_font"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6jali"]
@@ -47,7 +48,7 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pccxb"]
-bg_color = Color(0, 0.65098, 0.317647, 1)
+bg_color = Color(0.957, 0.122, 0.122, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -73,6 +74,13 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cuo0n"]
 texture = ExtResource("2_t2syh")
 region_rect = Rect2(12.5, 32.4569, 236, 367.857)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_endbtn"]
+texture = ExtResource("4_endbt")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_endbtn_disabled"]
+modulate_color = Color(0.517647, 0.517647, 0.517647, 1)
+texture = ExtResource("4_endbt")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p11fq"]
 bg_color = Color(0.176419, 0.176419, 0.176419, 1)
@@ -100,6 +108,17 @@ Card/base_type = &"Button"
 Card/styles/focus = SubResource("StyleBoxTexture_x7d04")
 Card/styles/hover = SubResource("StyleBoxTexture_x7d04")
 Card/styles/normal = SubResource("StyleBoxTexture_x7d04")
+EndTurnButton/base_type = &"Button"
+EndTurnButton/colors/font_color = Color(1, 1, 1, 1)
+EndTurnButton/colors/font_hover_color = Color(1, 0.843137, 0, 1)
+EndTurnButton/colors/font_pressed_color = Color(1, 0.843137, 0, 1)
+EndTurnButton/colors/font_disabled_color = Color(1, 1, 1, 0.501961)
+EndTurnButton/font_sizes/font_size = 16
+EndTurnButton/styles/disabled = SubResource("StyleBoxTexture_endbtn_disabled")
+EndTurnButton/styles/focus = SubResource("StyleBoxTexture_endbtn")
+EndTurnButton/styles/hover = SubResource("StyleBoxTexture_endbtn")
+EndTurnButton/styles/normal = SubResource("StyleBoxTexture_endbtn")
+EndTurnButton/styles/pressed = SubResource("StyleBoxTexture_endbtn")
 FlatButton/styles/disabled = SubResource("StyleBoxEmpty_grmsu")
 FlatButton/styles/hover = SubResource("StyleBoxFlat_kg3qt")
 FlatButton/styles/normal = SubResource("StyleBoxFlat_rolgm")
@@ -140,3 +159,8 @@ PlayerPanel/base_type = &"Panel"
 PlayerPanel/styles/panel = SubResource("StyleBoxFlat_p11fq")
 RewardPanel/base_type = &"Panel"
 RewardPanel/styles/panel = SubResource("StyleBoxFlat_reward_overlay")
+StatusLabel/base_type = &"Label"
+StatusLabel/colors/font_color = Color(1, 1, 1, 1)
+StatusLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+StatusLabel/constants/outline_size = 3
+StatusLabel/font_sizes/font_size = 12
