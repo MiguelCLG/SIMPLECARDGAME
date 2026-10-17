@@ -280,6 +280,15 @@ public partial class Player : Character
         healthBar.Value = MaxHealth;
     }
 
+    // Reset of encounter-scoped stats (fresh encounter only; GameManager calls this
+    // in the non-resumed branch of SetupRun). Add future transient stats here
+    // (poison, buffs, TurnEffects...) — not in ResolvePlayerTurn, which handles
+    // turn-scoped resets (mana, hand). Run-scoped stats (Health, MaxHealth) never reset here.
+    public void ResetEncounterStats()
+    {
+        ResetArmor();
+    }
+
     public void ResetArmor()
     {
         Armor = 0;
