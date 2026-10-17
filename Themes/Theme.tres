@@ -86,8 +86,13 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
+bg_color = Color(0, 0, 0, 0.88)
+
 [resource]
 default_font = ExtResource("3_font")
+OverlayPanel/base_type = &"Panel"
+OverlayPanel/styles/panel = SubResource("StyleBoxFlat_overlay")
 ArmorBar/base_type = &"ProgressBar"
 ArmorBar/styles/background = SubResource("StyleBoxFlat_6jali")
 ArmorBar/styles/fill = SubResource("StyleBoxFlat_lb3cy")
