@@ -67,6 +67,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MenuContainer" type="VBoxContainer" parent="CenterContainer" unique_id=359038692]
+unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 
@@ -132,6 +133,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="OptionContainer" type="VBoxContainer" parent="OptionsPanel/CenterContainer" unique_id=223540585]
+unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 
@@ -208,6 +210,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="GameContainer" type="VBoxContainer" parent="GamePanel/CenterContainer" unique_id=223540586]
+unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 
