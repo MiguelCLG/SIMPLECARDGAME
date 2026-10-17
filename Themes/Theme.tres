@@ -3,8 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://cuw4puh8icr77" path="res://Images/inkscape_exports/backgrounds/bg-green-planet.webp" id="1_1uobn"]
 [ext_resource type="Texture2D" uid="uid://drhuwcpoi1cw1" path="res://Images/inkscape_exports/card-icons/front-card.webp" id="1_iuvqu"]
 [ext_resource type="Texture2D" uid="uid://cnsl5ujvngfsi" path="res://Images/UI/Background.png" id="2_t2syh"]
-[ext_resource type="Texture2D" uid="uid://lnt15vvgp8r0" path="res://Images/inkscape_exports/end_button.webp" id="4_endbt"]
 [ext_resource type="FontFile" uid="uid://g1opv875pnbe" path="res://Themes/Fonts/BMSPA.TTF" id="3_font"]
+[ext_resource type="Texture2D" uid="uid://lnt15vvgp8r0" path="res://Images/inkscape_exports/end_button.webp" id="4_endbt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6jali"]
 bg_color = Color(0, 0, 0, 1)
@@ -29,6 +29,13 @@ expand_margin_left = 6.0
 expand_margin_top = 6.0
 expand_margin_right = 6.0
 expand_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_endbtn_disabled"]
+texture = ExtResource("4_endbt")
+modulate_color = Color(0.517647, 0.517647, 0.517647, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_endbtn"]
+texture = ExtResource("4_endbt")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_grmsu"]
 
@@ -75,13 +82,6 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 texture = ExtResource("2_t2syh")
 region_rect = Rect2(12.5, 32.4569, 236, 367.857)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_endbtn"]
-texture = ExtResource("4_endbt")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_endbtn_disabled"]
-modulate_color = Color(0.517647, 0.517647, 0.517647, 1)
-texture = ExtResource("4_endbt")
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p11fq"]
 bg_color = Color(0.176419, 0.176419, 0.176419, 1)
 border_width_left = 1
@@ -110,9 +110,9 @@ Card/styles/hover = SubResource("StyleBoxTexture_x7d04")
 Card/styles/normal = SubResource("StyleBoxTexture_x7d04")
 EndTurnButton/base_type = &"Button"
 EndTurnButton/colors/font_color = Color(1, 1, 1, 1)
+EndTurnButton/colors/font_disabled_color = Color(1, 1, 1, 0.501961)
 EndTurnButton/colors/font_hover_color = Color(1, 0.843137, 0, 1)
 EndTurnButton/colors/font_pressed_color = Color(1, 0.843137, 0, 1)
-EndTurnButton/colors/font_disabled_color = Color(1, 1, 1, 0.501961)
 EndTurnButton/font_sizes/font_size = 16
 EndTurnButton/styles/disabled = SubResource("StyleBoxTexture_endbtn_disabled")
 EndTurnButton/styles/focus = SubResource("StyleBoxTexture_endbtn")
