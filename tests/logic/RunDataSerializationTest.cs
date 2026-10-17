@@ -82,6 +82,60 @@ namespace SpaceOdyssey.Tests.Logic
             AssertThat(loaded.Seed).IsEqual(0);
         }
 
+        [TestCase]
+        public void Serialize_Deserialize_PreservesPendingReward()
+        {
+            RunData run = BuildSampleRun();
+            run.PendingReward = true;
+            run.PendingRewardCards = new List<CardSaveData>
+            {
+                Card("Cleave", "Hit all", 2, "Cleave"),
+                Card("Poison", "Poison", 1, "Poison"),
+                Card("Mana", "Gain mana", 0, "Mana")
+            };
+
+            string json = JsonConvert.SerializeObject(run, Formatting.Indented);
+            RunData loaded = JsonConvert.DeserializeObject<RunData>(json);
+
+            AssertThat(loaded).IsNotNull();
+            AssertThat(loaded.PendingReward).IsTrue();
+            AssertThat(loaded.PendingRewardCards.Count).IsEqual(3);
+            AssertThat(loaded.PendingRewardCards[0].CardName).IsEqual("Cleave");
+            AssertThat(loaded.PendingRewardCards[2].EffectString).IsEqual("Mana");
+            AssertThat(loaded.HasPendingReward()).IsTrue();
+        }
+
+        [TestCase]
+        public void Deserialize_LegacySaveWithoutPendingRewardDefaultsToNoReward()
+        {
+            // Pre-fix saves contain neither field; both must default so the resume
+            // path never misreads them as an awaiting reward.
+            const string legacyJson = "{\"SchemaVersion\":1,\"CurrentRow\":2,\"ActiveEncounter\":true}";
+            RunData loaded = JsonConvert.DeserializeObject<RunData>(legacyJson);
+
+            AssertThat(loaded).IsNotNull();
+            AssertThat(loaded.PendingReward).IsFalse();
+            AssertThat(loaded.PendingRewardCards).IsNotNull();
+            AssertThat(loaded.PendingRewardCards.Count).IsEqual(0);
+            AssertThat(loaded.HasPendingReward()).IsFalse();
+        }
+
+        [TestCase]
+        public void HasPendingReward_RequiresFlagAndCards()
+        {
+            var run = new RunData();
+            AssertThat(run.HasPendingReward()).IsFalse();
+
+            run.PendingReward = true;
+            AssertThat(run.HasPendingReward()).IsFalse();
+
+            run.PendingRewardCards.Add(Card("Strike", "Deal damage", 1, "Attack"));
+            AssertThat(run.HasPendingReward()).IsTrue();
+
+            run.PendingReward = false;
+            AssertThat(run.HasPendingReward()).IsFalse();
+        }
+
         private static RunData BuildSampleRun()
         {
             var run = new RunData

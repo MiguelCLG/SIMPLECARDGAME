@@ -28,6 +28,14 @@ public partial class Card : Button
     [Export]
     public bool isMultipleTargets = false;
 
+    /// <summary>
+    /// When false, pressing this card does not raise the global <c>OnCardClick</c> event.
+    /// Used by non-hand instances such as reward cards, which must not run the play-card
+    /// targeting flow (mana deduction, selectedCard state, stats).
+    /// </summary>
+    [Export]
+    public bool RaiseCardClick = true;
+
     public override void _Ready()
     {
         GetNode<Label>("ManaCost").Text = Cost.ToString();
@@ -72,6 +80,7 @@ public partial class Card : Button
 
     public void OnButtonPressed()
     {
+        if (!RaiseCardClick) return;
         EventRegistry.GetEventPublisher("OnCardClick").RaiseEvent(this);
         return;
     }

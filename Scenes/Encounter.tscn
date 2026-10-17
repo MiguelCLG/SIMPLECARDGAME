@@ -7,6 +7,8 @@
 [ext_resource type="Resource" uid="uid://ce6nt8ddy3ix8" path="res://Resources/Enemy/Star.tres" id="4_8sacp"]
 [ext_resource type="PackedScene" uid="uid://hacf2ofbjet2" path="res://Scenes/PlayerUI.tscn" id="4_wcy40"]
 [ext_resource type="Resource" path="res://Resources/Acts/Act1.tres" id="9_act1"]
+[ext_resource type="Script" uid="uid://nxglrahiflgg" path="res://scripts/RewardPanel.cs" id="5_reward"]
+[ext_resource type="Resource" uid="uid://c0p1d2e3f4g5h" path="res://Resources/CardPools/DefaultCardPool.tres" id="6_pool"]
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=1308158913]
 
@@ -21,6 +23,7 @@ script = ExtResource("1_88b2m")
 initialDeck = ExtResource("2_arw6l")
 enemyTypes = Array[Object]([ExtResource("3_gl7td"), ExtResource("4_8sacp")])
 actConfig = ExtResource("9_act1")
+rewardCardPool = ExtResource("6_pool")
 
 [node name="Panel" type="PanelContainer" parent="Encounter" unique_id=933500395]
 layout_mode = 1
@@ -59,3 +62,56 @@ size_flags_vertical = 10
 theme_override_constants/h_separation = 32
 theme_override_constants/v_separation = 32
 columns = 2
+
+[node name="RewardPanel" type="Panel" parent="Encounter"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_30d4m")
+theme_type_variation = &"RewardPanel"
+script = ExtResource("5_reward")
+
+[node name="CenterContainer" type="CenterContainer" parent="Encounter/RewardPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Encounter/RewardPanel/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="RewardTitle" type="Label" parent="Encounter/RewardPanel/CenterContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.843137, 0, 1)
+theme_override_font_sizes/font_size = 26
+text = "Choose a reward"
+horizontal_alignment = 1
+
+[node name="RewardHint" type="Label" parent="Encounter/RewardPanel/CenterContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Add a card to your deck"
+horizontal_alignment = 1
+
+[node name="RewardCardContainer" type="HBoxContainer" parent="Encounter/RewardPanel/CenterContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="RewardSkipButton" type="Button" parent="Encounter/RewardPanel/CenterContainer/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"MainMenuButton"
+text = "Skip"
