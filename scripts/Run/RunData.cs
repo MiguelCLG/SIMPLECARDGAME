@@ -21,10 +21,10 @@ public class RunData
 
     public class PlayerSaveState
     {
-        public int Health;
-        public int MaxHealth;
-        public int Armor;
-        public int Mana;
-        public int MaxMana;
+        public int Health;    // run-scoped: persists across encounters (healed only at rest nodes)
+        public int MaxHealth; // run-scoped
+        public int Armor;     // encounter-scoped: cleared on fresh encounters via Player.ResetEncounterStats()
+        public int Mana;      // turn-scoped: refilled each player turn in GameManager.ResolvePlayerTurn
+        public int MaxMana;   // run-scoped
     }
 }

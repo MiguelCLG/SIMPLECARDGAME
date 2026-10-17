@@ -61,8 +61,9 @@ public partial class GameManager : Control
         else
         {
             GenerateEnemies();
+            player.ResetEncounterStats(); // fresh encounter: transient stats don't carry over
             run.ActiveEncounter = true;
-            PersistLiveState();
+            PersistLiveState(); // immediately re-persists Armor = 0
         }
 
         player.StartEncounter();
