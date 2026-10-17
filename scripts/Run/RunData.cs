@@ -18,6 +18,18 @@ public class RunData
     public List<CardSaveData> Discard = new();
     public List<EnemySaveData> Enemies = new();
     public RunStats Stats = new();
+    public bool PendingReward;
+    public List<CardSaveData> PendingRewardCards = new();
+
+    /// <summary>
+    /// Single source of truth for "a reward is awaiting the player": the flag is set
+    /// only together with a non-empty card list, so legacy saves (both defaulting to
+    /// empty) report false. Not serialized (methods are ignored by the serializer).
+    /// </summary>
+    public bool HasPendingReward()
+    {
+        return PendingReward && PendingRewardCards != null && PendingRewardCards.Count > 0;
+    }
 
     public class PlayerSaveState
     {

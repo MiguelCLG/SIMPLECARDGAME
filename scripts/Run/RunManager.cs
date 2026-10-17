@@ -125,6 +125,8 @@ public static class RunManager
         CurrentRun.ActiveEncounter = false;
         CurrentRun.IsBossNode = false;
         CurrentRun.Enemies.Clear();
+        CurrentRun.PendingReward = false;
+        CurrentRun.PendingRewardCards.Clear();
         SaveRun();
     }
 

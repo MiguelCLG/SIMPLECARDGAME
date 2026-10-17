@@ -53,6 +53,26 @@ public partial class GameManager : Control
         player.SetHand(run.Hand);
         player.SetDiscard(run.Discard);
 
+        // Quit mid-reward: the fight was already won, so re-offer the persisted reward
+        // instead of regenerating the encounter. Player state is hydrated above.
+        if (run.HasPendingReward())
+        {
+            if (rewardPanel != null && run.PendingRewardCards.Count > 0)
+            {
+                rewardPanel.Present(run.PendingRewardCards, OnRewardChosen);
+            }
+            else
+            {
+                // Defensive: nothing to offer (or no panel) — complete the node so the
+                // player is never soft-locked behind an unresolvable reward.
+                run.PendingReward = false;
+                run.PendingRewardCards.Clear();
+                RunManager.CompleteCurrentNode();
+                ReturnToPath();
+            }
+            return;
+        }
+
         resumedEncounter = run.ActiveEncounter && run.Enemies.Count > 0;
         if (resumedEncounter)
         {
@@ -330,9 +350,11 @@ public partial class GameManager : Control
     }
 
     /// <summary>
-    /// Offers the post-encounter card reward. The node is only completed (and the map
-    /// advanced) once the player picks a card or skips. Falls back to today's immediate
-    /// transition when no reward pool is configured.
+    /// Offers the post-encounter card reward. The offered cards are persisted as a
+    /// pending reward before the panel is shown, so quitting mid-reward re-offers them
+    /// on resume instead of restarting the fight. The node is only completed (and the
+    /// map advanced) once the player picks a card or skips. Falls back to today's
+    /// immediate transition when no reward pool is configured (flag never set there).
     /// </summary>
     private void ShowRewardOrComplete()
     {
@@ -348,6 +370,12 @@ public partial class GameManager : Control
             Utils.TimerUtils.CreateTimer(ReturnToPath, this, .5f);
             return;
         }
+
+        // Persist the offer before showing it: a quit between here and the choice
+        // must resume into this reward, not a regenerated fight.
+        RunManager.CurrentRun.PendingReward = true;
+        RunManager.CurrentRun.PendingRewardCards = rewards;
+        RunManager.SaveRun();
 
         rewardPanel.Present(rewards, OnRewardChosen);
     }
