@@ -67,6 +67,7 @@ columns = 2
 [node name="RewardPanel" type="Panel" parent="Encounter" unique_id=300000001]
 unique_name_in_owner = true
 visible = false
+z_index = 100
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -120,6 +121,7 @@ text = "Skip"
 [node name="DeckOverlay" type="Panel" parent="Encounter" unique_id=200000001]
 unique_name_in_owner = true
 visible = false
+z_index = 100
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
