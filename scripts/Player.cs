@@ -24,6 +24,7 @@ public partial class Player : Character
     private Label armorLabel;
     private ProgressBar healthBar;
     private ProgressBar manaBar;
+    private ProgressBar armorBar;
     private PackedScene cardScene = GD.Load<PackedScene>("res://Scenes/card.tscn");
     private GridContainer handContainer;
 
@@ -38,6 +39,7 @@ public partial class Player : Character
         manaLabel = GetNode<Label>("%ManaLabel");
         healthBar = GetNode<ProgressBar>("%HealthBar");
         manaBar = GetNode<ProgressBar>("%ManaBar");
+        armorBar = GetNode<ProgressBar>("%ArmorBar");
         healthBar.MaxValue = MaxHealth;
         manaBar.MaxValue = MaxMana;
         healthBar.Value = Health;
@@ -45,11 +47,18 @@ public partial class Player : Character
 
         healthLabel.Text = $"{Health}/{MaxHealth}";
         manaLabel.Text = $"{Mana}/{MaxMana}";
-        armorLabel.Text = Armor.ToString();
+        UpdateArmorVisuals();
 
         Hand = new();
         DiscardPile = new();
         Deck = new();
+    }
+
+    private void UpdateArmorVisuals()
+    {
+        armorBar.MaxValue = Armor > 0 ? Armor : 1;
+        armorBar.Value = Armor;
+        armorLabel.Text = Armor.ToString();
     }
 
     public void ClearCards()
@@ -90,7 +99,7 @@ public partial class Player : Character
         manaBar.Value = Mana;
         healthLabel.Text = $"{Health}/{MaxHealth}";
         manaLabel.Text = $"{Mana}/{MaxMana}";
-        armorLabel.Text = Armor.ToString();
+        UpdateArmorVisuals();
     }
 
     public void CollectCards(out List<CardSaveData> deck, out List<CardSaveData> hand, out List<CardSaveData> discard)
@@ -238,7 +247,7 @@ public partial class Player : Character
                 Armor -= damage;
                 variableDamage = 0;
             }
-            armorLabel.Text = Armor.ToString();
+            UpdateArmorVisuals();
         }
         Health -= variableDamage;
         var stats = RunManager.CurrentRun?.Stats;
@@ -256,7 +265,7 @@ public partial class Player : Character
     public override void AddArmor(int armor)
     {
         Armor += armor;
-        armorLabel.Text = Armor.ToString();
+        UpdateArmorVisuals();
     }
 
     public override void AddMana(int mana)
