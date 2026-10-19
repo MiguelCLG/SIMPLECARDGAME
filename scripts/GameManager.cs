@@ -398,6 +398,10 @@ public partial class GameManager : Control
     /// </summary>
     private void ShowRewardOrComplete()
     {
+        // The deck overlay is a full-screen STOP panel drawn on top of everything,
+        // so it must never coexist with the reward panel (or the map transition).
+        HideDeckOverlay();
+
         List<CardSaveData> rewards = RewardGenerator.PickRewardCards(
             RunManager.CurrentRun,
             rewardCardPool,

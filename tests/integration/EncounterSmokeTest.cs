@@ -125,6 +125,51 @@ namespace SpaceOdyssey.Tests.Integration
             AssertThat(player.Armor).IsEqual(0);
         }
 
+        /// <summary>
+        /// Regression (issue 12): the deck overlay is a full-screen STOP panel and must
+        /// never stay open when the encounter is won, otherwise the reward panel appears
+        /// underneath it. Reachable in-game by ending the turn with the overlay open so
+        /// end-of-turn effects (e.g. poison) kill the last enemy.
+        /// </summary>
+        [TestCase]
+        [RequireGodotRuntime]
+        public async Task EncounterWin_WithDeckOverlayOpen_HidesDeckOverlay()
+        {
+            RunManager.NewRun();
+
+            ISceneRunner sceneRunner = ISceneRunner.Load("res://Scenes/Encounter.tscn", autoFree: true);
+            await sceneRunner.SimulateFrames(30);
+
+            Node sceneRoot = sceneRunner.Scene();
+            Player player = sceneRoot.GetNode<Player>("%Player");
+            Panel overlay = sceneRoot.GetNode<Panel>("%DeckOverlay");
+            RewardPanel rewardPanel = sceneRoot.GetNode<RewardPanel>("%RewardPanel");
+            Node enemySpawn = sceneRoot.GetNode<Node>("%EnemySpawn");
+
+            AssertThat(overlay.Visible).IsFalse();
+
+            // Open the overlay the way the in-game Deck button does.
+            player.OnDeckViewPress();
+            await sceneRunner.SimulateFrames(2);
+            AssertThat(overlay.Visible).IsTrue();
+
+            // Kill every enemy through the real win path (OnEnemyDie -> ShowRewardOrComplete).
+            var enemies = new System.Collections.Generic.List<Node>();
+            foreach (Node child in enemySpawn.GetChildren())
+                enemies.Add(child);
+            AssertThat(enemies.Count >= 1).IsTrue();
+
+            EventPublisher<object> publisher = EventRegistry.GetEventPublisher("OnEnemyDie");
+            foreach (Node enemy in enemies)
+                publisher.RaiseEvent(enemy);
+
+            // Flush the deferred QueueFree() calls; no timers involved in showing the reward.
+            await sceneRunner.SimulateFrames(2);
+
+            AssertThat(overlay.Visible).IsFalse();
+            AssertThat(rewardPanel.Visible).IsTrue();
+        }
+
         [TestCase]
         [RequireGodotRuntime]
         public async Task ResumedEncounter_KeepsArmor()
