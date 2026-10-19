@@ -21,6 +21,7 @@ public static class CardUi
         card.isMultipleTargets = data.isMultipleTargets;
         card.InitializeEffect();
         card.MouseFilter = Control.MouseFilterEnum.Ignore;
+        card.FocusMode = Control.FocusModeEnum.None;
         return card;
     }
 }

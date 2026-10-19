@@ -126,10 +126,11 @@ vertical_alignment = 1
 
 [node name="DeckButton" type="Button" parent="PlayerUI/MarginContainer/HBoxContainer" unique_id=1476649677]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(48, 0)
+custom_minimum_size = Vector2(48, 54)
 layout_mode = 2
 size_flags_horizontal = 0
 theme = ExtResource("1_602uo")
+size_flags_vertical = 4
 theme_type_variation = &"MainMenuButton"
 text = "Deck"
 

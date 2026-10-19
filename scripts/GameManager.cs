@@ -334,7 +334,7 @@ public partial class GameManager : Control
         if (player.Hand != null) all.AddRange(player.Hand.Select(CardSaveData.FromCard));
 
         deckCountLabel.Text = $"Draw {draw} · Hand {hand} · Discard {discard}";
-        deckGrid.Show(all);
+        deckGrid.ShowCards(all);
     }
 
     // Events

@@ -35,6 +35,83 @@ namespace SpaceOdyssey.Tests.Integration
 
         [TestCase]
         [RequireGodotRuntime]
+        public async Task PlayCard_CardNotInHand_IsIgnored()
+        {
+            RunManager.NewRun();
+
+            ISceneRunner sceneRunner = ISceneRunner.Load("res://Scenes/Encounter.tscn", autoFree: true);
+            await sceneRunner.SimulateFrames(30);
+
+            Node sceneRoot = sceneRunner.Scene();
+            Player player = sceneRoot.GetNode<Player>("%Player");
+            player.SetManaToMax();
+
+            int manaBefore = player.Mana;
+            int armorBefore = player.Armor;
+            int handBefore = player.Hand.Count;
+            int discardBefore = player.DiscardPile.Count;
+
+            // A card that is NOT in the player's hand (added to the tree so the
+            // unguarded code path would run to completion instead of crashing).
+            Card card = CardUi.CreateCardView(new CardSaveData
+            {
+                CardName = "Guard Test Card",
+                Description = "Not in hand",
+                Cost = 1,
+                EffectString = "Defense",
+                Value = 5
+            });
+            sceneRoot.AddChild(card);
+
+            Godot.Collections.Array<Character> targets = new() { player };
+            player.PlayCard(card, targets);
+
+            AssertThat(player.Mana).IsEqual(manaBefore);
+            AssertThat(player.Armor).IsEqual(armorBefore);
+            AssertThat(player.Hand.Count).IsEqual(handBefore);
+            AssertThat(player.DiscardPile.Count).IsEqual(discardBefore);
+        }
+
+        [TestCase]
+        [RequireGodotRuntime]
+        public async Task PlayCard_CardInHand_IsPlayed()
+        {
+            RunManager.NewRun();
+
+            ISceneRunner sceneRunner = ISceneRunner.Load("res://Scenes/Encounter.tscn", autoFree: true);
+            await sceneRunner.SimulateFrames(30);
+
+            Node sceneRoot = sceneRunner.Scene();
+            Player player = sceneRoot.GetNode<Player>("%Player");
+            player.SetManaToMax();
+
+            // Deterministic in-hand card: Defend (Defense, cost 1, value 5).
+            // Added via SpawnCard so the Hand.Contains guard sees a legitimately
+            // drawn card regardless of shuffle order.
+            CardResource defend = ResourceCache.Load<CardResource>("res://Resources/Cards/Defend.tres");
+            AssertThat(defend).IsNotNull();
+            player.SpawnCard(CardSaveData.FromResource(defend));
+            Card card = player.Hand[player.Hand.Count - 1];
+            AssertThat(player.Hand.Contains(card)).IsTrue();
+
+            int manaBefore = player.Mana;
+            int armorBefore = player.Armor;
+            int handBefore = player.Hand.Count;
+            int discardBefore = player.DiscardPile.Count;
+
+            Godot.Collections.Array<Character> targets = new() { player };
+            player.PlayCard(card, targets);
+
+            // The guard must not overblock: an affordable in-hand card is played,
+            // mana spent, effect applied, and the card moved to the discard pile.
+            AssertThat(player.Mana).IsEqual(manaBefore - defend.Cost);
+            AssertThat(player.Armor).IsEqual(armorBefore + defend.Value);
+            AssertThat(player.Hand.Count).IsEqual(handBefore - 1);
+            AssertThat(player.DiscardPile.Count).IsEqual(discardBefore + 1);
+        }
+
+        [TestCase]
+        [RequireGodotRuntime]
         public async Task FreshEncounter_ResetsCarriedOverArmor()
         {
             RunManager.NewRun();

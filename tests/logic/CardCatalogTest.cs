@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using GdUnit4;
 using static GdUnit4.Assertions;
 
@@ -45,7 +46,13 @@ namespace SpaceOdyssey.Tests.Logic
                 "*.tres"
             );
 
-            AssertThat(catalog.Count).IsEqual(files.Length);
+            HashSet<string> catalogPaths = new();
+            foreach (CardResource card in catalog)
+                AssertThat(catalogPaths.Add(card.ResourcePath)).IsTrue();
+
+            HashSet<string> folderPaths = new(files.Select(
+                f => $"res://Resources/Cards/{System.IO.Path.GetFileName(f)}"));
+            AssertThat(catalogPaths.SetEquals(folderPaths)).IsTrue();
         }
     }
 }

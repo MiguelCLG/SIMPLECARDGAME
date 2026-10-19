@@ -30,6 +30,14 @@ namespace SpaceOdyssey.Tests.Integration
             int owned = player.Deck.Count + player.Hand.Count + player.DiscardPile.Count;
             AssertThat(grid.CardCount).IsEqual(owned);
 
+            GridContainer container = grid.GetChild<GridContainer>(0);
+            AssertThat(container.GetChildCount()).IsEqual(owned);
+            foreach (Node child in container.GetChildren())
+            {
+                AssertThat(child is Card).IsTrue();
+                AssertThat(((Card)child).FocusMode).IsEqual(Control.FocusModeEnum.None);
+            }
+
             player.OnDeckViewPress();
             await sceneRunner.SimulateFrames(2);
             AssertThat(overlay.Visible).IsFalse();

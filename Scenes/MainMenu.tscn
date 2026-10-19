@@ -86,7 +86,7 @@ theme = SubResource("Theme_4a6vu")
 theme_type_variation = &"MainMenuButton"
 text = "Options"
 
-[node name="CardsButton" type="Button" parent="CenterContainer/MenuContainer" unique_id=413076402]
+[node name="CardsButton" type="Button" parent="CenterContainer/MenuContainer" unique_id=413076403]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(224, 54)
 layout_mode = 2

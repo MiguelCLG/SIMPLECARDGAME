@@ -13,7 +13,7 @@ public partial class CardCompendium : Control
         List<CardSaveData> cards = CardCatalog.All()
             .Select(CardSaveData.FromResource)
             .ToList();
-        cardGrid.Show(cards);
+        cardGrid.ShowCards(cards);
     }
 
     private void OnBackPressed() => GetTree().ChangeSceneToFile("res://Scenes/MainMenu.tscn");

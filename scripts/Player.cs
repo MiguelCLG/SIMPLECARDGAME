@@ -201,6 +201,11 @@ public partial class Player : Character
 
     public void PlayCard(Card card, Array<Character> targets)
     {
+        if (!Hand.Contains(card))
+        {
+            GD.PushWarning($"Player.PlayCard: {card.CardName} is not in hand — ignoring");
+            return;
+        }
         if (Mana >= card.Cost)
         {
             Hand.Remove(card);

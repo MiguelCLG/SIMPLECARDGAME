@@ -7,7 +7,7 @@ public partial class CardGrid : ScrollContainer
 
     public override void _Ready() => grid = GetNode<GridContainer>("%CardGrid");
 
-    public void Show(IReadOnlyList<CardSaveData> cards)
+    public void ShowCards(IReadOnlyList<CardSaveData> cards)
     {
         foreach (Node child in grid.GetChildren())
         {

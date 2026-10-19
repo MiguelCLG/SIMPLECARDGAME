@@ -38,6 +38,7 @@ namespace SpaceOdyssey.Tests.Integration
             {
                 AssertThat(child is Card).IsTrue();
                 AssertThat(((Card)child).MouseFilter).IsEqual(Control.MouseFilterEnum.Ignore);
+                AssertThat(((Card)child).FocusMode).IsEqual(Control.FocusModeEnum.None);
             }
         }
     }
