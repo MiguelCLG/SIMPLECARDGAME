@@ -306,7 +306,7 @@ public partial class Player : Character
     public void ResetArmor()
     {
         Armor = 0;
-        armorLabel.Text = Armor.ToString();
+        UpdateArmorVisuals();                 // syncs bar MaxValue, Value, and label
     }
 
     public void OnEndTurnPress()

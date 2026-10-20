@@ -147,6 +147,13 @@ namespace SpaceOdyssey.Tests.Integration
             Player player = sceneRunner.FindChild("Player") as Player;
             AssertThat(player).IsNotNull();
             AssertThat(player.Armor).IsEqual(0);
+
+            ProgressBar armorBar = player.GetNode<ProgressBar>("%ArmorBar");
+            AssertThat(armorBar.Value).IsEqual(0d);
+            AssertThat(armorBar.MaxValue).IsEqual(1d); // UpdateArmorVisuals ternary: Armor == 0 → MaxValue = 1
+
+            Label armorLabel = player.GetNode<Label>("%ArmorLabel");
+            AssertThat(armorLabel.Text).IsEqual("0"); // label half of the same sync
         }
 
         /// <summary>
