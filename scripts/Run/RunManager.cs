@@ -138,6 +138,7 @@ public static class RunManager
         CurrentRun.Stats.Timestamp = DateTime.Now;
         CurrentRun.Stats.DurationSec = (int)(DateTime.Now - CurrentRun.StartedAt).TotalSeconds;
         SaveManager.AppendRun(CurrentRun.Stats);
+        MetaManager.RecordRunFinished(CurrentRun.Stats);
         SaveManager.DeleteRun();
         CurrentRun = null;
     }
