@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="CardResource" format=3 uid="uid://bwhgpaj5hubmr"]
 
-[ext_resource type="Texture2D" uid="uid://do0lhicgc5mr5" path="res://Images/inkscape_exports/card-icons/rebirth.webp" id="1_2ex5o"]
+[ext_resource type="Texture2D" uid="uid://fmb4mmkoxwl5" path="res://Images/inkscape_exports/card-icons/focus.webp" id="1_2ex5o"]
 [ext_resource type="Script" uid="uid://htm5qpc8jsmd" path="res://scripts/Resources/CardResource.cs" id="1_3nhji"]
 
 [resource]

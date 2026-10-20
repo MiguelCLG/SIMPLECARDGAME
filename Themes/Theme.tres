@@ -97,6 +97,8 @@ corner_radius_bottom_left = 5
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reward_overlay"]
 bg_color = Color(0, 0, 0, 0.88235295)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_transparent_panel"]
+
 [resource]
 default_font = ExtResource("3_font")
 ArmorBar/base_type = &"ProgressBar"
@@ -164,3 +166,5 @@ StatusLabel/colors/font_color = Color(1, 1, 1, 1)
 StatusLabel/colors/font_outline_color = Color(0, 0, 0, 1)
 StatusLabel/constants/outline_size = 3
 StatusLabel/font_sizes/font_size = 12
+TransparentPanel/base_type = &"Panel"
+TransparentPanel/styles/panel = SubResource("StyleBoxEmpty_transparent_panel")

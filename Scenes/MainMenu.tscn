@@ -11,9 +11,6 @@ blend_mode = 3
 
 [sub_resource type="Theme" id="Theme_4a6vu"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
-bg_color = Color(0, 0, 0, 0.88235295)
-
 [sub_resource type="Theme" id="Theme_imx17"]
 
 [node name="MainMenu" type="Control" unique_id=242072808]
@@ -107,22 +104,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_overlay")
-
-[node name="OptionsTitle" type="Label" parent="OptionsPanel" unique_id=1561180704]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -80.0
-offset_top = 143.0
-offset_right = 80.0
-offset_bottom = 174.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 30
-text = "Options"
-horizontal_alignment = 1
+theme_type_variation = &"TransparentPanel"
 
 [node name="CenterContainer" type="CenterContainer" parent="OptionsPanel" unique_id=107632508]
 layout_mode = 1
@@ -179,27 +161,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_overlay")
-
-[node name="GameTitle" type="Label" parent="GamePanel" unique_id=1114597406]
-custom_minimum_size = Vector2(1, 1)
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -150.0
-offset_top = 118.0
-offset_right = 150.0
-offset_bottom = 218.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 40
-text = "Space Odyssey"
-horizontal_alignment = 1
-autowrap_mode = 2
+theme_type_variation = &"TransparentPanel"
 
 [node name="CenterContainer" type="CenterContainer" parent="GamePanel" unique_id=107632509]
 layout_mode = 1

@@ -3,6 +3,8 @@ using Godot;
 
 public partial class MainMenu : Control
 {
+    private const float TransitionDuration = 0.3f;
+
     private Button startButton;
     private Button optionsButton;
     private Button quitButton;
@@ -13,14 +15,10 @@ public partial class MainMenu : Control
     private Button continueButton;
     private Button backToMenuButton;
     private Control menuContainer;
-    private Control gameContainer;
-    private Control optionContainer;
     private readonly Dictionary<Button, Tween> hoverTweens = new();
     private bool isTransitioning = false;
     private Tween activeTransition;
     private Vector2 menuHomePosition;
-    private Vector2 gameHomePosition;
-    private Vector2 optionHomePosition;
 
     public override async void _Ready()
     {
@@ -34,8 +32,6 @@ public partial class MainMenu : Control
         continueButton = GetNode<Button>("%ContinueButton");
         backToMenuButton = GetNode<Button>("%BackToMenuButton");
         menuContainer = GetNode<Control>("%MenuContainer");
-        gameContainer = GetNode<Control>("%GameContainer");
-        optionContainer = GetNode<Control>("%OptionContainer");
 
         ConnectHover(startButton);
         ConnectHover(optionsButton);
@@ -48,22 +44,10 @@ public partial class MainMenu : Control
         volumeSlider.ValueChanged += OnVolumeChanged;
 
         await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
-        // Remember where the layout puts each container so the transitions always animate
-        // back to it. The menu is already laid out, but the game/options panels start hidden
-        // so their containers have not necessarily been positioned yet.
+        // Remember where the layout puts the menu so the transitions always animate back to it.
         menuHomePosition = menuContainer.Position;
-        gameHomePosition = CenteredPosition(gameContainer);
-        optionHomePosition = CenteredPosition(optionContainer);
         AnimateMenuIn();
     }
-
-    /// <summary>
-    /// The position this scene's full-screen CenterContainer gives a child, mirrored from
-    /// Godot's own centering math. Used for containers inside panels that are still hidden,
-    /// where <see cref="Control.Position"/> may not reflect the final layout yet.
-    /// </summary>
-    private Vector2 CenteredPosition(Control child)
-        => ((GetViewport().GetVisibleRect().Size - child.GetCombinedMinimumSize()) / 2f).Floor();
 
     private void AnimateMenuIn()
     {
@@ -110,35 +94,48 @@ public partial class MainMenu : Control
         AudioServer.SetBusVolumeDb(masterBus, (float)Mathf.LinearToDb(value / 100.0));
     }
 
-    private void OnStartPressed()
+    private void OnStartPressed() => OpenPanel(gamePanel);
+
+    private void OnOptionsPressed() => OpenPanel(optionsPanel);
+
+    private void OnBackToMenuPressed() => ClosePanel(gamePanel);
+
+    private void OnBackPressed() => ClosePanel(optionsPanel);
+
+    /// <summary>Fully off-screen position to the right of the viewport.</summary>
+    private Vector2 OffscreenRight()
+        => new(GetViewport().GetVisibleRect().Size.X + 24f, 0f);
+
+    private Vector2 HiddenMenuPosition()
+        => new(-menuContainer.Size.X - 48f, menuHomePosition.Y);
+
+    /// <summary>
+    /// Slides and fades a panel in from the right while the main menu slides out to the
+    /// left, so panels never pop into place. The panel itself is animated (not its
+    /// contents) because the CenterContainer inside it re-centers its child whenever the
+    /// panel becomes visible, which would swallow a tween on the container's position.
+    /// </summary>
+    private void OpenPanel(Panel panel)
     {
         if (isTransitioning) return;
         isTransitioning = true;
-        TweenToGamePanel();
-    }
+        KillActiveTransition();
 
-    private void TweenToGamePanel()
-    {
-        if (activeTransition != null && IsInstanceValid(activeTransition))
-            activeTransition.Kill();
-
-        gamePanel.Visible = true;
-        // Ensure game container starts off-screen to the right
-        gameContainer.PivotOffset = gameContainer.Size / 2f;
-        gameContainer.Position = new Vector2(GetViewport().GetVisibleRect().Size.X + 24f, gameHomePosition.Y);
+        panel.Visible = true;
+        SetAlpha(panel, 0f);
+        panel.Position = OffscreenRight();
 
         activeTransition = CreateTween();
-        activeTransition.Parallel().TweenProperty(menuContainer, "position", new Vector2(-menuContainer.Size.X - 48f, menuHomePosition.Y), 0.2f)
+        activeTransition.Parallel().TweenProperty(panel, "position", Vector2.Zero, TransitionDuration)
             .SetEase(Tween.EaseType.Out)
             .SetTrans(Tween.TransitionType.Quad);
-        activeTransition.Parallel().TweenProperty(gameContainer, "position", gameHomePosition, 0.2f)
+        activeTransition.Parallel().TweenProperty(panel, "modulate:a", 1f, TransitionDuration)
             .SetEase(Tween.EaseType.Out)
             .SetTrans(Tween.TransitionType.Quad);
-        activeTransition.Finished += () =>
-        {
-            isTransitioning = false;
-            activeTransition = null;
-        };
+        activeTransition.Parallel().TweenProperty(menuContainer, "position", HiddenMenuPosition(), TransitionDuration)
+            .SetEase(Tween.EaseType.Out)
+            .SetTrans(Tween.TransitionType.Quad);
+        activeTransition.Finished += EndTransition;
     }
 
     private void OnNewGamePressed()
@@ -156,104 +153,52 @@ public partial class MainMenu : Control
             GetTree().ChangeSceneToFile("res://Scenes/PathMap.tscn");
     }
 
-    private void OnBackToMenuPressed()
+    /// <summary>
+    /// Fades a panel out and slides it back out to the right while the main menu returns
+    /// from the left. Restores every tweened property on finish.
+    /// </summary>
+    private void ClosePanel(Panel panel)
     {
         if (isTransitioning) return;
         isTransitioning = true;
-        TweenToMainFromGame();
-    }
+        KillActiveTransition();
 
-    private void TweenToMainFromGame()
-    {
-        if (activeTransition != null && IsInstanceValid(activeTransition))
-            activeTransition.Kill();
-
-        gamePanel.Visible = true;
+        panel.Visible = true;
 
         activeTransition = CreateTween();
-        activeTransition.Parallel().TweenProperty(gameContainer, "position", new Vector2(GetViewport().GetVisibleRect().Size.X + 24f, gameHomePosition.Y), 0.2f)
+        activeTransition.Parallel().TweenProperty(panel, "position", OffscreenRight(), TransitionDuration)
             .SetEase(Tween.EaseType.Out)
             .SetTrans(Tween.TransitionType.Quad);
-        activeTransition.Parallel().TweenProperty(menuContainer, "position", menuHomePosition, 0.2f)
+        activeTransition.Parallel().TweenProperty(panel, "modulate:a", 0f, TransitionDuration)
+            .SetEase(Tween.EaseType.Out)
+            .SetTrans(Tween.TransitionType.Quad);
+        activeTransition.Parallel().TweenProperty(menuContainer, "position", menuHomePosition, TransitionDuration)
             .SetEase(Tween.EaseType.Out)
             .SetTrans(Tween.TransitionType.Quad);
         activeTransition.Finished += () =>
         {
-            gamePanel.Visible = false;
-            // Restore game container position for next time
-            gameContainer.Position = gameHomePosition;
-            isTransitioning = false;
-            activeTransition = null;
+            panel.Visible = false;
+            panel.Position = Vector2.Zero;
+            SetAlpha(panel, 1f);
+            menuContainer.Position = menuHomePosition;
+            EndTransition();
         };
     }
 
-    private void OnOptionsPressed()
-    {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        TweenToOptionsPanel();
-    }
-
-    private void TweenToOptionsPanel()
+    private void KillActiveTransition()
     {
         if (activeTransition != null && IsInstanceValid(activeTransition))
             activeTransition.Kill();
-
-        optionsPanel.Visible = true;
-        optionsPanel.Modulate = new Color(optionsPanel.Modulate.R, optionsPanel.Modulate.G, optionsPanel.Modulate.B, 0f);
-        optionContainer.PivotOffset = optionContainer.Size / 2f;
-        optionContainer.Position = new Vector2(optionHomePosition.X, GetViewport().GetVisibleRect().Size.Y + 48f);
-
-        activeTransition = CreateTween();
-        activeTransition.Parallel().TweenProperty(menuContainer, "position", new Vector2(-menuContainer.Size.X - 48f, menuHomePosition.Y), 0.2f)
-            .SetEase(Tween.EaseType.Out)
-            .SetTrans(Tween.TransitionType.Quad);
-        activeTransition.Parallel().TweenProperty(optionsPanel, "modulate:a", 1f, 0.2f)
-            .SetEase(Tween.EaseType.Out)
-            .SetTrans(Tween.TransitionType.Quad);
-        activeTransition.Parallel().TweenProperty(optionContainer, "position", optionHomePosition, 0.2f)
-            .SetEase(Tween.EaseType.Out)
-            .SetTrans(Tween.TransitionType.Quad);
-        activeTransition.Finished += () =>
-        {
-            isTransitioning = false;
-            activeTransition = null;
-        };
     }
 
-    private void OnBackPressed()
+    private void EndTransition()
     {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        TweenToMainFromOptions();
+        isTransitioning = false;
+        activeTransition = null;
     }
 
-    private void TweenToMainFromOptions()
-    {
-        if (activeTransition != null && IsInstanceValid(activeTransition))
-            activeTransition.Kill();
-
-        optionsPanel.Visible = true;
-
-        activeTransition = CreateTween();
-        activeTransition.Parallel().TweenProperty(optionContainer, "position", new Vector2(optionHomePosition.X, GetViewport().GetVisibleRect().Size.Y + 48f), 0.2f)
-            .SetEase(Tween.EaseType.Out)
-            .SetTrans(Tween.TransitionType.Quad);
-        activeTransition.Parallel().TweenProperty(optionsPanel, "modulate:a", 0f, 0.2f)
-            .SetEase(Tween.EaseType.Out)
-            .SetTrans(Tween.TransitionType.Quad);
-        activeTransition.Parallel().TweenProperty(menuContainer, "position", menuHomePosition, 0.2f)
-            .SetEase(Tween.EaseType.Out)
-            .SetTrans(Tween.TransitionType.Quad);
-        activeTransition.Finished += () =>
-        {
-            optionsPanel.Visible = false;
-            optionsPanel.Modulate = new Color(1f, 1f, 1f, 1f);
-            optionContainer.Position = optionHomePosition;
-            isTransitioning = false;
-            activeTransition = null;
-        };
-    }
+    private static void SetAlpha(CanvasItem item, float alpha)
+        => item.Modulate = new Color(item.Modulate.R, item.Modulate.G, item.Modulate.B, alpha);
 
     private void OnQuitPressed()
     {

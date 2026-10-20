@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CardPoolResource" load_steps=12 format=3 uid="uid://c0p1d2e3f4g5h"]
+[gd_resource type="Resource" script_class="CardPoolResource" format=3 uid="uid://c0p1d2e3f4g5h"]
 
 [ext_resource type="Script" uid="uid://m1g8pk1f3n6u" path="res://scripts/Resources/CardPoolResource.cs" id="1_pool"]
 [ext_resource type="Script" uid="uid://htm5qpc8jsmd" path="res://scripts/Resources/CardResource.cs" id="2_card"]
@@ -15,4 +15,3 @@
 [resource]
 script = ExtResource("1_pool")
 cards = Array[ExtResource("2_card")]([ExtResource("3_strike"), ExtResource("4_defend"), ExtResource("5_sstrike"), ExtResource("6_sshield"), ExtResource("7_draw1"), ExtResource("8_draw2"), ExtResource("9_focus"), ExtResource("10_rebirth"), ExtResource("11_cleave")])
-ClassName = "Default"
