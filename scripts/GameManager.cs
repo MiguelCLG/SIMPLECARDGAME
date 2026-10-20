@@ -21,9 +21,7 @@ public partial class GameManager : Control
     private Control enemyContainer;
     private RewardPanel rewardPanel;
     private bool resumedEncounter;
-    private Panel deckOverlay;
-    private CardGrid deckGrid;
-    private Label deckCountLabel;
+    private DeckOverlay deckOverlay;
     [Export] private DeckResource initialDeck;
     [Export] private Array<EnemyResource> enemyTypes;
     [Export] private ActConfig actConfig;
@@ -36,10 +34,7 @@ public partial class GameManager : Control
         enemies = new();
         enemyContainer = GetNode<Control>("%EnemySpawn");
         rewardPanel = GetNodeOrNull<RewardPanel>("%RewardPanel");
-        deckOverlay = GetNode<Panel>("%DeckOverlay");
-        deckGrid = GetNode<CardGrid>("%CardGrid");
-        deckCountLabel = GetNode<Label>("%DeckCountLabel");
-        GetNode<Button>("%DeckCloseButton").Pressed += HideDeckOverlay;
+        deckOverlay = GetNode<DeckOverlay>("%DeckOverlay");
         KeepExportedResourcesAlive();
         SetupRun();
     }
@@ -333,34 +328,19 @@ public partial class GameManager : Control
 
     private void ToggleDeckOverlay()
     {
-        if (deckOverlay.Visible)
-        {
-            HideDeckOverlay();
-            return;
-        }
-        RefreshDeckOverlay();
-        deckOverlay.Visible = true;
+        deckOverlay.ToggleDeck(player.Deck, LiveHand(), player.DiscardPile);
     }
 
     private void HideDeckOverlay()
     {
-        deckOverlay.Visible = false;
+        deckOverlay.Hide();
     }
 
-    private void RefreshDeckOverlay()
-    {
-        int draw = player.Deck?.Count ?? 0;
-        int hand = player.Hand?.Count ?? 0;
-        int discard = player.DiscardPile?.Count ?? 0;
-
-        List<CardSaveData> all = new();
-        if (player.Deck != null) all.AddRange(player.Deck);
-        if (player.DiscardPile != null) all.AddRange(player.DiscardPile);
-        if (player.Hand != null) all.AddRange(player.Hand.Select(CardSaveData.FromCard));
-
-        deckCountLabel.Text = $"Draw {draw} · Hand {hand} · Discard {discard}";
-        deckGrid.ShowCards(all);
-    }
+    /// <summary>
+    /// Snapshot of the live hand as save data (the hand holds card nodes, not save data).
+    /// </summary>
+    private List<CardSaveData> LiveHand() =>
+        player.Hand == null ? new() : player.Hand.Select(CardSaveData.FromCard).ToList();
 
     // Events
     private void OnEndTurnPress(object sender, object obj)

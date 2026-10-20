@@ -8,6 +8,8 @@ public partial class PathMap : Control
     private Panel restPanel;
     private Label restHealthLabel;
     private Button quitButton;
+    private Button deckButton;
+    private DeckOverlay deckOverlay;
     private Button restButton;
     private Button skipButton;
     private Label hintLabel;
@@ -18,16 +20,20 @@ public partial class PathMap : Control
         restPanel = GetNode<Panel>("%RestPanel");
         restHealthLabel = GetNode<Label>("%RestHealthLabel");
         quitButton = GetNode<Button>("%QuitButton");
+        deckButton = GetNode<Button>("%DeckButton");
+        deckOverlay = GetNode<DeckOverlay>("%DeckOverlay");
         restButton = GetNode<Button>("%RestButton");
         skipButton = GetNode<Button>("%SkipButton");
         hintLabel = GetNode<Label>("%HintLabel");
 
         quitButton.Pressed += OnQuitPressed;
+        deckButton.Pressed += OnDeckPressed;
         restButton.Pressed += OnRestPressed;
         skipButton.Pressed += OnSkipPressed;
 
         if (RunManager.CurrentRun == null)
         {
+            deckButton.Disabled = true;
             GetTree().ChangeSceneToFile("res://Scenes/MainMenu.tscn");
             return;
         }
@@ -43,6 +49,22 @@ public partial class PathMap : Control
         RunData.PlayerSaveState p = run.PlayerState;
         int currentRow = run.CurrentRow;
         hintLabel.Text = currentRow >= run.Path.Count ? "Map complete" : $"Step {currentRow + 1}/{run.Path.Count}  HP {p.Health}/{p.MaxHealth}";
+    }
+
+    /// <summary>
+    /// Opens the shared deck viewer for the run piles. No event bus: OnDeckViewPress
+    /// only exists inside the Encounter lifecycle. PendingRewardCards are excluded —
+    /// they are not owned by the player until the reward is picked.
+    /// </summary>
+    private void OnDeckPressed()
+    {
+        RunData run = RunManager.CurrentRun;
+        if (run == null)
+        {
+            deckButton.Disabled = true;
+            return;
+        }
+        deckOverlay.ToggleDeck(run.Deck, run.Hand, run.Discard);
     }
 
     private void OnNodePressed(int row, int col)

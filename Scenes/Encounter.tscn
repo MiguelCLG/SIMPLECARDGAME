@@ -9,7 +9,7 @@
 [ext_resource type="Resource" path="res://Resources/Acts/Act1.tres" id="9_act1"]
 [ext_resource type="Script" uid="uid://nxglrahiflgg" path="res://scripts/RewardPanel.cs" id="5_reward"]
 [ext_resource type="Resource" uid="uid://c0p1d2e3f4g5h" path="res://Resources/CardPools/DefaultCardPool.tres" id="6_pool"]
-[ext_resource type="PackedScene" uid="uid://bx7k2vf8dlsrj" path="res://Scenes/CardGrid.tscn" id="10_cgrid"]
+[ext_resource type="PackedScene" path="res://Scenes/DeckOverlay.tscn" id="10_deov"]
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=1308158913]
 
@@ -118,53 +118,6 @@ size_flags_horizontal = 4
 theme_type_variation = &"MainMenuButton"
 text = "Skip"
 
-[node name="DeckOverlay" type="Panel" parent="Encounter" unique_id=200000001]
+[node name="DeckOverlay" parent="Encounter" instance=ExtResource("10_deov")]
 unique_name_in_owner = true
-visible = false
-z_index = 100
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("3_30d4m")
-theme_type_variation = &"OverlayPanel"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Encounter/DeckOverlay" unique_id=200000002]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-offset_left = 8.0
-offset_top = 8.0
-offset_right = -8.0
-offset_bottom = -8.0
-
-[node name="DeckTitle" type="Label" parent="Encounter/DeckOverlay/VBoxContainer" unique_id=200000003]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Deck"
-horizontal_alignment = 1
-
-[node name="DeckCountLabel" type="Label" parent="Encounter/DeckOverlay/VBoxContainer" unique_id=200000004]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Draw 0 · Hand 0 · Discard 0"
-horizontal_alignment = 1
-
-[node name="CardGrid" parent="Encounter/DeckOverlay/VBoxContainer" unique_id=200000005 instance=ExtResource("10_cgrid")]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="DeckCloseButton" type="Button" parent="Encounter/DeckOverlay/VBoxContainer" unique_id=200000006]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 40)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_type_variation = &"MainMenuButton"
-text = "Close"
 

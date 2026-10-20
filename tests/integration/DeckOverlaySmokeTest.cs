@@ -29,7 +29,7 @@ namespace SpaceOdyssey.Tests.Integration
             await sceneRunner.SimulateFrames(2);
 
             AssertThat(overlay.Visible).IsTrue();
-            CardGrid grid = sceneRoot.GetNode<CardGrid>("%CardGrid");
+            CardGrid grid = sceneRoot.GetNode<DeckOverlay>("%DeckOverlay").Grid;
             int owned = player.Deck.Count + player.Hand.Count + player.DiscardPile.Count;
             AssertThat(grid.CardCount).IsEqual(owned);
 
@@ -104,7 +104,7 @@ namespace SpaceOdyssey.Tests.Integration
             Node sceneRoot = sceneRunner.Scene();
             Player player = sceneRoot.GetNode<Player>("%Player");
             Panel overlay = sceneRoot.GetNode<Panel>("%DeckOverlay");
-            Button close = sceneRoot.GetNode<Button>("%DeckCloseButton");
+            Button close = sceneRoot.GetNode<DeckOverlay>("%DeckOverlay").CloseButton;
             Node enemySpawn = sceneRoot.GetNode<Node>("%EnemySpawn");
 
             List<Enemy> enemies = new();
