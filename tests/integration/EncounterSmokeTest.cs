@@ -35,6 +35,30 @@ namespace SpaceOdyssey.Tests.Integration
 
         [TestCase]
         [RequireGodotRuntime]
+        public async Task Encounter_KeepsSceneExportedResourcesAlive()
+        {
+            RunManager.NewRun();
+
+            ISceneRunner sceneRunner = ISceneRunner.Load("res://Scenes/Encounter.tscn", autoFree: true);
+            await sceneRunner.SimulateFrames(30);
+
+            // These are exported on Encounter.tscn, so the engine resource cache owns them.
+            // GameManager must hold their managed wrappers, otherwise the cache can abort
+            // the game when it resurrects a collected wrapper on the next scene load
+            // (godotengine/godot#83762). Reloading them here returns the cached wrappers.
+            CardPoolResource pool = ResourceLoader.Load<CardPoolResource>("res://Resources/CardPools/DefaultCardPool.tres");
+            AssertThat(pool).IsNotNull();
+            AssertThat(ResourceCache.IsKeptAlive(pool)).IsTrue();
+            foreach (CardResource card in pool.cards)
+                AssertThat(ResourceCache.IsKeptAlive(card)).IsTrue();
+
+            EnemyResource enemy = ResourceLoader.Load<EnemyResource>("res://Resources/Enemy/Eye.tres");
+            AssertThat(enemy).IsNotNull();
+            AssertThat(ResourceCache.IsKeptAlive(enemy)).IsTrue();
+        }
+
+        [TestCase]
+        [RequireGodotRuntime]
         public async Task PlayCard_CardNotInHand_IsIgnored()
         {
             RunManager.NewRun();

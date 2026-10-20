@@ -37,13 +37,51 @@ namespace SpaceOdyssey.Tests.Integration
             AssertThat(container.GetChildCount()).IsEqual(owned);
             foreach (Node child in container.GetChildren())
             {
-                AssertThat(child is Card).IsTrue();
-                AssertThat(((Card)child).FocusMode).IsEqual(Control.FocusModeEnum.None);
+                // Cards live in expanding cells so the grid spreads them over the overlay.
+                AssertThat(child is CenterContainer).IsTrue();
+                CenterContainer cell = (CenterContainer)child;
+                AssertThat(cell.SizeFlagsHorizontal).IsEqual(Control.SizeFlags.ExpandFill);
+                AssertThat(cell.SizeFlagsVertical).IsEqual(Control.SizeFlags.ExpandFill);
+                AssertThat(cell.GetChildCount()).IsEqual(1);
+                AssertThat(cell.GetChild(0) is Card).IsTrue();
+                AssertThat(((Card)cell.GetChild(0)).FocusMode).IsEqual(Control.FocusModeEnum.None);
             }
 
             player.OnDeckViewPress();
             await sceneRunner.SimulateFrames(2);
             AssertThat(overlay.Visible).IsFalse();
+        }
+
+        /// <summary>
+        /// Regression: cards left in hand/discard when an encounter ends used to stay in
+        /// those piles for the next fight, so the draw deck kept shrinking. A fresh
+        /// encounter must pool everything back into the deck and start with discard 0.
+        /// </summary>
+        [TestCase]
+        [RequireGodotRuntime]
+        public async Task FreshEncounter_PoolsHandAndDiscardBackIntoDeck()
+        {
+            RunManager.NewRun();
+            RunData run = RunManager.CurrentRun;
+
+            // State left behind by a decided encounter: some cards in hand and discard.
+            CardSaveData handCard = run.Deck[0];
+            CardSaveData discardCard = run.Deck[1];
+            run.Deck.RemoveRange(0, 2);
+            run.Hand.Add(handCard);
+            run.Discard.Add(discardCard);
+
+            int total = run.Deck.Count + run.Hand.Count + run.Discard.Count;
+            AssertThat(run.ActiveEncounter).IsFalse();
+            AssertThat(run.Enemies.Count).IsEqual(0);
+
+            ISceneRunner sceneRunner = ISceneRunner.Load("res://Scenes/Encounter.tscn", autoFree: true);
+            await sceneRunner.SimulateFrames(30);
+
+            Player player = sceneRunner.Scene().GetNode<Player>("%Player");
+            AssertThat(player.DiscardPile.Count).IsEqual(0);
+            AssertThat(player.Hand.Count).IsEqual(3); // first turn draws a fresh hand
+            AssertThat(player.Deck.Count + player.Hand.Count + player.DiscardPile.Count).IsEqual(total);
         }
 
         /// <summary>

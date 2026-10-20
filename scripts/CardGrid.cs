@@ -16,7 +16,16 @@ public partial class CardGrid : ScrollContainer
         }
         foreach (CardSaveData data in cards)
         {
-            grid.AddChild(CardUi.CreateCardView(data));
+            // Wrap each fixed-size card in an expanding cell so the grid splits the spare
+            // width/height between cells instead of packing everything into the top left.
+            CenterContainer cell = new()
+            {
+                SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
+                SizeFlagsVertical = Control.SizeFlags.ExpandFill,
+                MouseFilter = Control.MouseFilterEnum.Ignore,
+            };
+            cell.AddChild(CardUi.CreateCardView(data));
+            grid.AddChild(cell);
         }
     }
 

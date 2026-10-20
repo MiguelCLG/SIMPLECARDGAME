@@ -31,6 +31,26 @@ public class RunData
         return PendingReward && PendingRewardCards != null && PendingRewardCards.Count > 0;
     }
 
+    /// <summary>
+    /// Pools hand + discard back into the draw pile between encounters: a fresh fight
+    /// must start with the whole deck and an empty discard pile. Idempotent, so paths
+    /// that normalize twice (or legacy saves with leftovers) stay safe.
+    /// </summary>
+    public void ReturnCardsToDeck()
+    {
+        Deck ??= new();
+        if (Hand != null)
+        {
+            Deck.AddRange(Hand);
+            Hand.Clear();
+        }
+        if (Discard != null)
+        {
+            Deck.AddRange(Discard);
+            Discard.Clear();
+        }
+    }
+
     public class PlayerSaveState
     {
         public int Health;    // run-scoped: persists across encounters (healed only at rest nodes)

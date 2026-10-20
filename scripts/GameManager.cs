@@ -40,7 +40,24 @@ public partial class GameManager : Control
         deckGrid = GetNode<CardGrid>("%CardGrid");
         deckCountLabel = GetNode<Label>("%DeckCountLabel");
         GetNode<Button>("%DeckCloseButton").Pressed += HideDeckOverlay;
+        KeepExportedResourcesAlive();
         SetupRun();
+    }
+
+    /// <summary>
+    /// Scene-exported custom resources are loaded through the engine resource cache, and
+    /// the cache aborts the game if it resurrects a resource whose C# wrapper was already
+    /// collected (godotengine/godot#83762). Holding the wrappers of the whole export graph
+    /// for the process lifetime keeps that from happening.
+    /// </summary>
+    private void KeepExportedResourcesAlive()
+    {
+        ResourceCache.KeepAliveGraph(initialDeck);
+        ResourceCache.KeepAliveGraph(actConfig);
+        ResourceCache.KeepAliveGraph(rewardCardPool);
+        if (enemyTypes == null) return;
+        foreach (EnemyResource enemy in enemyTypes)
+            ResourceCache.KeepAliveGraph(enemy);
     }
 
     private void SetupRun()
@@ -55,10 +72,19 @@ public partial class GameManager : Control
 
         SetEncounterBackground(run);
 
+        // A fresh fight starts with the whole deck pooled back together: hand/discard
+        // are leftovers from the previous encounter (and legacy saves may still carry
+        // them). A resumed encounter must keep its exact mid-fight piles instead.
+        resumedEncounter = run.ActiveEncounter && run.Enemies.Count > 0;
+        if (!resumedEncounter) run.ReturnCardsToDeck();
+
         player.ApplyState(run.PlayerState);
         player.SetDeck(run.Deck);
-        player.SetHand(run.Hand);
-        player.SetDiscard(run.Discard);
+        if (resumedEncounter)
+        {
+            player.SetHand(run.Hand);
+            player.SetDiscard(run.Discard);
+        }
 
         // Quit mid-reward: the fight was already won, so re-offer the persisted reward
         // instead of regenerating the encounter. Player state is hydrated above.
@@ -80,7 +106,6 @@ public partial class GameManager : Control
             return;
         }
 
-        resumedEncounter = run.ActiveEncounter && run.Enemies.Count > 0;
         if (resumedEncounter)
         {
             foreach (EnemySaveData data in run.Enemies)
