@@ -7,7 +7,7 @@
 script = ExtResource("1_3q00s")
 CardName = "Rebirth"
 CardImage = ExtResource("1_xyx15")
-Description = "Gain 1 Mana this turn"
+Description = "Gain 2 Mana this turn"
 Cost = 1
 Value = 2
 Amount = 2
