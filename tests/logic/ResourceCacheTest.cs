@@ -53,6 +53,22 @@ namespace SpaceOdyssey.Tests.Logic
 
         [TestCase]
         [RequireGodotRuntime]
+        public void KeepAliveGraph_HoldsExportedResourcesAndTheirDependencies()
+        {
+            // Loaded the way the engine loads a scene export (through its resource cache).
+            CardPoolResource pool = ResourceLoader.Load<CardPoolResource>("res://Resources/CardPools/DefaultCardPool.tres");
+            AssertThat(pool).IsNotNull();
+
+            ResourceCache.KeepAliveGraph(pool);
+
+            AssertThat(ResourceCache.IsKeptAlive(pool)).IsTrue();
+            foreach (CardResource card in pool.cards)
+                AssertThat(ResourceCache.IsKeptAlive(card)).IsTrue();
+            AssertThat(ResourceCache.IsKeptAlive(pool.cards[0].CardImage)).IsTrue();
+        }
+
+        [TestCase]
+        [RequireGodotRuntime]
         public void Load_SurvivesGarbageCollection()
         {
             PathDistribution first = ResourceCache.Load<PathDistribution>(PlanetPaths[0]);

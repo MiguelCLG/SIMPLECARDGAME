@@ -201,6 +201,11 @@ public partial class Player : Character
 
     public void PlayCard(Card card, Array<Character> targets)
     {
+        if (!Hand.Contains(card))
+        {
+            GD.PushWarning($"Player.PlayCard: {card.CardName} is not in hand — ignoring");
+            return;
+        }
         if (Mana >= card.Cost)
         {
             Hand.Remove(card);
@@ -309,5 +314,11 @@ public partial class Player : Character
         GetNode<Button>("%EndTurnButton").ReleaseFocus();
         GetNode<Button>("%EndTurnButton").Disabled = true;
         EventRegistry.GetEventPublisher("OnEndTurnPress").RaiseEvent(this);
+    }
+
+    public void OnDeckViewPress()
+    {
+        GetNode<Button>("%DeckButton").ReleaseFocus();
+        EventRegistry.GetEventPublisher("OnDeckViewPress").RaiseEvent(this);
     }
 }

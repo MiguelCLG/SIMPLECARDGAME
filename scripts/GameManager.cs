@@ -21,6 +21,7 @@ public partial class GameManager : Control
     private Control enemyContainer;
     private RewardPanel rewardPanel;
     private bool resumedEncounter;
+    private DeckOverlay deckOverlay;
     [Export] private DeckResource initialDeck;
     [Export] private Array<EnemyResource> enemyTypes;
     [Export] private ActConfig actConfig;
@@ -33,7 +34,25 @@ public partial class GameManager : Control
         enemies = new();
         enemyContainer = GetNode<Control>("%EnemySpawn");
         rewardPanel = GetNodeOrNull<RewardPanel>("%RewardPanel");
+        deckOverlay = GetNode<DeckOverlay>("%DeckOverlay");
+        KeepExportedResourcesAlive();
         SetupRun();
+    }
+
+    /// <summary>
+    /// Scene-exported custom resources are loaded through the engine resource cache, and
+    /// the cache aborts the game if it resurrects a resource whose C# wrapper was already
+    /// collected (godotengine/godot#83762). Holding the wrappers of the whole export graph
+    /// for the process lifetime keeps that from happening.
+    /// </summary>
+    private void KeepExportedResourcesAlive()
+    {
+        ResourceCache.KeepAliveGraph(initialDeck);
+        ResourceCache.KeepAliveGraph(actConfig);
+        ResourceCache.KeepAliveGraph(rewardCardPool);
+        if (enemyTypes == null) return;
+        foreach (EnemyResource enemy in enemyTypes)
+            ResourceCache.KeepAliveGraph(enemy);
     }
 
     private void SetupRun()
@@ -48,10 +67,19 @@ public partial class GameManager : Control
 
         SetEncounterBackground(run);
 
+        // A fresh fight starts with the whole deck pooled back together: hand/discard
+        // are leftovers from the previous encounter (and legacy saves may still carry
+        // them). A resumed encounter must keep its exact mid-fight piles instead.
+        resumedEncounter = run.ActiveEncounter && run.Enemies.Count > 0;
+        if (!resumedEncounter) run.ReturnCardsToDeck();
+
         player.ApplyState(run.PlayerState);
         player.SetDeck(run.Deck);
-        player.SetHand(run.Hand);
-        player.SetDiscard(run.Discard);
+        if (resumedEncounter)
+        {
+            player.SetHand(run.Hand);
+            player.SetDiscard(run.Discard);
+        }
 
         // Quit mid-reward: the fight was already won, so re-offer the persisted reward
         // instead of regenerating the encounter. Player state is hydrated above.
@@ -73,7 +101,6 @@ public partial class GameManager : Control
             return;
         }
 
-        resumedEncounter = run.ActiveEncounter && run.Enemies.Count > 0;
         if (resumedEncounter)
         {
             foreach (EnemySaveData data in run.Enemies)
@@ -297,6 +324,24 @@ public partial class GameManager : Control
 
     // Add other methods as needed
 
+    private void OnDeckViewPress(object sender, object obj) => ToggleDeckOverlay();
+
+    private void ToggleDeckOverlay()
+    {
+        deckOverlay.ToggleDeck(player.Deck, LiveHand(), player.DiscardPile);
+    }
+
+    private void HideDeckOverlay()
+    {
+        deckOverlay.Hide();
+    }
+
+    /// <summary>
+    /// Snapshot of the live hand as save data (the hand holds card nodes, not save data).
+    /// </summary>
+    private List<CardSaveData> LiveHand() =>
+        player.Hand == null ? new() : player.Hand.Select(CardSaveData.FromCard).ToList();
+
     // Events
     private void OnEndTurnPress(object sender, object obj)
     {
@@ -358,6 +403,10 @@ public partial class GameManager : Control
     /// </summary>
     private void ShowRewardOrComplete()
     {
+        // The deck overlay is a full-screen STOP panel drawn on top of everything,
+        // so it must never coexist with the reward panel (or the map transition).
+        HideDeckOverlay();
+
         List<CardSaveData> rewards = RewardGenerator.PickRewardCards(
             RunManager.CurrentRun,
             rewardCardPool,
@@ -438,6 +487,7 @@ public partial class GameManager : Control
         EventSubscriber.UnsubscribeFromEvent("OnPlayerDie", OnPlayerDie);
         EventSubscriber.UnsubscribeFromEvent("OnEndTurnPress", OnEndTurnPress);
         EventSubscriber.UnsubscribeFromEvent("OnEscapeKey", OnEscapeKey);
+        EventSubscriber.UnsubscribeFromEvent("OnDeckViewPress", OnDeckViewPress);
     }
 
     private void RegisterEvents()
@@ -457,6 +507,9 @@ public partial class GameManager : Control
 
         EventRegistry.RegisterEvent("OnEndTurnPress");
         EventSubscriber.SubscribeToEvent("OnEndTurnPress", OnEndTurnPress);
+
+        EventRegistry.RegisterEvent("OnDeckViewPress");
+        EventSubscriber.SubscribeToEvent("OnDeckViewPress", OnDeckViewPress);
 
         // Register inputs
         EventRegistry.RegisterEvent("OnEscapeKey");

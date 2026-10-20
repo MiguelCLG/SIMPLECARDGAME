@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardCatalogResource" load_steps=11 format=3 uid="uid://cnq4w8v2jy5la"]
+
+[ext_resource type="Resource" uid="uid://7mxbthqhyemg" path="res://Resources/Cards/Strike.tres" id="1_strike"]
+[ext_resource type="Resource" uid="uid://vm4yktngf3oe" path="res://Resources/Cards/Defend.tres" id="2_defend"]
+[ext_resource type="Resource" uid="uid://c8f702qdscrak" path="res://Resources/Cards/SuperStrike.tres" id="3_superstrike"]
+[ext_resource type="Resource" uid="uid://df6kqhmwpikos" path="res://Resources/Cards/SuperShield.tres" id="4_supershield"]
+[ext_resource type="Resource" uid="uid://6y4g2d7eo6c2" path="res://Resources/Cards/Draw_1.tres" id="5_draw1"]
+[ext_resource type="Resource" uid="uid://bjtb73qmxb6ba" path="res://Resources/Cards/Draw_2.tres" id="6_draw2"]
+[ext_resource type="Resource" uid="uid://bwhgpaj5hubmr" path="res://Resources/Cards/Focus.tres" id="7_focus"]
+[ext_resource type="Resource" uid="uid://cbpi8i12flpr1" path="res://Resources/Cards/Rebirth.tres" id="8_rebirth"]
+[ext_resource type="Resource" uid="uid://cg40eloq3p8tk" path="res://Resources/Cards/Cleave.tres" id="9_cleave"]
+[ext_resource type="Script" uid="uid://drurqxg3sg3wh" path="res://scripts/Resources/CardCatalogResource.cs" id="10_catalog"]
+
+[resource]
+script = ExtResource("10_catalog")
+cards = [ExtResource("1_strike"), ExtResource("2_defend"), ExtResource("3_superstrike"), ExtResource("4_supershield"), ExtResource("5_draw1"), ExtResource("6_draw2"), ExtResource("7_focus"), ExtResource("8_rebirth"), ExtResource("9_cleave")]

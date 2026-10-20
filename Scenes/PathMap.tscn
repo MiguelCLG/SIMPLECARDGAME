@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://clymt3ti1gg1g" path="res://scripts/PathCanvas.cs" id="2_pcanvas"]
 [ext_resource type="Theme" uid="uid://dbrvjx74ucqyo" path="res://Themes/Theme.tres" id="3_th3m"]
 [ext_resource type="Texture2D" uid="uid://c7bcf57vugvie" path="res://Images/inkscape_exports/backgrounds/background-1080x1920.webp" id="8_v87ff"]
+[ext_resource type="PackedScene" path="res://Scenes/DeckOverlay.tscn" id="9_deov"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
 bg_color = Color(0, 0, 0, 0.88235295)
@@ -50,7 +51,17 @@ grow_horizontal = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
 
-[node name="QuitButton" type="Button" parent="MarginContainer" unique_id=2104329986]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=710000001]
+layout_mode = 2
+
+[node name="DeckButton" type="Button" parent="MarginContainer/HBoxContainer" unique_id=710000002]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"MainMenuButton"
+text = "Deck"
+
+[node name="QuitButton" type="Button" parent="MarginContainer/HBoxContainer" unique_id=2104329986]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
@@ -160,3 +171,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"MainMenuButton"
 text = "Skip"
+
+[node name="DeckOverlay" parent="." unique_id=710000003 instance=ExtResource("9_deov")]
+unique_name_in_owner = true
