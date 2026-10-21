@@ -187,7 +187,34 @@ public partial class Player : Character
         cardInstance.isTargetingSelf = data.isTargetingSelf;
         cardInstance.isMultipleTargets = data.isMultipleTargets;
         cardInstance.InitializeEffect();
-        handContainer.AddChild(cardInstance);
+
+        // A hand card keeps its AUTHORED 81x150 layout rect and is rendered at RestScale (0.5),
+        // because a container sorts by the unscaled combined minimum size and shrinking the rect
+        // would break the authored internals. The half-size visual therefore gets its own plain
+        // Control slot of HandCardSlotSize (40.5x75) that the GridContainer lays out.
+        var slot = new Control
+        {
+            Name = "CardSlot",
+            MouseFilter = Control.MouseFilterEnum.Ignore,
+            FocusMode = Control.FocusModeEnum.None,
+            CustomMinimumSize = HandCardInteraction.HandCardSlotSize,
+            CustomMaximumSize = HandCardInteraction.HandCardSlotSize
+        };
+        handContainer.AddChild(slot);
+        slot.AddChild(cardInstance);
+
+        // Plain Control parent (not a container), so the card keeps its own anchors/offsets; the
+        // interaction then offsets it by RestOffset to centre the shrunken visual in the slot.
+        cardInstance.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.TopLeft);
+        cardInstance.CustomMinimumSize = HandCardInteraction.AuthoredCardSize;
+        cardInstance.CustomMaximumSize = HandCardInteraction.AuthoredCardSize;
+        cardInstance.Size = HandCardInteraction.AuthoredCardSize;
+
+        var interaction = new HandCardInteraction { Name = "HandCardInteraction" };
+        cardInstance.AddChild(interaction);
+        interaction.Bind(cardInstance, this);
+
+        // The hand list stores the Card, never the slot: everything else iterates Hand.
         Hand.Add(cardInstance);
     }
 
@@ -195,7 +222,20 @@ public partial class Player : Character
     {
         // Implement discarding card logic
         DiscardPile.Add(CardSaveData.FromCard(card));
-        handContainer.RemoveChild(card);
+
+        // Hand cards are wrapped in a CardSlot (see SpawnCard), so the slot is the GridContainer
+        // child: removing only the card would leave an empty cell in the hand.
+        Node parent = card.GetParent();
+        if (parent != null && parent != handContainer && parent.GetParent() == handContainer)
+        {
+            handContainer.RemoveChild(parent);
+            parent.QueueFree(); // takes the card with it
+        }
+        else
+        {
+            handContainer.RemoveChild(card);
+        }
+
         card.QueueFree();
     }
 
