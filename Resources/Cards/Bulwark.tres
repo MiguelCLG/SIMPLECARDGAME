@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CardResource" format=3]
+
+[ext_resource type="Texture2D" path="res://Images/inkscape_exports/card-icons/front-card.webp" id="1"]
+[ext_resource type="Script" path="res://scripts/Resources/CardResource.cs" id="2"]
+
+[resource]
+script = ExtResource("2")
+CardName = "Bulwark"
+CardImage = ExtResource("1")
+Description = "Gain 8 Armor, then discard 1 card from your hand"
+Cost = 1
+Value = 8
+Amount = 1
+EffectString = "Defense,Discard"
+isTargetingSelf = true
+isMultipleTargets = false

@@ -20,6 +20,10 @@ public partial class Card : Button
     public CardEffect Effect { get; set; }
 
     [Export]
+    public string OnDiscardEffectString;
+    public CardEffect OnDiscardEffect { get; set; }
+
+    [Export]
     public int Value { get; set; }
     [Export]
     public int Amount { get; set; }
@@ -27,6 +31,8 @@ public partial class Card : Button
     public bool isTargetingSelf = false;
     [Export]
     public bool isMultipleTargets = false;
+    [Export]
+    public string SummonCardPath;
 
     /// <summary>
     /// When false, pressing this card does not raise the global <c>OnCardClick</c> event.
@@ -46,36 +52,38 @@ public partial class Card : Button
 
     public void InitializeEffect()
     {
-        switch (EffectString)
+        Effect = CardEffectFactory.Create(EffectString);
+        if (Effect == null)
         {
-            case "Attack":
-                Effect = new AttackEffect();
-                break;
-            case "Defense":
-                Effect = new DefenseEffect();
-
-                break;
-            case "Draw":
-                Effect = new DrawEffect();
-                break;
-            case "Mana":
-                Effect = new ManaEffect();
-                break;
-            case "Cleave":
-                Effect = new CleaveEffect();
-                break;
-            case "Poison":
-                Effect = new PoisonEffect();
-                break;
-                // Handle other effect types if needed
-            default:
-                GD.PushError($"Card.InitializeEffect: unknown EffectString '{EffectString}' for card '{CardName}'");
-                return;
+            GD.PushError($"Card.InitializeEffect: unknown EffectString '{EffectString}' for card '{CardName}'");
+            return;
         }
         Effect.Value = Value;
         Effect.Amount = Amount;
         Effect.isMultipleTargets = isMultipleTargets;
         Effect.isTargetingSelf = isTargetingSelf;
+        if (Effect is SummonEffect summonEffect && !string.IsNullOrEmpty(SummonCardPath))
+        {
+            summonEffect.CardPath = SummonCardPath;
+        }
+        InitializeOnDiscardEffect();
+    }
+
+    public void InitializeOnDiscardEffect()
+    {
+        if (string.IsNullOrEmpty(OnDiscardEffectString))
+        {
+            OnDiscardEffect = null;
+            return;
+        }
+        OnDiscardEffect = CardEffectFactory.Create(OnDiscardEffectString);
+        if (OnDiscardEffect != null)
+        {
+            OnDiscardEffect.Value = Value;
+            OnDiscardEffect.Amount = Amount;
+            OnDiscardEffect.isMultipleTargets = false;
+            OnDiscardEffect.isTargetingSelf = true;
+        }
     }
 
     public void OnButtonPressed()

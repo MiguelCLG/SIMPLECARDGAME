@@ -18,6 +18,7 @@ public partial class GameManager : Control
     private List<Enemy> enemies;
     private Turns turn = Turns.PlayerTurn;
     private Card selectedCard;
+    private bool awaitingDiscardTarget = false;
     private Control enemyContainer;
     private RewardPanel rewardPanel;
     private bool resumedEncounter;
@@ -351,6 +352,8 @@ public partial class GameManager : Control
     private void OnEscapeKey(object sender, object obj)
     {
         selectedCard = null;
+        awaitingDiscardTarget = false;
+        awaitingDiscardTarget = false;
     }
 
     private void OnPlayerDie(object sender, object obj)
@@ -445,6 +448,7 @@ public partial class GameManager : Control
                 PersistLiveState();
             }
         selectedCard = null;
+        awaitingDiscardTarget = false;
     }
 
     private void OnCardClick(object sender, object obj)
@@ -453,13 +457,39 @@ public partial class GameManager : Control
             return;
         if (obj is Card card)
         {
-            if (card.Effect.Type == CardEffectType.Attack && !card.Effect.isMultipleTargets)
+            if (awaitingDiscardTarget)
+            {
+                if (selectedCard != null && selectedCard != card && selectedCard.Effect != null && selectedCard.Effect.RequiresHandTarget)
+                {
+                    selectedCard.Effect.SetDiscardTarget(card);
+                    Array<Character> chars = new();
+                    if (selectedCard.Effect.isTargetingSelf)
+                    {
+                        chars.Add(player);
+                    }
+                    player.PlayCard(selectedCard, chars);
+                    PersistLiveState();
+                    selectedCard = null;
+                    awaitingDiscardTarget = false;
+                    return;
+                }
+                return;
+            }
+
+            if (card.Effect != null && card.Effect.RequiresHandTarget)
+            {
+                selectedCard = card;
+                awaitingDiscardTarget = true;
+                return;
+            }
+
+            if (card.Effect != null && card.Effect.Type == CardEffectType.Attack && !card.Effect.isMultipleTargets)
             {
                 selectedCard = card;
                 return;
             }
             Array<Character> characters = new();
-            if (card.Effect.isTargetingSelf)
+            if (card.Effect != null && card.Effect.isTargetingSelf)
             {
                 characters.Add(player);
             }
@@ -515,4 +545,14 @@ public partial class GameManager : Control
         EventRegistry.RegisterEvent("OnEscapeKey");
         EventSubscriber.SubscribeToEvent("OnEscapeKey", OnEscapeKey);
     }
+
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        if (@event.IsActionPressed("ui_cancel"))
+        {
+            EventRegistry.GetEventPublisher("OnEscapeKey").RaiseEvent(this);
+            GetViewport().SetInputAsHandled();
+        }
+    }
+
 }
