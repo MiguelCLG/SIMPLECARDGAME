@@ -479,6 +479,43 @@ public partial class GameManager : Control
         }
     }
 
+    /// <summary>
+    /// Play a card that was dragged out of the hand. Mirrors the target assembly of
+    /// <see cref="OnCardClick"/> but never goes through the click event, so a drag can
+    /// never double-trigger a click play. Returns false when the play must be cancelled
+    /// (not the player's turn, a modal is up, card no longer in hand, or not enough mana).
+    /// </summary>
+    public bool PlayCardFromDrag(Card card, Array<Character> targets)
+    {
+        if (turn != Turns.PlayerTurn) return false;
+        // Defense-in-depth: the hold-start gate is not enough, a modal (deck overlay / reward
+        // panel) can appear mid-gesture, so re-check it at play time.
+        if (IsHandBlocked) return false;
+        if (card == null || player == null) return false;
+        if (player.Hand == null || !player.Hand.Contains(card)) return false;
+        if (player.Mana < card.Cost) return false;
+        player.PlayCard(card, targets);
+        PersistLiveState();
+        selectedCard = null;
+        return true;
+    }
+
+    /// <summary>Live enemy list in spawn order; index-stable snapshot for drag hit-testing.</summary>
+    public IReadOnlyList<Enemy> GetLiveEnemies() =>
+        enemies == null ? (IReadOnlyList<Enemy>)System.Array.Empty<Enemy>() : enemies;
+
+    /// <summary>True while the player may play cards (mirrors the click path's turn gate).</summary>
+    public bool IsPlayerTurn => turn == Turns.PlayerTurn;
+
+    /// <summary>
+    /// True while a modal (deck overlay / reward panel) covers the hand. Drag input runs in
+    /// <c>_Input</c>, before GUI hit-testing, so the overlay can no longer swallow the gesture
+    /// implicitly the way it does for clicks - the interaction must ask instead.
+    /// </summary>
+    public bool IsHandBlocked =>
+        (deckOverlay != null && IsInstanceValid(deckOverlay) && deckOverlay.Visible) ||
+        (rewardPanel != null && IsInstanceValid(rewardPanel) && rewardPanel.Visible);
+
      public override void _ExitTree()
     {
         EventSubscriber.UnsubscribeFromEvent("OnCardClick", OnCardClick);
